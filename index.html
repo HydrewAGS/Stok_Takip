@@ -11,7 +11,7 @@
 <title>Ev Stok Takip</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
 <style>
 :root {
   --bg:       #0D0F1A;
@@ -190,31 +190,31 @@ img{display:block}
 .save-btn{padding:16px;border-radius:var(--radius);border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:16px;width:100%;transition:opacity .2s;margin-top:8px;letter-spacing:.02em}
 .save-btn:disabled{background:var(--surface2);color:var(--muted);cursor:not-allowed}
 
-/* ── Scanner ── */
-#scanOverlay{display:none;position:fixed;inset:0;background:#000;z-index:1000;flex-direction:column}
-#scanOverlay.open{display:flex}
-.scan-head{padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 14px;display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,.85);backdrop-filter:blur(12px);position:relative;z-index:1010;flex-shrink:0}
-.scan-head-title{color:#fff;font-weight:700;font-size:17px}
-.scan-x{background:rgba(255,255,255,.2);border:none;border-radius:999px;width:42px;height:42px;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
-.scan-x svg{width:18px;height:18px}
-#scanPort{flex:1;position:relative;overflow:hidden;background:#000;min-height:0}
-#scanVid{width:100%;height:100%;object-fit:cover}
-.scan-frame{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
-.scan-box{position:relative;width:260px;height:180px}
-.sc{position:absolute;width:32px;height:32px;border-color:var(--accent2);border-style:solid}
-.sc.tl{top:0;left:0;border-width:3px 0 0 3px}
-.sc.tr{top:0;right:0;border-width:3px 3px 0 0}
-.sc.bl{bottom:0;left:0;border-width:0 0 3px 3px}
-.sc.br{bottom:0;right:0;border-width:0 3px 3px 0}
-.scan-lx{position:absolute;left:4px;right:4px;height:2px;background:linear-gradient(90deg,transparent,var(--accent2),transparent);animation:scanln 2s ease-in-out infinite}
-@keyframes scanln{0%,100%{top:8%}50%{top:88%}}
-.scan-hint-wrap{position:absolute;bottom:80px;left:0;right:0;text-align:center}
-.scan-hint-pill{color:rgba(255,255,255,.9);font-size:13px;background:rgba(0,0,0,.6);padding:7px 18px;border-radius:999px}
-#scanFoot{background:rgba(13,15,26,.97);padding:16px 20px calc(16px + env(safe-area-inset-bottom,0px));flex-shrink:0;position:relative;z-index:1010}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+50%{top:88%}}
+
+
+
 .scan-manual{display:flex;gap:10px}
 .scan-manual input{flex:1;padding:12px 16px;border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:#fff;font-size:14px;outline:none}
 .scan-manual button{padding:12px 20px;border-radius:var(--radius-sm);border:none;background:var(--accent);color:#fff;font-weight:700;font-size:14px}
-.scan-demo{color:var(--dim);font-size:11px;text-align:center;margin-top:10px;line-height:1.6}
+
 
 /* ── Preview modal ── */
 #previewOverlay{display:none;position:fixed;inset:0;z-index:1100;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);align-items:flex-end;justify-content:center}
@@ -314,7 +314,7 @@ svg{stroke-linecap:round;stroke-linejoin:round}
 
 
 
-  /* ── Scanner overlay layout fixes ── */
+  
   .scan-head { position: relative; z-index: 1010 !important; flex-shrink: 0; }
   .scan-x { cursor: pointer; flex-shrink: 0; }
   #scanFoot { z-index: 1010 !important; position: relative; }
@@ -333,13 +333,13 @@ svg{stroke-linecap:round;stroke-linejoin:round}
   #html5-qrcode-button-camera-permission { display: flex !important; }
 
 
-  /* ── Scanner layout fixes ── */
-  .scan-head{padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 14px !important;position:relative;z-index:1010 !important;flex-shrink:0}
-  .scan-x{width:42px !important;height:42px !important;cursor:pointer;flex-shrink:0}
-  #scanPort{flex:1;position:relative;overflow:hidden;background:#000;min-height:200px}
-  #scanFoot{z-index:1010 !important;position:relative;flex-shrink:0;padding:16px 20px calc(16px + env(safe-area-inset-bottom,0px)) !important}
-  .scan-frame{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:1005}
-  .scan-hint-wrap{position:absolute;bottom:16px;left:0;right:0;text-align:center;z-index:1006;pointer-events:none}
+  
+  
+  
+  
+  
+  
+  
   #scanPort video{position:absolute !important;inset:0 !important;width:100% !important;height:100% !important;object-fit:cover !important;z-index:1001}
   #qr-shaded-region{border:none !important;z-index:1002 !important}
   #html5-qrcode-button-camera-permission,
@@ -354,7 +354,74 @@ svg{stroke-linecap:round;stroke-linejoin:round}
   * { touch-action: manipulation; }
   input, textarea, select { touch-action: auto; }
 
+
+  /* ── Scanner: temiz video + overlay ── */
+  #scanOverlay { display:none; position:fixed; inset:0; z-index:1000; background:#000; flex-direction:column; }
+  #scanOverlay.open { display:flex; }
+  .scan-head {
+    padding: calc(env(safe-area-inset-top,0px) + 14px) 20px 14px;
+    display:flex; align-items:center; justify-content:space-between;
+    background:rgba(0,0,0,.8); backdrop-filter:blur(12px);
+    flex-shrink:0; position:relative; z-index:1010;
+  }
+  .scan-head-title { color:#fff; font-weight:700; font-size:17px; }
+  .scan-x {
+    background:rgba(255,255,255,.18); border:none; border-radius:999px;
+    width:42px; height:42px; color:#fff; display:flex; align-items:center;
+    justify-content:center; cursor:pointer; flex-shrink:0;
+  }
+  .scan-x svg { width:20px; height:20px; }
+  #scanPort {
+    flex:1; position:relative; overflow:hidden; background:#000;
+    min-height:0;
+  }
+  /* Video tam ekran, hiçbir şey üstünü örtmesin */
+  #scanVid {
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; display:block;
+  }
+  /* Tarama çerçevesi video'nun üstünde */
+  .scan-frame {
+    position:absolute; inset:0; display:flex; align-items:center;
+    justify-content:center; pointer-events:none; z-index:10;
+  }
+  .scan-box { position:relative; width:72%; max-width:280px; aspect-ratio:16/9; }
+  /* Köşeler */
+  .sc { position:absolute; width:28px; height:28px; border-color:#818CF8; border-style:solid; }
+  .sc.tl { top:0; left:0;  border-width:3px 0 0 3px; }
+  .sc.tr { top:0; right:0; border-width:3px 3px 0 0; }
+  .sc.bl { bottom:0; left:0;  border-width:0 0 3px 3px; }
+  .sc.br { bottom:0; right:0; border-width:0 3px 3px 0; }
+  /* Tarama çizgisi */
+  .scan-lx {
+    position:absolute; left:0; right:0; height:2px;
+    background:linear-gradient(90deg,transparent,#818CF8,transparent);
+    box-shadow:0 0 8px #6366F1;
+    animation:scanln 2s ease-in-out infinite;
+  }
+  @keyframes scanln { 0%,100%{top:5%} 50%{top:90%} }
+  /* Karartma: tarama kutusu dışı */
+  .scan-shade {
+    position:absolute; inset:0; pointer-events:none; z-index:9;
+    background: radial-gradient(ellipse 75% 50% at 50% 50%, transparent 40%, rgba(0,0,0,.6) 100%);
+  }
+  /* Hint */
+  .scan-hint-wrap {
+    position:absolute; bottom:20px; left:0; right:0;
+    text-align:center; z-index:11; pointer-events:none;
+  }
+  .scan-hint-pill {
+    color:rgba(255,255,255,.9); font-size:13px;
+    background:rgba(0,0,0,.55); padding:7px 18px; border-radius:999px;
+  }
+  #scanFoot {
+    background:rgba(13,15,26,.97); padding:16px 20px;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom,0px));
+    flex-shrink:0; position:relative; z-index:1010;
+  }
+
 </style>
+<script src="https://unpkg.com/@zxing/browser@0.1.5/umd/index.min.js"></script>
 </head>
 <body>
 <div id="app">
@@ -539,6 +606,7 @@ svg{stroke-linecap:round;stroke-linejoin:round}
   </div>
   <div id="scanPort">
     <video id="scanVid" playsinline muted autoplay webkit-playsinline></video>
+    <div class="scan-shade"></div>
     <div class="scan-frame"><div class="scan-box"><div class="sc tl"></div><div class="sc tr"></div><div class="sc bl"></div><div class="sc br"></div><div class="scan-lx"></div></div></div>
     <div class="scan-hint-wrap"><span class="scan-hint-pill" id="scanHint">Barkodu çerçeve içine getirin</span></div>
   </div>
@@ -591,7 +659,11 @@ svg{stroke-linecap:round;stroke-linejoin:round}
 <div id="toast"></div>
 </div>
 
+
+
 <script>
+
+
 
 
 
@@ -1108,121 +1180,139 @@ async function startCamera() {
   const hint = document.getElementById('scanHint');
   hint.textContent = '📷 Kamera başlatılıyor...';
 
+  // Önceki oturumu temizle
+  await stopCamera();
+
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
     hint.textContent = '⚠️ Tarayıcınız kamerayı desteklemiyor. Kodu manuel girin.';
     document.getElementById('manualInput').focus();
     return;
   }
 
-  await stopCamera();
-
-  if (typeof Html5Qrcode !== 'undefined') {
-    try {
-      const port = document.getElementById('scanPort');
-      port.innerHTML = '';
-
-      const portW = port.offsetWidth  || window.innerWidth;
-      const portH = port.offsetHeight || Math.round(window.innerHeight * 0.55);
-      const boxW  = Math.round(Math.min(portW * 0.82, 300));
-      const boxH  = Math.round(Math.min(portH * 0.55, 180));
-
-      const qr = new Html5Qrcode('scanPort', {
-        formatsToSupport: [
-          Html5QrcodeSupportedFormats.EAN_13,
-          Html5QrcodeSupportedFormats.EAN_8,
-          Html5QrcodeSupportedFormats.QR_CODE,
-          Html5QrcodeSupportedFormats.CODE_128,
-          Html5QrcodeSupportedFormats.CODE_39,
-          Html5QrcodeSupportedFormats.UPC_A,
-          Html5QrcodeSupportedFormats.UPC_E,
-          Html5QrcodeSupportedFormats.DATA_MATRIX,
-        ],
-        verbose: false
-      });
-      scanZxing = qr;
-
-      await qr.start(
-        { facingMode: 'environment' },
-        {
-          fps: 15,
-          qrbox: { width: boxW, height: boxH },
-          aspectRatio: portW / portH,
-          disableFlip: false,
-        },
-        function onDecode(decodedText) {
-          const ref = scanZxing; scanZxing = null;
-          if (ref) ref.stop().catch(function(){});
-          onBarcodeFound(decodedText);
-        },
-        function onError() {}
-      );
-
-      hint.textContent = 'Barkodu tarama kutusuna getirin';
-
-    } catch(err) {
-      console.error('Scanner err:', err.name, err.message);
-      if (err.name === 'NotAllowedError' || (err.message||'').toLowerCase().includes('permission')) {
-        hint.textContent = '⚠️ Kamera izni verilmedi. Ayarlar > Safari > Kamera iznini açın.';
-      } else {
-        hint.textContent = '⚠️ Kamera açılamadı: ' + (err.message||err.name) + '. Manuel girin.';
-      }
-      document.getElementById('manualInput').focus();
-    }
-    return;
-  }
-
+  // ── Kamerayı aç ─────────────────────────────────────────────
   try {
-    let stream;
+    // Önce arka kamera dene
     try {
-      stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode:{ideal:'environment'}, width:{ideal:1920}, height:{ideal:1080} }
+      scanStream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: { exact: 'environment' },
+          width:  { ideal: 1920 },
+          height: { ideal: 1080 }
+        }
       });
     } catch(e) {
-      stream = await navigator.mediaDevices.getUserMedia({ video:{facingMode:{ideal:'environment'}} });
-    }
-    scanStream = stream;
-    const v = document.getElementById('scanVid');
-    v.style.display = '';
-    v.srcObject = stream;
-    await new Promise(function(res,rej){
-      v.onloadedmetadata=res; v.onerror=rej; setTimeout(rej,8000);
-    });
-    await v.play();
-    hint.textContent = 'Barkodu kameraya yaklaştırın';
-
-    if ('BarcodeDetector' in window) {
-      const det = new window.BarcodeDetector({
-        formats:['ean_13','ean_8','qr_code','code_128','upc_a','upc_e','code_39','data_matrix']
-      });
-      let active = true;
-      scanInterval = setInterval(async function() {
-        if (!active||!v||v.readyState<2) return;
-        try {
-          const codes = await det.detect(v);
-          if (codes.length>0){ active=false; clearInterval(scanInterval); stopCamera(); onBarcodeFound(codes[0].rawValue); }
-        } catch(e){}
-      }, 250);
-    } else {
-      hint.textContent = '⚠️ Bu tarayıcı barkod okumayı desteklemiyor. iOS 17+ veya Chrome kullanın ya da kodu manuel girin.';
+      // exact başarısız olursa ideal ile dene
+      try {
+        scanStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: 'environment' }, width:{ideal:1280}, height:{ideal:720} }
+        });
+      } catch(e2) {
+        scanStream = await navigator.mediaDevices.getUserMedia({ video: true });
+      }
     }
   } catch(err) {
     hint.textContent = '⚠️ ' + (
-      err.name==='NotAllowedError'  ? 'Kamera izni verilmedi.' :
-      err.name==='NotFoundError'    ? 'Kamera bulunamadı.' :
-      err.name==='NotReadableError' ? 'Kamera meşgul.' :
-      ('Açılamadı: '+(err.message||err.name))
-    ) + ' Kodu manuel girin.';
+      err.name === 'NotAllowedError'  ? 'Kamera izni verilmedi. Ayarlar > Safari > Kamera iznini açın.' :
+      err.name === 'NotFoundError'    ? 'Kamera bulunamadı.' :
+      err.name === 'NotReadableError' ? 'Kamera başka uygulama tarafından kullanılıyor.' :
+      'Kamera açılamadı: ' + (err.message || err.name)
+    );
     document.getElementById('manualInput').focus();
+    return;
   }
+
+  // Video elementine bağla
+  const v = document.getElementById('scanVid');
+  v.srcObject = scanStream;
+  v.style.display = '';
+  try {
+    await new Promise(function(res, rej) {
+      v.onloadedmetadata = res;
+      v.onerror = rej;
+      setTimeout(rej, 8000);
+    });
+    await v.play();
+  } catch(e) {
+    hint.textContent = '⚠️ Video başlatılamadı. Kodu manuel girin.';
+    document.getElementById('manualInput').focus();
+    return;
+  }
+
+  hint.textContent = 'Barkodu kameraya gösterin';
+
+  // ── Okuma motoru seç ────────────────────────────────────────
+
+  // 1. ZXing-browser (iOS Safari + tüm tarayıcılar)
+  if (typeof ZXingBrowser !== 'undefined' && ZXingBrowser.BrowserMultiFormatReader) {
+    try {
+      const reader = new ZXingBrowser.BrowserMultiFormatReader();
+      scanZxing = reader;
+      reader.decodeFromVideoElement(v, function(result, err, controls) {
+        if (result) {
+          controls.stop();
+          scanZxing = null;
+          stopCamera();
+          onBarcodeFound(result.getText());
+        }
+      });
+      hint.textContent = 'Barkodu kameraya yaklaştırın';
+      return;
+    } catch(e) {
+      console.warn('ZXing-browser err:', e);
+      scanZxing = null;
+      // fallback'e geç
+    }
+  }
+
+  // 2. Native BarcodeDetector (Chrome Android + iOS 17+)
+  if ('BarcodeDetector' in window) {
+    try {
+      const det = new window.BarcodeDetector({
+        formats: ['ean_13','ean_8','qr_code','code_128','upc_a','upc_e','code_39','data_matrix','itf']
+      });
+      let active = true;
+      scanInterval = setInterval(async function() {
+        if (!active || !v || v.readyState < 2 || v.paused) return;
+        try {
+          const codes = await det.detect(v);
+          if (codes.length > 0) {
+            active = false;
+            clearInterval(scanInterval);
+            stopCamera();
+            onBarcodeFound(codes[0].rawValue);
+          }
+        } catch(e) {}
+      }, 200);
+      return;
+    } catch(e) {
+      console.warn('BarcodeDetector err:', e);
+    }
+  }
+
+  // 3. Hiçbiri yoksa
+  hint.textContent = '⚠️ Bu tarayıcı otomatik barkod okumayı desteklemiyor. Kodu manuel girin.';
+  document.getElementById('manualInput').focus();
 }
 
-
-function stopCamera(){
-  if(scanZxing){ var ref=scanZxing; scanZxing=null; ref.stop().catch(function(){}); }
-  if(scanInterval){ clearInterval(scanInterval); scanInterval=null; }
-  if(scanStream){ scanStream.getTracks().forEach(function(t){t.stop();}); scanStream=null; }
-  var v=document.getElementById('scanVid');
-  if(v){ v.srcObject=null; }
+function stopCamera() {
+  return new Promise(function(resolve) {
+    if (scanZxing) {
+      try {
+        if (typeof scanZxing.stopAsyncDecode === 'function') scanZxing.stopAsyncDecode();
+        if (typeof scanZxing.stopContinuousDecode === 'function') scanZxing.stopContinuousDecode();
+        if (typeof scanZxing.reset === 'function') scanZxing.reset();
+      } catch(e) {}
+      scanZxing = null;
+    }
+    if (scanInterval) { clearInterval(scanInterval); scanInterval = null; }
+    if (scanStream) {
+      scanStream.getTracks().forEach(function(t) { t.stop(); });
+      scanStream = null;
+    }
+    var v = document.getElementById('scanVid');
+    if (v) { v.srcObject = null; }
+    setTimeout(resolve, 50);
+  });
 }
 
 function manualGo(){
@@ -1402,6 +1492,8 @@ maybeAutoNotify();
 
 
 
+
+
 </script>
 <script>
 // PWA Manifest (inline blob)
@@ -1417,5 +1509,668 @@ maybeAutoNotify();
   if(pwaIcon) pwaIcon.src='data:image/png;base64,'+icon192;
 })();
 </script>
+</body>
+</htmlE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0D0F1A">
+<meta name="apple-mobile-web-app-title" content="Ev Stogum">
+<title>Ev Stok Takip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg:       #0D0F1A;
+  --bg2:      #12152B;
+  --surface:  #181B2E;
+  --surface2: #1F2340;
+  --border:   rgba(255,255,255,.07);
+  --border2:  rgba(99,102,241,.25);
+  --text:     #F0F1FF;
+  --text2:    #A8AACC;
+  --muted:    #6B6E96;
+  --dim:      #3D4068;
+  --accent:   #6366F1;
+  --accent2:  #818CF8;
+  --accent-bg:#1a1b3a;
+  --green:    #34D399;
+  --green-bg: #022c22;
+  --danger:   #F87171;
+  --danger-bg:#2d1212;
+  --warn:     #FBBF24;
+  --warn-bg:  #2d1f02;
+  --info:     #38BDF8;
+  --info-bg:  #082f49;
+  --radius:   16px;
+  --radius-sm:10px;
+  --safe-b:   env(safe-area-inset-bottom,0px);
+  --nav-h:    calc(64px + var(--safe-b));
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;overscroll-behavior:none}
+input,select,textarea,button{font-family:inherit}
+button{cursor:pointer}
+img{display:block}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar{width:0;height:0}
+
+/* ── App shell ── */
+#app{max-width:500px;margin:0 auto;min-height:100vh;position:relative;overflow-x:hidden}
+.view{display:none;padding-bottom:calc(var(--nav-h) + 16px);animation:vFadeIn .2s ease}
+.view.active{display:block}
+@keyframes vFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Bottom Nav ── */
+#nav{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:500px;
+  background:rgba(13,15,26,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-top:1px solid var(--border);
+  display:grid;grid-template-columns:1fr 1fr 72px 1fr 1fr;
+  padding:8px 0 calc(8px + var(--safe-b));z-index:300;
+}
+.nb{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:var(--muted);padding:4px 8px;transition:color .15s;position:relative}
+.nb.active{color:var(--accent2)}
+.nb svg{width:22px;height:22px;stroke-width:2}
+.nb span{font-size:10px;font-weight:600;letter-spacing:.02em}
+.nb .badge{position:absolute;top:2px;right:calc(50% - 18px);background:var(--danger);color:#fff;font-size:9px;font-weight:800;min-width:16px;height:16px;border-radius:99px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+#scanNb{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;padding:0;color:var(--accent2)}
+.scan-orb{width:52px;height:52px;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;margin-top:-22px;box-shadow:0 0 0 3px var(--bg),0 4px 20px rgba(99,102,241,.5)}
+.scan-orb svg{width:24px;height:24px;stroke:#fff;stroke-width:2.5}
+#scanNb span{font-size:10px;font-weight:700;color:var(--accent2)}
+
+/* ── Page headers ── */
+.ph{padding:56px 20px 20px}
+.ph-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.ph-label{color:var(--accent2);font-size:11px;font-weight:700;letter-spacing:.12em;margin-bottom:4px;text-transform:uppercase}
+.ph-title{color:var(--text);font-size:26px;font-weight:800;line-height:1.15}
+.ph-sub{color:var(--muted);font-size:13px;margin-top:4px}
+.ph-action{background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.2);border-radius:var(--radius-sm);padding:9px;color:var(--accent2);flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:4px}
+.ph-action svg{width:20px;height:20px}
+
+/* ── Cards ── */
+.card{background:var(--surface);border-radius:var(--radius);padding:16px;border:1px solid var(--border)}
+.card.selected{border-color:var(--accent);background:var(--accent-bg)}
+.card.expired{border-color:rgba(248,113,113,.3);background:rgba(45,18,18,.5)}
+.card.expiring{border-color:rgba(251,191,36,.25);background:rgba(45,31,2,.4)}
+
+/* ── Stat grid ── */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px 20px}
+.stat-card{background:var(--surface);border-radius:var(--radius);padding:18px 16px;border:1px solid var(--border);position:relative;overflow:hidden}
+.stat-card::after{content:'';position:absolute;inset:-40%;background:radial-gradient(circle at 80% 20%,var(--glow,.1) 0%,transparent 70%);pointer-events:none}
+.stat-val{font-size:30px;font-weight:900;line-height:1}
+.stat-lbl{font-size:11px;color:var(--text2);margin-top:6px;font-weight:500}
+
+/* ── Category grid ── */
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px 20px}
+.cat-card{border-radius:var(--radius);padding:18px 16px;border:1px solid transparent;cursor:pointer;transition:transform .12s,box-shadow .12s;position:relative;overflow:hidden}
+.cat-card:active{transform:scale(.97)}
+.cat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.04) 0%,transparent 60%);pointer-events:none}
+.cat-emoji{font-size:26px;margin-bottom:8px}
+.cat-name{font-weight:700;font-size:14px}
+.cat-count{font-size:11px;color:rgba(255,255,255,.35);margin-top:2px}
+
+/* ── Section header ── */
+.sec{display:flex;align-items:center;justify-content:space-between;padding:0 20px;margin-bottom:12px}
+.sec-label{color:var(--text2);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.sec-action{color:var(--accent2);font-size:13px;background:none;border:none;font-weight:600}
+
+/* ── Pill tabs ── */
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:0 20px 14px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.pill{padding:7px 14px;border-radius:99px;border:none;white-space:nowrap;background:rgba(255,255,255,.06);color:var(--muted);font-size:12px;font-weight:500;transition:all .15s;cursor:pointer}
+.pill.active{background:rgba(99,102,241,.2);color:var(--accent2);font-weight:700;border:1px solid rgba(99,102,241,.3)}
+
+/* ── Sort/Filter toolbar ── */
+.toolbar{display:flex;align-items:center;gap:8px;padding:0 20px 12px;overflow-x:auto;scrollbar-width:none}
+.toolbar::-webkit-scrollbar{display:none}
+.sort-btn{display:flex;align-items:center;gap:5px;padding:7px 12px;border-radius:99px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text2);font-size:12px;font-weight:500;white-space:nowrap;transition:all .15s}
+.sort-btn.active{border-color:rgba(99,102,241,.4);background:rgba(99,102,241,.1);color:var(--accent2)}
+.sort-btn svg{width:13px;height:13px;flex-shrink:0}
+.spacer{flex:1}
+.select-toggle{padding:7px 12px;border-radius:99px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text2);font-size:12px;font-weight:600;white-space:nowrap}
+.select-toggle.active{border-color:rgba(99,102,241,.4);background:rgba(99,102,241,.15);color:var(--accent2)}
+
+/* ── Bulk action bar ── */
+#bulkBar{display:none;position:fixed;bottom:var(--nav-h);left:50%;transform:translateX(-50%);width:100%;max-width:500px;background:var(--surface2);border-top:1px solid var(--border2);padding:12px 20px;z-index:250;gap:10px;align-items:center}
+#bulkBar.show{display:flex}
+.bulk-count{color:var(--accent2);font-size:14px;font-weight:700;flex:1}
+.bulk-btn{padding:10px 18px;border-radius:var(--radius-sm);border:none;font-size:13px;font-weight:700;cursor:pointer}
+.bulk-del{background:rgba(248,113,113,.15);color:var(--danger)}
+.bulk-cancel{background:rgba(255,255,255,.06);color:var(--text2)}
+
+/* ── Item card ── */
+.ic-wrap{padding:0 20px;display:flex;flex-direction:column;gap:10px}
+.ic{display:flex;align-items:flex-start;gap:12px;transition:all .15s}
+.ic-check{width:22px;height:22px;border-radius:6px;border:2px solid var(--border2);background:transparent;flex-shrink:0;margin-top:2px;display:none;align-items:center;justify-content:center;cursor:pointer;transition:all .15s}
+.ic-check.visible{display:flex}
+.ic-check.checked{background:var(--accent);border-color:var(--accent)}
+.ic-check svg{width:13px;height:13px;stroke:#fff;stroke-width:3}
+.ic-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0}
+.ic-body{flex:1;min-width:0}
+.ic-name{color:var(--text);font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.ic-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.ic-meta span{font-size:11px;color:var(--muted)}
+.ic-foot{display:flex;align-items:center;justify-content:space-between}
+.badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;letter-spacing:.04em;flex-shrink:0}
+.qty-ctrl{display:flex;align-items:center;background:rgba(0,0,0,.3);border-radius:99px;padding:2px}
+.qty-btn{width:28px;height:28px;border:none;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:18px;line-height:1}
+.qty-minus{background:rgba(255,255,255,.07);color:var(--text2)}
+.qty-plus{background:rgba(99,102,241,.15);color:var(--accent2)}
+.qty-val{color:var(--text);font-weight:700;min-width:48px;text-align:center;font-size:14px}
+.qty-unit{color:var(--muted);font-weight:400;font-size:11px}
+.ic-acts{display:flex;gap:5px}
+.ic-btn{width:30px;height:30px;border:none;background:rgba(255,255,255,.05);border-radius:99px;display:flex;align-items:center;justify-content:center}
+.ic-btn svg{width:14px;height:14px}
+.loc-badge{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;padding:2px 7px;border-radius:999px;background:rgba(99,102,241,.1);color:var(--accent2)}
+
+/* ── Search ── */
+.search-wrap{position:relative;padding:0 20px 12px}
+.search-wrap svg{position:absolute;left:34px;top:50%;transform:translateY(-65%);color:var(--muted);pointer-events:none;width:16px;height:16px}
+.search-input{width:100%;padding:12px 16px 12px 40px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:14px;outline:none;transition:border-color .15s}
+.search-input:focus{border-color:rgba(99,102,241,.4)}
+.search-input::placeholder{color:var(--muted)}
+
+/* ── Form ── */
+.fv{min-height:100vh;background:var(--bg);padding-bottom:40px}
+.fv-head{padding:52px 20px 20px;display:flex;align-items:center;gap:12px}
+.fv-back{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);width:38px;height:38px;color:var(--text2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fv-back svg{width:18px;height:18px}
+.fv-title{color:var(--text);font-size:18px;font-weight:800}
+.fv-body{padding:0 20px;display:flex;flex-direction:column;gap:16px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{color:var(--text2);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.field input,.field select,.field textarea{width:100%;padding:13px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:14px;outline:none;-webkit-appearance:none;appearance:none;transition:border-color .15s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:rgba(99,102,241,.4)}
+.field textarea{resize:none}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cat-picker{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cat-opt{padding:11px 8px;border-radius:var(--radius-sm);border:2px solid transparent;background:rgba(255,255,255,.04);color:var(--muted);font-size:13px;font-weight:500;display:flex;align-items:center;gap:7px;justify-content:center;transition:all .15s;cursor:pointer}
+.loc-picker{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.loc-opt{padding:10px 8px;border-radius:var(--radius-sm);border:2px solid transparent;background:rgba(255,255,255,.04);color:var(--muted);font-size:12px;font-weight:500;display:flex;align-items:center;gap:6px;transition:all .15s;cursor:pointer}
+.loc-opt.active{border-color:var(--info);background:var(--info-bg);color:var(--info)}
+.qty-field{display:flex;align-items:center;background:var(--surface);border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--border)}
+.qty-field button{padding:13px 16px;border:none;background:transparent;font-size:22px;cursor:pointer}
+.qty-display{flex:1;text-align:center;color:var(--text);font-weight:800;font-size:18px}
+.save-btn{padding:16px;border-radius:var(--radius);border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:16px;width:100%;transition:opacity .2s;margin-top:8px;letter-spacing:.02em}
+.save-btn:disabled{background:var(--surface2);color:var(--muted);cursor:not-allowed}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+50%{top:88%}}
+
+
+
+.scan-manual{display:flex;gap:10px}
+.scan-manual input{flex:1;padding:12px 16px;border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:#fff;font-size:14px;outline:none}
+.scan-manual button{padding:12px 20px;border-radius:var(--radius-sm);border:none;background:var(--accent);color:#fff;font-weight:700;font-size:14px}
+
+
+/* ── Preview modal ── */
+#previewOverlay{display:none;position:fixed;inset:0;z-index:1100;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);align-items:flex-end;justify-content:center}
+#previewOverlay.open{display:flex}
+#previewSheet{background:var(--surface2);border-radius:24px 24px 0 0;width:100%;max-width:500px;padding:0 0 calc(20px + var(--safe-b));animation:sheetUp .28s cubic-bezier(.22,1,.36,1);max-height:90vh;overflow-y:auto}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.preview-drag{width:36px;height:4px;background:rgba(255,255,255,.15);border-radius:99px;margin:14px auto 18px}
+#previewLoading{padding:40px 24px;text-align:center}
+.spinner{width:40px;height:40px;border:3px solid rgba(99,102,241,.2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+#previewFound{display:none}
+.pf-hero{padding:0 24px 16px;display:flex;gap:14px;align-items:flex-start}
+.pf-img{width:72px;height:72px;border-radius:14px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0;overflow:hidden}
+.pf-img img{width:100%;height:100%;object-fit:contain}
+.pf-src{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.1em;margin-bottom:3px;text-transform:uppercase}
+.pf-name{color:var(--text);font-size:17px;font-weight:800;line-height:1.25;margin-bottom:3px}
+.pf-brand{color:var(--text2);font-size:13px;margin-bottom:7px}
+.pf-tags{display:flex;gap:5px;flex-wrap:wrap}
+.pf-tag{font-size:11px;padding:2px 8px;border-radius:999px;background:rgba(255,255,255,.06);color:var(--text2)}
+.pf-rows{padding:0 24px 16px;display:flex;flex-direction:column;gap:6px}
+.pf-row{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:rgba(255,255,255,.03);border-radius:10px}
+.pf-rl{color:var(--text2);font-size:12px}
+.pf-rv{color:var(--text);font-size:12px;font-weight:600}
+.pf-barcode{margin:0 24px 16px;padding:9px 14px;background:rgba(255,255,255,.03);border-radius:10px;display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px;font-family:monospace;letter-spacing:.06em}
+.pf-acts{padding:0 24px;display:flex;gap:10px}
+.pf-add{flex:1;padding:15px;border-radius:var(--radius);border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:15px}
+.pf-edit{padding:15px 18px;border-radius:var(--radius);border:1px solid var(--border);background:transparent;color:var(--text2);font-size:13px;font-weight:600}
+#previewNotFound{display:none;padding:28px 24px;text-align:center}
+.nf-emoji{font-size:48px;margin-bottom:12px}
+.nf-title{color:var(--text);font-size:16px;font-weight:700;margin-bottom:5px}
+.nf-sub{color:var(--text2);font-size:13px;margin-bottom:6px}
+.nf-code{color:var(--muted);font-size:11px;font-family:monospace;background:var(--surface);padding:5px 12px;border-radius:8px;display:inline-block;margin-bottom:20px}
+.nf-btn{width:100%;padding:14px;border-radius:var(--radius);border:none;background:var(--accent);color:#fff;font-weight:700;font-size:14px;margin-bottom:8px}
+.nf-cancel{background:none;border:none;color:var(--muted);font-size:13px;padding:8px}
+
+/* ── Shopping list ── */
+.shop-header{padding:0 20px 12px;display:flex;align-items:center;justify-content:space-between}
+.shop-title{color:var(--text2);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.shop-actions{display:flex;gap:8px}
+.shop-btn{padding:7px 14px;border-radius:99px;border:none;font-size:12px;font-weight:600;cursor:pointer}
+.shop-export{background:rgba(99,102,241,.12);color:var(--accent2)}
+.shop-wa{background:rgba(52,211,153,.1);color:var(--green)}
+.shop-clear{background:rgba(255,255,255,.06);color:var(--muted)}
+.shop-item{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);margin:0 20px 8px}
+.shop-item.checked .shop-name{text-decoration:line-through;color:var(--muted)}
+.shop-item.checked{opacity:.55}
+.shop-check{width:22px;height:22px;border-radius:6px;border:2px solid var(--border2);background:transparent;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.shop-check.done{background:var(--green);border-color:var(--green)}
+.shop-check svg{width:13px;height:13px;stroke:#fff;stroke-width:3}
+.shop-info{flex:1;min-width:0}
+.shop-name{color:var(--text);font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shop-reason{color:var(--muted);font-size:11px;margin-top:2px}
+.shop-qty{color:var(--accent2);font-size:12px;font-weight:700;flex-shrink:0}
+.shop-add-btn{margin:0 20px 10px;padding:13px;border-radius:var(--radius-sm);border:1px dashed var(--border);background:transparent;color:var(--muted);font-size:13px;font-weight:500;width:calc(100% - 40px);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.shop-add-input{padding:0 20px 12px;display:none}
+.shop-add-input.show{display:flex;gap:10px}
+.shop-add-input input{flex:1;padding:11px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:14px;outline:none}
+.shop-add-input button{padding:11px 18px;border-radius:var(--radius-sm);border:none;background:var(--accent);color:#fff;font-weight:700;font-size:13px}
+
+/* ── Notification banner ── */
+#notifBar{display:none;background:linear-gradient(135deg,var(--info-bg),rgba(8,47,73,.8));border-bottom:1px solid rgba(56,189,248,.2);padding:12px 16px;align-items:center;gap:12px}
+#notifBar.show{display:flex}
+#notifBarText{flex:1;color:#e0f2fe;font-size:13px;line-height:1.4}
+#notifAllow{padding:8px 14px;border-radius:var(--radius-sm);border:none;background:var(--info);color:#082f49;font-weight:700;font-size:12px;flex-shrink:0}
+#notifClose{background:none;border:none;color:var(--muted);font-size:20px;padding:4px;flex-shrink:0}
+
+/* ── PWA banner ── */
+#pwaBar{display:none;position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:500px;z-index:9999;background:rgba(18,21,43,.97);border-bottom:1px solid rgba(99,102,241,.3);padding:12px 16px;align-items:center;gap:12px;box-shadow:0 4px 24px rgba(0,0,0,.5);animation:slideDown .35s cubic-bezier(.22,1,.36,1)}
+#pwaBar.show{display:flex}
+@keyframes slideDown{from{transform:translateX(-50%) translateY(-100%)}to{transform:translateX(-50%) translateY(0)}}
+#pwaIcon{width:42px;height:42px;border-radius:10px;flex-shrink:0}
+#pwaText{flex:1;min-width:0}
+#pwaText strong{display:block;color:var(--text);font-size:13px;font-weight:700}
+#pwaText span{color:var(--muted);font-size:12px}
+#pwaInstall{padding:8px 14px;border-radius:var(--radius-sm);border:none;background:var(--accent);color:#fff;font-weight:700;font-size:12px;white-space:nowrap;flex-shrink:0}
+#pwaClose{background:none;border:none;color:var(--muted);font-size:22px;padding:4px;flex-shrink:0;line-height:1}
+body.pwa-open .view{padding-top:68px}
+
+/* ── Toast ── */
+#toast{position:fixed;bottom:calc(var(--nav-h) + 16px);left:50%;transform:translateX(-50%) translateY(12px);padding:11px 20px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;z-index:2000;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .25s,transform .25s;box-shadow:0 8px 32px rgba(0,0,0,.4);max-width:calc(100vw - 40px);overflow:hidden;text-overflow:ellipsis}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── Undo bar ── */
+#undoBar{display:none;position:fixed;bottom:calc(var(--nav-h) + 12px);left:50%;transform:translateX(-50%);width:calc(100% - 40px);max-width:460px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 16px;z-index:250;align-items:center;gap:12px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+#undoBar.show{display:flex}
+#undoMsg{flex:1;color:var(--text2);font-size:13px}
+#undoBtn{padding:7px 14px;border-radius:var(--radius-sm);border:none;background:rgba(99,102,241,.2);color:var(--accent2);font-weight:700;font-size:13px;cursor:pointer}
+#undoProgress{position:absolute;bottom:0;left:0;height:2px;background:var(--accent);border-radius:0 0 var(--radius-sm) var(--radius-sm);animation:undoProg 5s linear forwards}
+@keyframes undoProg{from{width:100%}to{width:0}}
+
+/* ── Empty ── */
+.empty{text-align:center;padding:56px 20px}
+.empty .emoji{font-size:56px;margin-bottom:14px}
+.empty p{color:var(--text2);font-size:15px;margin-bottom:5px;font-weight:600}
+.empty small{color:var(--muted);font-size:13px}
+svg{stroke-linecap:round;stroke-linejoin:round}
+
+
+
+  
+  .scan-head { position: relative; z-index: 1010 !important; flex-shrink: 0; }
+  .scan-x { cursor: pointer; flex-shrink: 0; }
+  #scanFoot { z-index: 1010 !important; position: relative; }
+  .scan-frame { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 1005; }
+  .scan-hint-wrap { position: absolute; bottom: 16px; left: 0; right: 0; text-align: center; z-index: 1006; pointer-events: none; }
+  /* html5-qrcode injected elements */
+  #scanPort > div:first-child { width: 100% !important; height: 100% !important; }
+  #scanPort video { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; z-index: 1001; }
+  #qr-shaded-region { border: none !important; z-index: 1002 !important; }
+  /* Hide html5-qrcode's own buttons - we use manual input instead */
+  #html5-qrcode-button-camera-permission,
+  #html5-qrcode-button-camera-start,
+  #html5-qrcode-button-camera-stop,
+  #html5-qrcode-anchor-scan-type-change,
+  #scanPort select { display: none !important; }
+  #html5-qrcode-button-camera-permission { display: flex !important; }
+
+
+  
+  
+  
+  
+  
+  
+  
+  #scanPort video{position:absolute !important;inset:0 !important;width:100% !important;height:100% !important;object-fit:cover !important;z-index:1001}
+  #qr-shaded-region{border:none !important;z-index:1002 !important}
+  #html5-qrcode-button-camera-permission,
+  #html5-qrcode-button-camera-start,
+  #html5-qrcode-button-camera-stop,
+  #html5-qrcode-anchor-scan-type-change,
+  #scanPort select{display:none !important}
+
+
+  /* Yakınlaştırma ve kaydırma kilidi */
+  html, body { touch-action: pan-y; overscroll-behavior: none; }
+  * { touch-action: manipulation; }
+  input, textarea, select { touch-action: auto; }
+
+
+  /* ── Scanner: temiz video + overlay ── */
+  #scanOverlay { display:none; position:fixed; inset:0; z-index:1000; background:#000; flex-direction:column; }
+  #scanOverlay.open { display:flex; }
+  .scan-head {
+    padding: calc(env(safe-area-inset-top,0px) + 14px) 20px 14px;
+    display:flex; align-items:center; justify-content:space-between;
+    background:rgba(0,0,0,.8); backdrop-filter:blur(12px);
+    flex-shrink:0; position:relative; z-index:1010;
+  }
+  .scan-head-title { color:#fff; font-weight:700; font-size:17px; }
+  .scan-x {
+    background:rgba(255,255,255,.18); border:none; border-radius:999px;
+    width:42px; height:42px; color:#fff; display:flex; align-items:center;
+    justify-content:center; cursor:pointer; flex-shrink:0;
+  }
+  .scan-x svg { width:20px; height:20px; }
+  #scanPort {
+    flex:1; position:relative; overflow:hidden; background:#000;
+    min-height:0;
+  }
+  /* Video tam ekran, hiçbir şey üstünü örtmesin */
+  #scanVid {
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; display:block;
+  }
+  /* Tarama çerçevesi video'nun üstünde */
+  .scan-frame {
+    position:absolute; inset:0; display:flex; align-items:center;
+    justify-content:center; pointer-events:none; z-index:10;
+  }
+  .scan-box { position:relative; width:72%; max-width:280px; aspect-ratio:16/9; }
+  /* Köşeler */
+  .sc { position:absolute; width:28px; height:28px; border-color:#818CF8; border-style:solid; }
+  .sc.tl { top:0; left:0;  border-width:3px 0 0 3px; }
+  .sc.tr { top:0; right:0; border-width:3px 3px 0 0; }
+  .sc.bl { bottom:0; left:0;  border-width:0 0 3px 3px; }
+  .sc.br { bottom:0; right:0; border-width:0 3px 3px 0; }
+  /* Tarama çizgisi */
+  .scan-lx {
+    position:absolute; left:0; right:0; height:2px;
+    background:linear-gradient(90deg,transparent,#818CF8,transparent);
+    box-shadow:0 0 8px #6366F1;
+    animation:scanln 2s ease-in-out infinite;
+  }
+  @keyframes scanln { 0%,100%{top:5%} 50%{top:90%} }
+  /* Karartma: tarama kutusu dışı */
+  .scan-shade {
+    position:absolute; inset:0; pointer-events:none; z-index:9;
+    background: radial-gradient(ellipse 75% 50% at 50% 50%, transparent 40%, rgba(0,0,0,.6) 100%);
+  }
+  /* Hint */
+  .scan-hint-wrap {
+    position:absolute; bottom:20px; left:0; right:0;
+    text-align:center; z-index:11; pointer-events:none;
+  }
+  .scan-hint-pill {
+    color:rgba(255,255,255,.9); font-size:13px;
+    background:rgba(0,0,0,.55); padding:7px 18px; border-radius:999px;
+  }
+  #scanFoot {
+    background:rgba(13,15,26,.97); padding:16px 20px;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom,0px));
+    flex-shrink:0; position:relative; z-index:1010;
+  }
+
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- PWA Banner -->
+<div id="pwaBar">
+  <img id="pwaIcon" src="" alt="">
+  <div id="pwaText"><strong>Ev Stok Takip</strong><span>Ana ekrana uygulama olarak ekle</span></div>
+  <button id="pwaInstall" onclick="pwaTriggerInstall()">⬇ Yükle</button>
+  <button id="pwaClose" onclick="pwaDismiss()">×</button>
+</div>
+
+<!-- Notification Banner -->
+<div id="notifBar">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+  <div id="notifBarText"><strong>SKT Hatırlatıcısı</strong><br>Son kullanma tarihi yaklaşan ürünler için bildirim alın</div>
+  <button id="notifAllow" onclick="requestNotifPermission()">İzin Ver</button>
+  <button id="notifClose" onclick="dismissNotifBar()">×</button>
+</div>
+
+<!-- HOME -->
+<div id="view-home" class="view active">
+  <div class="ph">
+    <div class="ph-row">
+      <div>
+        <div class="ph-label">EV STOĞUM</div>
+        <div class="ph-title">Merhaba! 👋</div>
+        <div class="ph-sub">Stoğunuzu buradan yönetin</div>
+      </div>
+      <button class="ph-action" onclick="showNotifSetup()" id="notifBell" style="position:relative">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span id="notifDot" style="display:none;position:absolute;top:6px;right:6px;width:8px;height:8px;background:var(--danger);border-radius:999px;border:2px solid var(--bg)"></span>
+      </button>
+    </div>
+  </div>
+  <div class="stat-grid">
+    <div class="stat-card" style="--glow:rgba(99,102,241,.15)"><div class="stat-val" id="st-total" style="color:var(--accent2)">0</div><div class="stat-lbl">Toplam Ürün</div></div>
+    <div class="stat-card" style="--glow:rgba(251,191,36,.1)"><div class="stat-val" id="st-low" style="color:var(--warn)">0</div><div class="stat-lbl">Az Stok</div></div>
+    <div class="stat-card" style="--glow:rgba(251,146,60,.1)"><div class="stat-val" id="st-exp" style="color:#fb923c">0</div><div class="stat-lbl">SKT Uyarısı</div></div>
+    <div class="stat-card" style="--glow:rgba(248,113,113,.1)"><div class="stat-val" id="st-out" style="color:var(--danger)">0</div><div class="stat-lbl">SKT Geçmiş</div></div>
+  </div>
+  <div class="sec" style="margin-bottom:8px"><span class="sec-label">KATEGORİLER</span></div>
+  <div class="cat-grid" id="homeCatGrid"></div>
+  <div class="sec"><span class="sec-label">SON EKLENENLER</span><button class="sec-action" onclick="showView('list')">Tümünü Gör</button></div>
+  <div id="recentList" style="padding:0 20px;display:flex;flex-direction:column;gap:10px"></div>
+  <div id="homeEmpty" class="empty" style="display:none"><div class="emoji">📦</div><p>Henüz ürün eklenmedi</p><small>Barkod tarayarak veya manuel ekleyerek başlayın</small></div>
+</div>
+
+<!-- LIST -->
+<div id="view-list" class="view">
+  <div class="ph" style="padding-bottom:0">
+    <div class="ph-row" style="margin-bottom:14px">
+      <div><div class="ph-title" style="font-size:22px">Ürün Listesi</div></div>
+      <button class="select-toggle" id="selectToggle" onclick="toggleSelectMode()">Seç</button>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="6"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input class="search-input" id="searchInput" placeholder="Ürün, marka veya barkod ara..." oninput="renderList()">
+  </div>
+  <div class="tabs" id="catTabs"></div>
+  <div class="tabs" id="locTabs" style="padding-top:0"></div>
+  <div class="toolbar">
+    <button class="sort-btn" id="sort-name" onclick="setSort('name')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h6"/></svg>A–Z
+    </button>
+    <button class="sort-btn" id="sort-expiry" onclick="setSort('expiry')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>SKT
+    </button>
+    <button class="sort-btn" id="sort-qty" onclick="setSort('qty')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="4"/><polyline points="6 10 12 4 18 10"/></svg>Miktar
+    </button>
+    <button class="sort-btn" id="sort-category" onclick="setSort('category')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Kategori
+    </button>
+    <div class="spacer"></div>
+    <span id="resultCount" style="color:var(--muted);font-size:11px;font-weight:600;white-space:nowrap"></span>
+  </div>
+  <div class="ic-wrap" id="itemsList"></div>
+  <div id="listEmpty" class="empty" style="display:none"><div class="emoji">🔍</div><p>Ürün bulunamadı</p><small>Arama kriterini değiştirin veya yeni ürün ekleyin</small></div>
+</div>
+
+<!-- SHOPPING LIST -->
+<div id="view-shop" class="view">
+  <div class="ph">
+    <div class="ph-label">ALIŞVERİŞ</div>
+    <div class="ph-title">Alışveriş Listesi</div>
+    <div class="ph-sub">Az stok ve SKT yaklaşan ürünler</div>
+  </div>
+  <div class="shop-header">
+    <span class="shop-title">LİSTE</span>
+    <div class="shop-actions">
+      <button class="shop-btn shop-export" onclick="exportShopCSV()">CSV</button>
+      <button class="shop-btn shop-wa" onclick="shareShopWhatsApp()">WhatsApp</button>
+      <button class="shop-btn shop-clear" onclick="clearCheckedShop()">Temizle</button>
+    </div>
+  </div>
+  <div id="shopItems"></div>
+  <button class="shop-add-btn" onclick="toggleShopAddInput()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Manuel ürün ekle
+  </button>
+  <div class="shop-add-input" id="shopAddInput">
+    <input id="shopAddText" placeholder="Ürün adı..." onkeydown="if(event.key==='Enter')addShopManual()">
+    <button onclick="addShopManual()">Ekle</button>
+  </div>
+  <div id="shopEmpty" class="empty" style="display:none"><div class="emoji">🛒</div><p>Liste boş</p><small>Az stok veya SKT yaklaşan ürünler otomatik eklenir</small></div>
+</div>
+
+<!-- FORM -->
+<div id="view-form" class="view fv">
+  <div class="fv-head">
+    <button class="fv-back" onclick="cancelForm()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    <span class="fv-title" id="formTitle">Yeni Ürün Ekle</span>
+  </div>
+  <div class="fv-body">
+    <div class="field"><label>Ürün Adı *</label><input id="f-name" type="text" placeholder="ör. Zeytinyağı" oninput="checkFormValid()"></div>
+    <div class="field"><label>Kategori</label><div class="cat-picker" id="catPicker"></div></div>
+    <div class="two-col">
+      <div class="field"><label>Miktar</label>
+        <div class="qty-field">
+          <button style="color:var(--text2)" onclick="adjQty(-1)">−</button>
+          <div class="qty-display" id="qtyDisplay">1</div>
+          <button style="color:var(--accent2)" onclick="adjQty(1)">+</button>
+        </div>
+      </div>
+      <div class="field"><label>Birim</label>
+        <select id="f-unit"><option>adet</option><option>kg</option><option>g</option><option>lt</option><option>ml</option><option>paket</option><option>kutu</option><option>şişe</option><option>tüp</option><option>çift</option></select>
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="field"><label>Marka</label><input id="f-brand" type="text" placeholder="ör. Ülker"></div>
+      <div class="field"><label>Barkod</label><input id="f-barcode" type="text" placeholder="ör. 8690..."></div>
+    </div>
+    <div class="two-col">
+      <div class="field"><label>Son Kullanma Tarihi</label><input id="f-expiry" type="date"></div>
+      <div class="field"><label>Min. Stok Uyarısı</label><input id="f-minstock" type="number" min="0" value="1"></div>
+    </div>
+    <div class="field"><label>Depolama Yeri</label><div class="loc-picker" id="locPicker"></div></div>
+    <div class="field"><label>Notlar</label><textarea id="f-notes" rows="3" placeholder="İsteğe bağlı not..."></textarea></div>
+    <button class="save-btn" id="saveBtn" disabled onclick="saveItem()">Ürünü Ekle</button>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav id="nav">
+  <button class="nb active" id="nav-home" onclick="showView('home')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span>Ana Sayfa</span>
+  </button>
+  <button class="nb" id="nav-list" onclick="showView('list')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1.2" fill="currentColor" stroke="none"/><circle cx="3" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="3" cy="18" r="1.2" fill="currentColor" stroke="none"/></svg>
+    <span>Stok</span>
+  </button>
+  <button id="scanNb" onclick="openScanner()">
+    <div class="scan-orb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" y1="12" x2="17" y2="12"/></svg></div>
+    <span>TARA</span>
+  </button>
+  <button class="nb" id="nav-shop" onclick="showView('shop')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+    <span>Alışveriş</span>
+    <span class="badge" id="shopBadge" style="display:none">0</span>
+  </button>
+  <button class="nb" onclick="openManualAdd()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    <span>Ekle</span>
+  </button>
+</nav>
+
+<!-- BULK ACTION BAR -->
+<div id="bulkBar">
+  <span class="bulk-count" id="bulkCount">0 seçildi</span>
+  <button class="bulk-btn bulk-del" onclick="bulkDelete()">Sil</button>
+  <button class="bulk-btn bulk-cancel" onclick="exitSelectMode()">Vazgeç</button>
+</div>
+
+<!-- SCANNER -->
+<div id="scanOverlay">
+  <div class="scan-head">
+    <span class="scan-head-title">Barkod / QR Tara</span>
+    <button class="scan-x" onclick="closeScanner()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div id="scanPort">
+    <video id="scanVid" playsinline muted autoplay webkit-playsinline></video>
+    <div class="scan-shade"></div>
+    <div class="scan-frame"><div class="scan-box"><div class="sc tl"></div><div class="sc tr"></div><div class="sc bl"></div><div class="sc br"></div><div class="scan-lx"></div></div></div>
+    <div class="scan-hint-wrap"><span class="scan-hint-pill" id="scanHint">Barkodu çerçeve içine getirin</span></div>
+  </div>
+  <div id="scanFoot">
+    <div class="scan-manual">
+      <input id="manualInput" type="text" inputmode="numeric" placeholder="Barkod / QR kodu manuel girin..." onkeydown="if(event.key==='Enter')manualGo()">
+      <button onclick="manualGo()">Ara</button>
+    </div>
+    <div class="scan-demo">Demo: 8690569531404 · 8690804021284 · 8690530015282 · 8690588009254</div>
+  </div>
+</div>
+
+<!-- PREVIEW MODAL -->
+<div id="previewOverlay" onclick="if(event.target===this)closePreview()">
+  <div id="previewSheet">
+    <div class="preview-drag"></div>
+    <div id="previewLoading"><div class="spinner"></div><p style="color:var(--text2);font-size:13px">Ürün aranıyor...</p><p id="loadingCode" style="color:var(--muted);font-size:11px;font-family:monospace;margin-top:4px"></p></div>
+    <div id="previewFound">
+      <div class="pf-hero">
+        <div class="pf-img" id="pfImg"></div>
+        <div style="flex:1;min-width:0">
+          <div class="pf-src" id="pfSrc"></div>
+          <div class="pf-name" id="pfName"></div>
+          <div class="pf-brand" id="pfBrand"></div>
+          <div class="pf-tags" id="pfTags"></div>
+        </div>
+      </div>
+      <div class="pf-rows" id="pfRows"></div>
+      <div class="pf-barcode"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" y1="12" x2="17" y2="12"/></svg><span id="pfBarcode"></span></div>
+      <div class="pf-acts"><button class="pf-add" onclick="addFromPreview()">✓ Stoka Ekle</button><button class="pf-edit" onclick="editFromPreview()">Düzenle</button></div>
+    </div>
+    <div id="previewNotFound">
+      <div class="nf-emoji">🔍</div>
+      <div class="nf-title">Ürün Bulunamadı</div>
+      <div class="nf-sub">Bu barkod veritabanında kayıtlı değil.</div>
+      <div class="nf-code" id="nfCode"></div>
+      <button class="nf-btn" onclick="editFromPreview()">Manuel Bilgi Gir</button><br>
+      <button class="nf-cancel" onclick="closePreview()">İptal</button>
+    </div>
+  </div>
+</div>
+
+<!-- UNDO BAR -->
+<div id="undoBar">
+  <span id="undoMsg"></span>
+  <button id="undoBtn" onclick="undoDelete()">Geri Al</button>
+  <div id="undoProgress"></div>
+</div>
+
+<div id="toast"></div>
+</div>
+
+
+
 </body>
 </html>
