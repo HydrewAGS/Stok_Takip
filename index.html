@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -193,11 +193,11 @@ img{display:block}
 /* ── Scanner ── */
 #scanOverlay{display:none;position:fixed;inset:0;background:#000;z-index:1000;flex-direction:column}
 #scanOverlay.open{display:flex}
-.scan-head{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,.7);backdrop-filter:blur(10px)}
+.scan-head{padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 14px;display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,.85);backdrop-filter:blur(12px);position:relative;z-index:1010;flex-shrink:0}
 .scan-head-title{color:#fff;font-weight:700;font-size:17px}
-.scan-x{background:rgba(255,255,255,.12);border:none;border-radius:999px;width:36px;height:36px;color:#fff;display:flex;align-items:center;justify-content:center}
+.scan-x{background:rgba(255,255,255,.2);border:none;border-radius:999px;width:42px;height:42px;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 .scan-x svg{width:18px;height:18px}
-#scanPort{flex:1;position:relative;overflow:hidden}
+#scanPort{flex:1;position:relative;overflow:hidden;background:#000;min-height:0}
 #scanVid{width:100%;height:100%;object-fit:cover}
 .scan-frame{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .scan-box{position:relative;width:260px;height:180px}
@@ -210,7 +210,7 @@ img{display:block}
 @keyframes scanln{0%,100%{top:8%}50%{top:88%}}
 .scan-hint-wrap{position:absolute;bottom:80px;left:0;right:0;text-align:center}
 .scan-hint-pill{color:rgba(255,255,255,.9);font-size:13px;background:rgba(0,0,0,.6);padding:7px 18px;border-radius:999px}
-#scanFoot{background:rgba(13,15,26,.97);padding:20px}
+#scanFoot{background:rgba(13,15,26,.97);padding:16px 20px calc(16px + env(safe-area-inset-bottom,0px));flex-shrink:0;position:relative;z-index:1010}
 .scan-manual{display:flex;gap:10px}
 .scan-manual input{flex:1;padding:12px 16px;border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:#fff;font-size:14px;outline:none}
 .scan-manual button{padding:12px 20px;border-radius:var(--radius-sm);border:none;background:var(--accent);color:#fff;font-weight:700;font-size:14px}
@@ -312,19 +312,47 @@ body.pwa-open .view{padding-top:68px}
 .empty small{color:var(--muted);font-size:13px}
 svg{stroke-linecap:round;stroke-linejoin:round}
 
-  /* html5-qrcode overlay fixes */
-  #scanPort { position: relative !important; }
-  #scanPort video { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; }
-  #scanPort canvas { display: none !important; }
-  #qr-shaded-region { border: none !important; }
+
+
+  /* ── Scanner overlay layout fixes ── */
+  .scan-head { position: relative; z-index: 1010 !important; flex-shrink: 0; }
+  .scan-x { cursor: pointer; flex-shrink: 0; }
+  #scanFoot { z-index: 1010 !important; position: relative; }
+  .scan-frame { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 1005; }
+  .scan-hint-wrap { position: absolute; bottom: 16px; left: 0; right: 0; text-align: center; z-index: 1006; pointer-events: none; }
+  /* html5-qrcode injected elements */
+  #scanPort > div:first-child { width: 100% !important; height: 100% !important; }
+  #scanPort video { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; z-index: 1001; }
+  #qr-shaded-region { border: none !important; z-index: 1002 !important; }
+  /* Hide html5-qrcode's own buttons - we use manual input instead */
   #html5-qrcode-button-camera-permission,
   #html5-qrcode-button-camera-start,
-  #html5-qrcode-button-camera-stop { 
-    padding: 12px 24px !important; border-radius: 10px !important; border: none !important;
-    background: #6366F1 !important; color: #fff !important; font-weight: 700 !important;
-    font-size: 14px !important; margin: 8px !important; cursor: pointer !important;
-  }
-  #html5-qrcode-anchor-scan-type-change { color: #818CF8 !important; font-size: 13px !important; }
+  #html5-qrcode-button-camera-stop,
+  #html5-qrcode-anchor-scan-type-change,
+  #scanPort select { display: none !important; }
+  #html5-qrcode-button-camera-permission { display: flex !important; }
+
+
+  /* ── Scanner layout fixes ── */
+  .scan-head{padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 14px !important;position:relative;z-index:1010 !important;flex-shrink:0}
+  .scan-x{width:42px !important;height:42px !important;cursor:pointer;flex-shrink:0}
+  #scanPort{flex:1;position:relative;overflow:hidden;background:#000;min-height:200px}
+  #scanFoot{z-index:1010 !important;position:relative;flex-shrink:0;padding:16px 20px calc(16px + env(safe-area-inset-bottom,0px)) !important}
+  .scan-frame{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:1005}
+  .scan-hint-wrap{position:absolute;bottom:16px;left:0;right:0;text-align:center;z-index:1006;pointer-events:none}
+  #scanPort video{position:absolute !important;inset:0 !important;width:100% !important;height:100% !important;object-fit:cover !important;z-index:1001}
+  #qr-shaded-region{border:none !important;z-index:1002 !important}
+  #html5-qrcode-button-camera-permission,
+  #html5-qrcode-button-camera-start,
+  #html5-qrcode-button-camera-stop,
+  #html5-qrcode-anchor-scan-type-change,
+  #scanPort select{display:none !important}
+
+
+  /* Yakınlaştırma ve kaydırma kilidi */
+  html, body { touch-action: pan-y; overscroll-behavior: none; }
+  * { touch-action: manipulation; }
+  input, textarea, select { touch-action: auto; }
 
 </style>
 </head>
@@ -564,6 +592,7 @@ svg{stroke-linecap:round;stroke-linejoin:round}
 </div>
 
 <script>
+
 
 // ══ DATA ════════════════════════════════════════════════════════════
 const CATS = [
@@ -1084,27 +1113,18 @@ async function startCamera() {
     return;
   }
 
-  // ── html5-qrcode (iOS Safari + tüm tarayıcılar) ────────────────
   if (typeof Html5Qrcode !== 'undefined') {
     try {
-      // html5-qrcode kendi video elementini oluşturur — scanVid'i temizle
-      const container = document.getElementById('scanPort');
-      // Önceki instance varsa temizle
       if (scanZxing) {
         try { await scanZxing.stop(); } catch {}
         try { scanZxing.clear(); } catch {}
         scanZxing = null;
       }
-      // scanVid'i gizle, html5-qrcode kendi render eder
-      document.getElementById('scanVid').style.display = 'none';
+      var vid = document.getElementById('scanVid');
+      if (vid) vid.style.display = 'none';
 
-      const qr = new Html5Qrcode('scanPort');
-      scanZxing = qr;
-
-      const config = {
-        fps: 10,
-        qrbox: { width: 250, height: 170 },
-        aspectRatio: 1.5,
+      // formatsToSupport constructor'a verilmeli (config'e değil)
+      var qr = new Html5Qrcode('scanPort', {
         formatsToSupport: [
           Html5QrcodeSupportedFormats.EAN_13,
           Html5QrcodeSupportedFormats.EAN_8,
@@ -1113,78 +1133,68 @@ async function startCamera() {
           Html5QrcodeSupportedFormats.CODE_39,
           Html5QrcodeSupportedFormats.UPC_A,
           Html5QrcodeSupportedFormats.UPC_E,
-        ]
-      };
+        ],
+        verbose: false
+      });
+      scanZxing = qr;
 
       await qr.start(
         { facingMode: 'environment' },
-        config,
-        function(decodedText) {
-          qr.stop().then(function() {
-            scanZxing = null;
-            document.getElementById('scanVid').style.display = '';
-            onBarcodeFound(decodedText);
-          }).catch(function(){});
+        {
+          fps: 15,
+          qrbox: { width: 240, height: 160 },
+          aspectRatio: window.innerHeight / window.innerWidth,
         },
-        function(errorMsg) {
-          // Tarama devam ediyor, hata normal
-        }
+        function(decodedText) {
+          var qrRef = scanZxing; scanZxing = null;
+          qrRef.stop().then(function() {
+            try { qrRef.clear(); } catch {}
+            var v2 = document.getElementById('scanVid');
+            if (v2) v2.style.display = '';
+            onBarcodeFound(decodedText);
+          }).catch(function() { onBarcodeFound(decodedText); });
+        },
+        function(err) { /* tarama devam ediyor */ }
       );
 
       hint.textContent = 'Barkodu çerçeve içine getirin';
 
     } catch(err) {
-      document.getElementById('scanVid').style.display = '';
-      console.error('html5-qrcode error:', err.name, err.message);
-      if (err.name === 'NotAllowedError' || (err.message && err.message.includes('permission'))) {
+      console.error('html5-qrcode:', err.name, err.message);
+      var v3 = document.getElementById('scanVid');
+      if (v3) v3.style.display = '';
+      if (err.name === 'NotAllowedError' || (err.message||'').toLowerCase().includes('permission')) {
         hint.textContent = '⚠️ Kamera izni verilmedi. Ayarlar > Safari > Kamera iznini açın.';
-      } else if (err.name === 'NotFoundError') {
-        hint.textContent = '⚠️ Kamera bulunamadı. Kodu manuel girin.';
       } else {
-        hint.textContent = '⚠️ Kamera açılamadı: ' + (err.message || err.name) + '. Kodu manuel girin.';
+        hint.textContent = '⚠️ ' + (err.message || err.name) + '. Kodu manuel girin.';
       }
       document.getElementById('manualInput').focus();
     }
     return;
   }
 
-  // ── Native BarcodeDetector fallback (Chrome / Samsung) ─────────
+  // Native BarcodeDetector fallback
   try {
-    let stream;
-    try {
-      stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { ideal: 'environment' }, width: {ideal:1280}, height: {ideal:720} }
-      });
-    } catch(e) {
-      stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    }
+    var stream;
+    try { stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}}}); }
+    catch(e) { stream = await navigator.mediaDevices.getUserMedia({video:true}); }
     scanStream = stream;
-    const v = document.getElementById('scanVid');
+    var v = document.getElementById('scanVid');
     v.srcObject = stream;
-    await new Promise((res, rej) => {
-      v.onloadedmetadata = res; v.onerror = rej; setTimeout(rej, 8000);
-    });
+    await new Promise(function(res,rej){ v.onloadedmetadata=res; v.onerror=rej; setTimeout(rej,8000); });
     await v.play();
     hint.textContent = 'Barkodu çerçeve içine getirin';
     if ('BarcodeDetector' in window) {
-      const det = new window.BarcodeDetector({ formats: ['ean_13','ean_8','qr_code','code_128','upc_a','upc_e','code_39'] });
-      scanInterval = setInterval(async () => {
-        if (!v || v.readyState < 2) return;
-        try {
-          const codes = await det.detect(v);
-          if (codes.length > 0) { clearInterval(scanInterval); stopCamera(); onBarcodeFound(codes[0].rawValue); }
-        } catch {}
-      }, 400);
+      var det = new window.BarcodeDetector({formats:['ean_13','ean_8','qr_code','code_128','upc_a','upc_e','code_39']});
+      scanInterval = setInterval(async function() {
+        if (!v||v.readyState<2) return;
+        try { var codes=await det.detect(v); if(codes.length>0){clearInterval(scanInterval);stopCamera();onBarcodeFound(codes[0].rawValue);} } catch {}
+      }, 300);
     } else {
       hint.textContent = '⚠️ Otomatik okuma desteklenmiyor. Kodu manuel girin.';
     }
   } catch(err) {
-    hint.textContent = '⚠️ ' + (
-      err.name === 'NotAllowedError'  ? 'Kamera izni verilmedi. Kodu manuel girin.' :
-      err.name === 'NotFoundError'    ? 'Kamera bulunamadı. Kodu manuel girin.' :
-      err.name === 'NotReadableError' ? 'Kamera meşgul. Kodu manuel girin.' :
-      'Kamera açılamadı. Kodu manuel girin.'
-    );
+    hint.textContent = '⚠️ ' + (err.name==='NotAllowedError'?'Kamera izni verilmedi.':err.name==='NotFoundError'?'Kamera bulunamadı.':err.name==='NotReadableError'?'Kamera meşgul.':'Kamera açılamadı.') + ' Kodu manuel girin.';
     document.getElementById('manualInput').focus();
   }
 }
@@ -1192,15 +1202,15 @@ async function startCamera() {
 
 function stopCamera(){
   if(scanZxing){
-    // html5-qrcode instance
-    try{ scanZxing.stop().then(function(){ try{scanZxing.clear();}catch{} }).catch(function(){}); }catch{}
-    scanZxing=null;
+    var qrRef=scanZxing; scanZxing=null;
+    try{ qrRef.stop().then(function(){try{qrRef.clear();}catch{}}).catch(function(){}); }catch{}
   }
   if(scanInterval){clearInterval(scanInterval);scanInterval=null;}
-  if(scanStream){scanStream.getTracks().forEach(t=>t.stop());scanStream=null;}
-  const v=document.getElementById('scanVid');
+  if(scanStream){scanStream.getTracks().forEach(function(t){t.stop();});scanStream=null;}
+  var v=document.getElementById('scanVid');
   if(v){v.srcObject=null;v.style.display='';}
 }
+
 function manualGo(){
   const code=document.getElementById('manualInput').value.trim();
   if(!code) return;
@@ -1376,8 +1386,8 @@ renderHome();
 updateShopBadge();
 maybeAutoNotify();
 
-</script>
 
+</script>
 <script>
 // PWA Manifest (inline blob)
 (function(){
