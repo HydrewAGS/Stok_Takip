@@ -7,10 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Ev Stok Takip</title>
-<link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#0F172A">
-<meta name="apple-mobile-web-app-title" content="Ev Stoğum">
-<link rel="apple-touch-icon" href="/icons/icon-192.png">
 
 <style>
   :root {
@@ -235,6 +232,29 @@
   .recent-wrap { padding: 0 20px; }
   svg { stroke-linecap: round; stroke-linejoin: round; }
 </style>
+<script>
+(function(){
+  var m = {
+    "name":"Ev Stok Takip","short_name":"Ev Stoğum",
+    "description":"Evdeki ürünlerinizi barkod okuyarak takip edin",
+    "start_url":".","display":"standalone",
+    "background_color":"#0F172A","theme_color":"#0F172A",
+    "orientation":"portrait","lang":"tr",
+    "icons":[
+      {"src":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAADDElEQVR4nO3Ssa1VWRBEURzs8ZgcMCYQoiJSYhkDBwmBPtS7v7vOWdIOoNW1Pvzz72fpr/swfoGqA0hRACkKIEUBpCiAFAWQogBSFECKAkhRACkKIEUBpCiAFAWQogBSFECKAkhRACkKIEUBpCiAFNUH6Mu3r2c3/uHTAI0vylMloPHltjW+SA2g8ak2N77OXkDj23Q1vtcuQON7NDa+2gpA4zO0dy+g8def1HWAxj9+XhcBGv/1qV0BaPzLZ3cyoPHn3tOBgMZ/eltHARr/5p0BJIDoOdrQ44DGP6hiQOO/0/cqAY1/TT8GkKLKAI3/Sz8HkKJqAI1/Sr+qAND4j/T7AFIUQIpaDWj8O3pLAClqKaDxv+jtAaQogBS1DtD4R/SnAaQogBR1HaCP/326J4AAAmiTHoB2GgJoaQABBBBAAAFUGkAAAQQQQACVBhBAAAEEEEClAQQQQAABBFBpAAEEEEAAAVQaQAABBBBAAJUGEEAAAQQQQKUBBBBAAAEEUGkAAQQQQAABVBpAAAEEEEAAlQYQQAABBBBApQEEEEAAAQRQaQABBBBAAAFUGkAAAQQQQACVBhBAAAEEEEClAQQQQAABBFBpAAEEEEAAAVQaQAABBBBAAJUGEEAAAQQQQKUBBBBAAAEEUGkAAQQQQAABVBpAAAEEEEAAlQYQQAABBBBApQEEEEAAAQRQaQABBNAyQ+OjHgboJbsDtDSAtD2AFAWQonYBYqirV40O0KUBpKiNgBhq6YWLA3RjewExtL/Xzg3QdQGkqO2AGNrcy7d+BBBDO3tiaIAuqgkQQ9t6aGWAbqkPEEN7em7iZwExtKFH930cEEMH63knQAydqgegwzsHEENH6nlXQAydp+e9AWF0Ep0xQAwdo2cMEENn6JkExNABeoYBYVRNZwsgjErp7ALEUKOeXYBIKnKzGhBGFXS2AyJps5smQLd5Gv/w4YC0KoAUBZCiAFIUQIoCSFEAKQogRQGkKIAUBZCiAFIUQIoCSFEAKQogRQGkKIAUBZCiAFIUQIoCSFH/A6Ue7CYsl4vHAAAAAElFTkSuQmCC","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+      {"src":"data:image/png;base64,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","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+    ]
+  };
+  var b = new Blob([JSON.stringify(m)],{type:'application/manifest+json'});
+  var l = document.createElement('link');
+  l.rel='manifest'; l.href=URL.createObjectURL(b);
+  document.head.appendChild(l);
+  var i = document.createElement('link');
+  i.rel='apple-touch-icon';
+  i.href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAADDElEQVR4nO3Ssa1VWRBEURzs8ZgcMCYQoiJSYhkDBwmBPtS7v7vOWdIOoNW1Pvzz72fpr/swfoGqA0hRACkKIEUBpCiAFAWQogBSFECKAkhRACkKIEUBpCiAFAWQogBSFECKAkhRACkKIEUBpCiAFNUH6Mu3r2c3/uHTAI0vylMloPHltjW+SA2g8ak2N77OXkDj23Q1vtcuQON7NDa+2gpA4zO0dy+g8def1HWAxj9+XhcBGv/1qV0BaPzLZ3cyoPHn3tOBgMZ/eltHARr/5p0BJIDoOdrQ44DGP6hiQOO/0/cqAY1/TT8GkKLKAI3/Sz8HkKJqAI1/Sr+qAND4j/T7AFIUQIpaDWj8O3pLAClqKaDxv+jtAaQogBS1DtD4R/SnAaQogBR1HaCP/326J4AAAmiTHoB2GgJoaQABBBBAAAFUGkAAAQQQQACVBhBAAAEEEEClAQQQQAABBFBpAAEEEEAAAVQaQAABBBBAAJUGEEAAAQQQQKUBBBBAAAEEUGkAAQQQQAABVBpAAAEEEEAAlQYQQAABBBBApQEEEEAAAQRQaQABBBBAAAFUGkAAAQQQQACVBhBAAAEEEEClAQQQQAABBFBpAAEEEEAAAVQaQAABBBBAAJUGEEAAAQQQQKUBBBBAAAEEUGkAAQQQQAABVBpAAAEEEEAAlQYQQAABBBBApQEEEEAAAQRQaQABBNAyQ+OjHgboJbsDtDSAtD2AFAWQonYBYqirV40O0KUBpKiNgBhq6YWLA3RjewExtL/Xzg3QdQGkqO2AGNrcy7d+BBBDO3tiaIAuqgkQQ9t6aGWAbqkPEEN7em7iZwExtKFH930cEEMH63knQAydqgegwzsHEENH6nlXQAydp+e9AWF0Ep0xQAwdo2cMEENn6JkExNABeoYBYVRNZwsgjErp7ALEUKOeXYBIKnKzGhBGFXS2AyJps5smQLd5Gv/w4YC0KoAUBZCiAFIUQIoCSFEAKQogRQGkKIAUBZCiAFIUQIoCSFEAKQogRQGkKIAUBZCiAFIUQIoCSFH/A6Ue7CYsl4vHAAAAAElFTkSuQmCC';
+  document.head.appendChild(i);
+})();
+</script>
 </head>
 <body>
 <div id="app">
@@ -925,13 +945,23 @@ renderHome();
 </script>
 
 <script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then(() => console.log('SW registered'))
-      .catch(e => console.log('SW error', e));
-  });
-}
+(function(){
+  if(!('serviceWorker' in navigator)) return;
+  var code = [
+    "const CACHE='ev-stok-v1';",
+    "self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['./'])).then(()=>self.skipWaiting()));});",
+    "self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});",
+    "self.addEventListener('fetch',e=>{",
+    "  var u=new URL(e.request.url);",
+    "  if(u.hostname.includes('openfoodfacts.org')){e.respondWith(fetch(e.request).catch(()=>new Response('{}',{headers:{'Content-Type':'application/json'}})));return;}",
+    "  e.respondWith(caches.match(e.request).then(c=>c||fetch(e.request).then(r=>{if(r&&r.ok&&e.request.method==='GET'){var cl=r.clone();caches.open(CACHE).then(ca=>ca.put(e.request,cl));}return r;})));",
+    "});"
+  ].join('\n');
+  var blob = new Blob([code],{type:'application/javascript'});
+  navigator.serviceWorker.register(URL.createObjectURL(blob))
+    .then(function(){console.log('SW ok');})
+    .catch(function(e){console.warn('SW err',e);});
+})();
 </script>
 </body>
 </html>
