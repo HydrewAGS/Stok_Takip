@@ -3,237 +3,221 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>Barkod Test</title>
+<title>Barkod Test v2</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: #000; font-family: system-ui, sans-serif; height: 100dvh; display: flex; flex-direction: column; }
-
+* { box-sizing:border-box; margin:0; padding:0; }
+body { background:#000; font-family:system-ui,sans-serif; height:100dvh; display:flex; flex-direction:column; }
 #header {
-  flex-shrink: 0;
-  padding: calc(env(safe-area-inset-top,0px) + 14px) 16px 14px;
-  background: rgba(0,0,0,.9);
-  display: flex; align-items: center; justify-content: space-between;
-  position: relative; z-index: 100;
+  flex-shrink:0; padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 12px;
+  background:rgba(0,0,0,.9); display:flex; align-items:center; justify-content:space-between;
+  position:relative; z-index:100;
 }
-#header h1 { color: #fff; font-size: 16px; font-weight: 700; }
+#header h1 { color:#fff; font-size:16px; font-weight:700; }
 #statusBox {
-  background: rgba(99,102,241,.15); border: 1px solid rgba(99,102,241,.3);
-  border-radius: 8px; padding: 4px 12px; color: #818CF8; font-size: 12px; font-weight: 600;
+  font-size:12px; font-weight:600; padding:4px 12px; border-radius:8px;
+  background:rgba(99,102,241,.15); border:1px solid rgba(99,102,241,.3); color:#818CF8;
 }
-
-#viewport {
-  flex: 1; position: relative; overflow: hidden; min-height: 0;
-}
-
+#viewport { flex:1; position:relative; overflow:hidden; min-height:0; }
 video {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover; z-index: 1;
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; z-index:1; display:block;
 }
-
-/* Karartma - CSS mask ile ortada delik */
+canvas#capture { display:none; }
 #overlay {
-  position: absolute; inset: 0; z-index: 2; pointer-events: none;
-  background: rgba(0,0,0,.6);
-  -webkit-mask-image: radial-gradient(ellipse 70% 40% at 50% 47%, transparent 98%, black 99%);
-  mask-image: radial-gradient(ellipse 70% 40% at 50% 47%, transparent 98%, black 99%);
+  position:absolute; inset:0; z-index:2; pointer-events:none;
+  background:rgba(0,0,0,.55);
+  -webkit-mask-image:radial-gradient(ellipse 70% 40% at 50% 47%, transparent 98%, black 99%);
+  mask-image:radial-gradient(ellipse 70% 40% at 50% 47%, transparent 98%, black 99%);
 }
-
-/* Çerçeve köşeleri */
 #frame {
-  position: absolute; inset: 0; z-index: 3; pointer-events: none;
-  display: flex; align-items: center; justify-content: center;
+  position:absolute; inset:0; z-index:3; pointer-events:none;
+  display:flex; align-items:center; justify-content:center;
 }
-#box {
-  position: relative;
-  width: 70%; max-width: 280px;
-  aspect-ratio: 3/2;
-}
-.c {
-  position: absolute; width: 24px; height: 24px;
-  border-color: #818CF8; border-style: solid;
-}
-.c.tl { top:0; left:0;    border-width: 3px 0 0 3px; border-radius: 3px 0 0 0; }
-.c.tr { top:0; right:0;   border-width: 3px 3px 0 0; border-radius: 0 3px 0 0; }
-.c.bl { bottom:0; left:0; border-width: 0 0 3px 3px; border-radius: 0 0 0 3px; }
-.c.br { bottom:0; right:0;border-width: 0 3px 3px 0; border-radius: 0 0 3px 0; }
-
-/* Tarama çizgisi */
+#box { position:relative; width:70%; max-width:280px; aspect-ratio:3/2; }
+.c { position:absolute; width:24px; height:24px; border-color:#818CF8; border-style:solid; }
+.c.tl{top:0;left:0;border-width:3px 0 0 3px;border-radius:3px 0 0 0}
+.c.tr{top:0;right:0;border-width:3px 3px 0 0;border-radius:0 3px 0 0}
+.c.bl{bottom:0;left:0;border-width:0 0 3px 3px;border-radius:0 0 0 3px}
+.c.br{bottom:0;right:0;border-width:0 3px 3px 0;border-radius:0 0 3px 0}
 #scanline {
-  position: absolute; left: 2px; right: 2px; height: 2px;
-  background: linear-gradient(90deg, transparent, #818CF8 30%, #6366F1 50%, #818CF8 70%, transparent);
-  box-shadow: 0 0 8px rgba(99,102,241,.8);
-  animation: scan 2s ease-in-out infinite;
+  position:absolute; left:2px; right:2px; height:2px;
+  background:linear-gradient(90deg,transparent,#818CF8 30%,#6366F1 50%,#818CF8 70%,transparent);
+  box-shadow:0 0 8px rgba(99,102,241,.8);
+  animation:scan 2s ease-in-out infinite;
 }
-@keyframes scan { 0%,100%{top:5%} 50%{top:90%} }
-
-/* Hint */
-#hint {
-  position: absolute; bottom: 16px; left: 0; right: 0;
-  text-align: center; z-index: 4; pointer-events: none;
+@keyframes scan{0%,100%{top:5%}50%{top:90%}}
+#hintWrap {
+  position:absolute; bottom:16px; left:0; right:0;
+  text-align:center; z-index:4; pointer-events:none;
 }
-#hint span {
-  display: inline-block;
-  background: rgba(0,0,0,.65); color: rgba(255,255,255,.9);
-  font-size: 13px; padding: 7px 18px; border-radius: 999px;
+#hintText {
+  display:inline-block; background:rgba(0,0,0,.65); color:rgba(255,255,255,.92);
+  font-size:13px; padding:7px 18px; border-radius:999px;
 }
-
-/* Alt alan */
 #footer {
-  flex-shrink: 0;
-  padding: 16px 16px calc(16px + env(safe-area-inset-bottom,0px));
-  background: #0D0F1A; position: relative; z-index: 100;
+  flex-shrink:0;
+  padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px));
+  background:#0D0F1A; position:relative; z-index:100;
 }
 #result {
-  background: rgba(52,211,153,.1); border: 1px solid rgba(52,211,153,.3);
-  border-radius: 10px; padding: 12px 16px; margin-bottom: 12px;
-  color: #34D399; font-size: 14px; font-weight: 600;
-  display: none; word-break: break-all;
+  display:none; background:rgba(52,211,153,.1); border:1px solid rgba(52,211,153,.3);
+  border-radius:10px; padding:11px 14px; margin-bottom:10px;
+  color:#34D399; font-size:14px; font-weight:600; word-break:break-all;
 }
-#manualRow { display: flex; gap: 8px; margin-bottom: 8px; }
+#manualRow{display:flex;gap:8px;margin-bottom:8px}
 #manualInput {
-  flex: 1; padding: 11px 14px; border-radius: 10px;
-  border: 1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.08);
-  color: #fff; font-size: 14px; outline: none;
+  flex:1; padding:11px 14px; border-radius:10px;
+  border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.08);
+  color:#fff; font-size:14px; outline:none;
 }
 #manualBtn {
-  padding: 11px 18px; border-radius: 10px; border: none;
-  background: #6366F1; color: #fff; font-weight: 700; font-size: 14px; cursor: pointer;
+  padding:11px 18px; border-radius:10px; border:none;
+  background:#6366F1; color:#fff; font-weight:700; font-size:14px; cursor:pointer;
 }
-#info { color: #475569; font-size: 11px; text-align: center; line-height: 1.6; }
+#info{color:#3D4068;font-size:11px;text-align:center;line-height:1.7}
 </style>
 </head>
 <body>
-
 <div id="header">
-  <h1>📷 Barkod Test</h1>
-  <span id="statusBox">Başlatılıyor...</span>
+  <h1>📷 Barkod Test v2</h1>
+  <span id="statusBox">Yükleniyor...</span>
 </div>
-
 <div id="viewport">
   <video id="vid" playsinline muted autoplay webkit-playsinline></video>
+  <canvas id="capture"></canvas>
   <div id="overlay"></div>
   <div id="frame">
     <div id="box">
-      <div class="c tl"></div>
-      <div class="c tr"></div>
-      <div class="c bl"></div>
-      <div class="c br"></div>
+      <div class="c tl"></div><div class="c tr"></div>
+      <div class="c bl"></div><div class="c br"></div>
       <div id="scanline"></div>
     </div>
   </div>
-  <div id="hint"><span id="hintText">Başlatılıyor...</span></div>
+  <div id="hintWrap"><span id="hintText">Başlatılıyor...</span></div>
 </div>
-
 <div id="footer">
   <div id="result"></div>
   <div id="manualRow">
     <input id="manualInput" type="text" inputmode="numeric" placeholder="Manuel barkod girin...">
     <button id="manualBtn">Ara</button>
   </div>
-  <div id="info">
-    BarcodeDetector: <span id="bdStatus">?</span> |
-    iOS: <span id="iosStatus">?</span> |
-    <span id="versionInfo">-</span>
-  </div>
+  <div id="info" id="dbgInfo">Yükleniyor...</div>
 </div>
 
+<!-- ZXing JS: iOS Safari dahil tüm tarayıcılarda çalışır -->
+<script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js"></script>
 <script>
-const status  = document.getElementById('statusBox');
-const hint    = document.getElementById('hintText');
-const result  = document.getElementById('result');
-const vid     = document.getElementById('vid');
+const vid      = document.getElementById('vid');
+const canvas   = document.getElementById('capture');
+const status   = document.getElementById('statusBox');
+const hint     = document.getElementById('hintText');
+const result   = document.getElementById('result');
+const info     = document.getElementById('info');
 
-// Cihaz bilgisi
-const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
-const isSafari = /safari/i.test(navigator.userAgent) && !/chrome/i.test(navigator.userAgent);
-const hasBD = 'BarcodeDetector' in window;
-document.getElementById('iosStatus').textContent = isIos ? 'Evet' : 'Hayır';
-document.getElementById('bdStatus').textContent = hasBD ? '✓ Var' : '✗ Yok';
-document.getElementById('versionInfo').textContent = navigator.userAgent.match(/OS (\d+)_/)?.[1]
-  ? 'iOS ' + navigator.userAgent.match(/OS (\d+)_/)[1]
-  : navigator.userAgent.match(/Chrome\/(\d+)/)?.[1]
-  ? 'Chrome ' + navigator.userAgent.match(/Chrome\/(\d+)/)[1]
-  : '?';
+const isIos    = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const hasBD    = 'BarcodeDetector' in window;
+const iosVer   = (navigator.userAgent.match(/OS (\d+)_/)||[])[1] || '?';
+const chrVer   = (navigator.userAgent.match(/Chrome\/(\d+)/)||[])[1] || '?';
 
-function showResult(code) {
-  result.style.display = 'block';
-  result.textContent = '✓ Okunan: ' + code;
-  status.textContent = 'Bulundu!';
-  status.style.color = '#34D399';
-  hint.textContent = '✓ ' + code;
+function setInfo() {
+  info.textContent =
+    'BD:' + (hasBD ? '✓' : '✗') +
+    ' | iOS:' + (isIos ? iosVer : 'Hayır') +
+    ' | ZXing:' + (typeof ZXing !== 'undefined' ? '✓' : '✗') +
+    ' | Chrome:' + (chrVer !== '?' ? chrVer : '-');
 }
 
-// Manuel giriş
+function found(code) {
+  result.style.display = 'block';
+  result.textContent   = '✓ ' + code;
+  status.textContent   = 'Bulundu!';
+  status.style.cssText = 'background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.3);color:#34D399;font-size:12px;font-weight:600;padding:4px 12px;border-radius:8px';
+  hint.textContent     = '✓ ' + code;
+}
+
+// Manuel
 document.getElementById('manualBtn').onclick = function() {
   const v = document.getElementById('manualInput').value.trim();
-  if (v) showResult(v);
+  if (v) found(v);
 };
 document.getElementById('manualInput').onkeydown = function(e) {
   if (e.key === 'Enter') document.getElementById('manualBtn').click();
 };
 
-// Kamerayı başlat
-async function start() {
-  status.textContent = 'Kamera...';
-  hint.textContent = 'Kamera açılıyor...';
-
-  try {
-    let stream;
-    // 3 farklı yöntem dene
-    const attempts = [
-      { facingMode: { exact: 'environment' }, width:{ideal:1920}, height:{ideal:1080} },
-      { facingMode: { ideal: 'environment' }, width:{ideal:1280}, height:{ideal:720}  },
-      { facingMode: 'environment' },
-    ];
-
-    for (const constraint of attempts) {
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({ video: constraint });
-        break;
-      } catch(e) {
-        if (e.name === 'NotAllowedError') throw e; // izin yok, deneme bırak
-      }
-    }
-    if (!stream) stream = await navigator.mediaDevices.getUserMedia({ video: true });
-
-    vid.srcObject = stream;
-    await vid.play();
-    status.textContent = 'Kamera Açık';
-    hint.textContent = 'Barkodu çerçeve içine getirin';
-
-    // BarcodeDetector
-    if (hasBD) {
-      const det = new BarcodeDetector({
-        formats: ['ean_13','ean_8','qr_code','code_128','upc_a','upc_e','code_39','itf','data_matrix']
-      });
-      status.textContent = 'Taranıyor...';
-      let active = true;
-      const loop = setInterval(async () => {
-        if (!active || vid.readyState < 2 || vid.paused) return;
-        try {
-          const codes = await det.detect(vid);
-          if (codes.length > 0) {
-            active = false;
-            clearInterval(loop);
-            showResult(codes[0].rawValue);
-          }
-        } catch(e) {}
-      }, 150);
-    } else {
-      hint.textContent = '⚠️ BarcodeDetector desteklenmiyor. Manuel girin.';
-      status.textContent = 'Kamera Açık (Manuel)';
-    }
-
-  } catch(err) {
-    status.textContent = 'Hata: ' + err.name;
-    hint.textContent = err.name === 'NotAllowedError'
-      ? '⚠️ Kamera izni verilmedi'
-      : '⚠️ ' + err.message;
+// ── Kamerayı aç ───────────────────────────────────────────────
+async function openCamera() {
+  status.textContent = 'Kamera açılıyor...';
+  hint.textContent   = 'Kamera açılıyor...';
+  let stream;
+  const tries = [
+    { facingMode:{exact:'environment'}, width:{ideal:1920}, height:{ideal:1080} },
+    { facingMode:{ideal:'environment'}, width:{ideal:1280}, height:{ideal:720}  },
+    { facingMode:'environment' },
+    true,
+  ];
+  for (const c of tries) {
+    try { stream = await navigator.mediaDevices.getUserMedia({video:c}); break; }
+    catch(e) { if (e.name === 'NotAllowedError') throw e; }
   }
+  vid.srcObject = stream;
+  vid.onloadedmetadata = () => vid.play().catch(()=>{});
+  status.textContent = 'Kamera Açık';
+  return stream;
 }
 
-start();
+// ── Motor seç ve başlat ────────────────────────────────────────
+async function startScanning() {
+  setInfo();
+
+  try { await openCamera(); }
+  catch(e) {
+    hint.textContent = '⚠️ ' + (e.name === 'NotAllowedError' ? 'Kamera izni verilmedi' : e.message);
+    status.textContent = 'Hata';
+    return;
+  }
+
+  // Motor 1: ZXing JS (iOS Safari dahil her tarayıcı)
+  if (typeof ZXing !== 'undefined') {
+    status.textContent = 'ZXing Taranıyor';
+    hint.textContent   = 'Barkodu çerçeve içine getirin';
+    try {
+      const reader = new ZXing.BrowserMultiFormatReader();
+      reader.decodeFromVideoDevice(undefined, vid, (result, err) => {
+        if (result) {
+          reader.reset();
+          found(result.getText());
+        }
+      });
+      return;
+    } catch(e) {
+      console.warn('ZXing err:', e);
+    }
+  }
+
+  // Motor 2: BarcodeDetector (Chrome Android)
+  if (hasBD) {
+    status.textContent = 'BD Taranıyor';
+    hint.textContent   = 'Barkodu çerçeve içine getirin';
+    const det = new BarcodeDetector({
+      formats:['ean_13','ean_8','qr_code','code_128','upc_a','upc_e','code_39']
+    });
+    let active = true;
+    setInterval(async () => {
+      if (!active || vid.readyState < 2) return;
+      try {
+        const codes = await det.detect(vid);
+        if (codes.length > 0) { active = false; found(codes[0].rawValue); }
+      } catch(e) {}
+    }, 150);
+    return;
+  }
+
+  // Motor yok
+  hint.textContent   = '⚠️ Desteklenmiyor. Kodu manuel girin.';
+  status.textContent = 'Manuel Mod';
+}
+
+startScanning();
 </script>
 </body>
 </html>
