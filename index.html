@@ -11,7 +11,7 @@
 <title>Ev Stok Takip</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/@zxing/library@0.20.0/umd/index.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <style>
 :root {
   --bg:       #0D0F1A;
@@ -311,6 +311,21 @@ body.pwa-open .view{padding-top:68px}
 .empty p{color:var(--text2);font-size:15px;margin-bottom:5px;font-weight:600}
 .empty small{color:var(--muted);font-size:13px}
 svg{stroke-linecap:round;stroke-linejoin:round}
+
+  /* html5-qrcode overlay fixes */
+  #scanPort { position: relative !important; }
+  #scanPort video { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; }
+  #scanPort canvas { display: none !important; }
+  #qr-shaded-region { border: none !important; }
+  #html5-qrcode-button-camera-permission,
+  #html5-qrcode-button-camera-start,
+  #html5-qrcode-button-camera-stop { 
+    padding: 12px 24px !important; border-radius: 10px !important; border: none !important;
+    background: #6366F1 !important; color: #fff !important; font-weight: 700 !important;
+    font-size: 14px !important; margin: 8px !important; cursor: pointer !important;
+  }
+  #html5-qrcode-anchor-scan-type-change { color: #818CF8 !important; font-size: 13px !important; }
+
 </style>
 </head>
 <body>
@@ -549,6 +564,7 @@ svg{stroke-linecap:round;stroke-linejoin:round}
 </div>
 
 <script>
+
 // ══ DATA ════════════════════════════════════════════════════════════
 const CATS = [
   { id:'food',        label:'Yiyecek',       emoji:'🥦', color:'#34D399', bg:'#022c22' },
@@ -1059,68 +1075,131 @@ async function openScanner() {
 function closeScanner(){stopCamera();document.getElementById('scanOverlay').classList.remove('open');}
 
 async function startCamera() {
-  const hint=document.getElementById('scanHint');
-  hint.textContent='📷 Kamera başlatılıyor...';
-  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
-    hint.textContent='⚠️ Tarayıcınız kamerayı desteklemiyor. Kodu manuel girin.';
-    document.getElementById('manualInput').focus(); return;
+  const hint = document.getElementById('scanHint');
+  hint.textContent = '📷 Kamera başlatılıyor...';
+
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    hint.textContent = '⚠️ Tarayıcınız kamerayı desteklemiyor. Kodu manuel girin.';
+    document.getElementById('manualInput').focus();
+    return;
   }
-  if(typeof ZXing!=='undefined'){
-    try{
-      const hints=new Map();
-      hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS,[
-        ZXing.BarcodeFormat.EAN_13,ZXing.BarcodeFormat.EAN_8,
-        ZXing.BarcodeFormat.QR_CODE,ZXing.BarcodeFormat.CODE_128,
-        ZXing.BarcodeFormat.CODE_39,ZXing.BarcodeFormat.UPC_A,
-        ZXing.BarcodeFormat.UPC_E,ZXing.BarcodeFormat.DATA_MATRIX,
-      ]);
-      const reader=new ZXing.BrowserMultiFormatReader(hints);
-      scanZxing=reader;
-      const devices=await ZXing.BrowserCodeReader.listVideoInputDevices();
-      let deviceId;
-      if(devices.length>0){
-        const rear=devices.find(d=>/back|rear|environment/i.test(d.label));
-        deviceId=rear?rear.deviceId:devices[devices.length-1].deviceId;
+
+  // ── html5-qrcode (iOS Safari + tüm tarayıcılar) ────────────────
+  if (typeof Html5Qrcode !== 'undefined') {
+    try {
+      // html5-qrcode kendi video elementini oluşturur — scanVid'i temizle
+      const container = document.getElementById('scanPort');
+      // Önceki instance varsa temizle
+      if (scanZxing) {
+        try { await scanZxing.stop(); } catch {}
+        try { scanZxing.clear(); } catch {}
+        scanZxing = null;
       }
-      hint.textContent='Barkodu çerçeve içine getirin';
-      reader.decodeFromVideoDevice(deviceId,'scanVid',(result,err)=>{
-        if(result){const code=result.getText();reader.reset();scanZxing=null;onBarcodeFound(code);}
-      });
-    }catch(err){
-      hint.textContent='⚠️ '+(err.name==='NotAllowedError'?'Kamera izni verilmedi.':err.name==='NotFoundError'?'Kamera bulunamadı.':'Kamera açılamadı.')+' Kodu manuel girin.';
+      // scanVid'i gizle, html5-qrcode kendi render eder
+      document.getElementById('scanVid').style.display = 'none';
+
+      const qr = new Html5Qrcode('scanPort');
+      scanZxing = qr;
+
+      const config = {
+        fps: 10,
+        qrbox: { width: 250, height: 170 },
+        aspectRatio: 1.5,
+        formatsToSupport: [
+          Html5QrcodeSupportedFormats.EAN_13,
+          Html5QrcodeSupportedFormats.EAN_8,
+          Html5QrcodeSupportedFormats.QR_CODE,
+          Html5QrcodeSupportedFormats.CODE_128,
+          Html5QrcodeSupportedFormats.CODE_39,
+          Html5QrcodeSupportedFormats.UPC_A,
+          Html5QrcodeSupportedFormats.UPC_E,
+        ]
+      };
+
+      await qr.start(
+        { facingMode: 'environment' },
+        config,
+        function(decodedText) {
+          qr.stop().then(function() {
+            scanZxing = null;
+            document.getElementById('scanVid').style.display = '';
+            onBarcodeFound(decodedText);
+          }).catch(function(){});
+        },
+        function(errorMsg) {
+          // Tarama devam ediyor, hata normal
+        }
+      );
+
+      hint.textContent = 'Barkodu çerçeve içine getirin';
+
+    } catch(err) {
+      document.getElementById('scanVid').style.display = '';
+      console.error('html5-qrcode error:', err.name, err.message);
+      if (err.name === 'NotAllowedError' || (err.message && err.message.includes('permission'))) {
+        hint.textContent = '⚠️ Kamera izni verilmedi. Ayarlar > Safari > Kamera iznini açın.';
+      } else if (err.name === 'NotFoundError') {
+        hint.textContent = '⚠️ Kamera bulunamadı. Kodu manuel girin.';
+      } else {
+        hint.textContent = '⚠️ Kamera açılamadı: ' + (err.message || err.name) + '. Kodu manuel girin.';
+      }
       document.getElementById('manualInput').focus();
     }
     return;
   }
-  try{
+
+  // ── Native BarcodeDetector fallback (Chrome / Samsung) ─────────
+  try {
     let stream;
-    try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}}});}
-    catch(e){stream=await navigator.mediaDevices.getUserMedia({video:true});}
-    scanStream=stream;
-    const v=document.getElementById('scanVid');
-    v.srcObject=stream;
-    await new Promise((res,rej)=>{v.onloadedmetadata=res;v.onerror=rej;setTimeout(rej,8000);});
-    await v.play();
-    hint.textContent='Barkodu çerçeve içine getirin';
-    if('BarcodeDetector' in window){
-      const det=new window.BarcodeDetector({formats:['ean_13','ean_8','qr_code','code_128','upc_a','upc_e','code_39']});
-      scanInterval=setInterval(async()=>{
-        if(!v||v.readyState<2) return;
-        try{const codes=await det.detect(v);if(codes.length>0){clearInterval(scanInterval);stopCamera();onBarcodeFound(codes[0].rawValue);}}catch{}
-      },400);
-    } else {
-      hint.textContent='⚠️ Otomatik okuma desteklenmiyor. Kodu manuel girin.';
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { ideal: 'environment' }, width: {ideal:1280}, height: {ideal:720} }
+      });
+    } catch(e) {
+      stream = await navigator.mediaDevices.getUserMedia({ video: true });
     }
-  }catch(err){
-    hint.textContent='⚠️ '+(err.name==='NotAllowedError'?'Kamera izni verilmedi.':err.name==='NotFoundError'?'Kamera bulunamadı.':err.name==='NotReadableError'?'Kamera meşgul.':'Kamera açılamadı.')+' Kodu manuel girin.';
+    scanStream = stream;
+    const v = document.getElementById('scanVid');
+    v.srcObject = stream;
+    await new Promise((res, rej) => {
+      v.onloadedmetadata = res; v.onerror = rej; setTimeout(rej, 8000);
+    });
+    await v.play();
+    hint.textContent = 'Barkodu çerçeve içine getirin';
+    if ('BarcodeDetector' in window) {
+      const det = new window.BarcodeDetector({ formats: ['ean_13','ean_8','qr_code','code_128','upc_a','upc_e','code_39'] });
+      scanInterval = setInterval(async () => {
+        if (!v || v.readyState < 2) return;
+        try {
+          const codes = await det.detect(v);
+          if (codes.length > 0) { clearInterval(scanInterval); stopCamera(); onBarcodeFound(codes[0].rawValue); }
+        } catch {}
+      }, 400);
+    } else {
+      hint.textContent = '⚠️ Otomatik okuma desteklenmiyor. Kodu manuel girin.';
+    }
+  } catch(err) {
+    hint.textContent = '⚠️ ' + (
+      err.name === 'NotAllowedError'  ? 'Kamera izni verilmedi. Kodu manuel girin.' :
+      err.name === 'NotFoundError'    ? 'Kamera bulunamadı. Kodu manuel girin.' :
+      err.name === 'NotReadableError' ? 'Kamera meşgul. Kodu manuel girin.' :
+      'Kamera açılamadı. Kodu manuel girin.'
+    );
     document.getElementById('manualInput').focus();
   }
 }
+
+
 function stopCamera(){
-  if(scanZxing){try{scanZxing.reset();}catch{}scanZxing=null;}
+  if(scanZxing){
+    // html5-qrcode instance
+    try{ scanZxing.stop().then(function(){ try{scanZxing.clear();}catch{} }).catch(function(){}); }catch{}
+    scanZxing=null;
+  }
   if(scanInterval){clearInterval(scanInterval);scanInterval=null;}
   if(scanStream){scanStream.getTracks().forEach(t=>t.stop());scanStream=null;}
-  const v=document.getElementById('scanVid');if(v)v.srcObject=null;
+  const v=document.getElementById('scanVid');
+  if(v){v.srcObject=null;v.style.display='';}
 }
 function manualGo(){
   const code=document.getElementById('manualInput').value.trim();
@@ -1296,6 +1375,7 @@ function toast(msg,type){
 renderHome();
 updateShopBadge();
 maybeAutoNotify();
+
 </script>
 
 <script>
