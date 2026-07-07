@@ -297,6 +297,7 @@
 
 
 
+
 <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js"></script>
 </head>
 <body>
@@ -525,7 +526,10 @@
 
 
 
+
+
 <script>
+
 
 
 
@@ -864,72 +868,76 @@ function openScanner() {
   stopCamera();
 
   overlay.classList.add('open');
-  hint.textContent = 'Kamera aciliyor...';
   document.getElementById('manualInput').value = '';
+  hint.textContent = 'DEBUG: acılıyor...';
 
-  // getUserMedia
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    hint.textContent = 'DEBUG: getUserMedia YOK';
+    return;
+  }
+
+  if (!window.isSecureContext) {
+    hint.textContent = 'DEBUG: guvenli baglanti (HTTPS) degil!';
+    return;
+  }
+
+  hint.textContent = 'DEBUG: izin isteniyor...';
+
   var tries = [
-    {video:{facingMode:{exact:'environment'},width:{ideal:1280},height:{ideal:720}}},
-    {video:{facingMode:{ideal:'environment'}}},
+    {video:{facingMode:{exact:'environment'}}},
     {video:{facingMode:'environment'}},
     {video:true}
   ];
 
   function attempt(i) {
     if (i >= tries.length) {
-      hint.textContent = 'Kamera acilamadi. Lutfen manuel girin.';
-      document.getElementById('manualInput').focus();
+      hint.textContent = 'DEBUG: tum denemeler basarisiz';
       return;
     }
+    hint.textContent = 'DEBUG: deneme ' + (i+1) + '/' + tries.length;
     navigator.mediaDevices.getUserMedia(tries[i])
       .then(function(stream) {
+        hint.textContent = 'DEBUG: stream alindi, track=' + stream.getVideoTracks().length;
         scanStream = stream;
         _scanActive = true;
-
-        // srcObject ata
+        vid.setAttribute('autoplay', '');
+        vid.setAttribute('muted', '');
+        vid.setAttribute('playsinline', '');
+        vid.muted = true;
         vid.srcObject = stream;
 
-        // iOS Safari icin: oncanplay'de play() cagir
-        vid.oncanplay = function() {
-          vid.oncanplay = null;
-          vid.play()
-            .then(function() {
-              hint.textContent = 'Barkodu cerceve icine getirin';
-              startDecode(vid);
-            })
-            .catch(function(e) {
-              // play() basarisiz - yine de decode dene
-              hint.textContent = 'Barkodu cerceve icine getirin';
-              startDecode(vid);
-            });
+        vid.onloadedmetadata = function() {
+          hint.textContent = 'DEBUG: metadata yuklendi ' + vid.videoWidth + 'x' + vid.videoHeight;
         };
 
-        // oncanplay gelmezse 1 saniye sonra zorla baslat
-        setTimeout(function() {
-          if (!vid.paused) return;
-          vid.play().catch(function(){});
+        vid.onplaying = function() {
           hint.textContent = 'Barkodu cerceve icine getirin';
           startDecode(vid);
-        }, 1000);
+        };
 
+        vid.onerror = function(e) {
+          hint.textContent = 'DEBUG: video hata - ' + (vid.error ? vid.error.message : 'bilinmeyen');
+        };
+
+        var playPromise = vid.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(function() {
+              hint.textContent = 'DEBUG: play() basarili, paused=' + vid.paused;
+            })
+            .catch(function(e) {
+              hint.textContent = 'DEBUG: play() hata - ' + e.name + ': ' + e.message;
+            });
+        } else {
+          hint.textContent = 'DEBUG: play() promise dondurmedi (eski tarayici)';
+        }
       })
       .catch(function(err) {
-        if (err.name === 'NotAllowedError') {
-          hint.textContent = 'Kamera izni verilmedi. Ayarlar > Safari > Kamera iznini acin.';
-          document.getElementById('manualInput').focus();
-        } else if (err.name === 'NotFoundError') {
-          hint.textContent = 'Kamera bulunamadi.';
-          document.getElementById('manualInput').focus();
-        } else {
-          attempt(i + 1);
+        hint.textContent = 'DEBUG: getUserMedia hata - ' + err.name + ': ' + err.message;
+        if (err.name !== 'NotAllowedError' && err.name !== 'NotFoundError') {
+          setTimeout(function() { attempt(i + 1); }, 500);
         }
       });
-  }
-
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-    hint.textContent = 'Tarayiciniz kamerayi desteklemiyor. Manuel girin.';
-    document.getElementById('manualInput').focus();
-    return;
   }
 
   attempt(0);
@@ -945,11 +953,11 @@ var _scanActive = false;
 
 function startDecode(vid) {
   if (typeof ZXing !== 'undefined') {
-    var canvas   = document.createElement('canvas');
-    var ctx      = canvas.getContext('2d');
-    var reader   = new ZXing.BrowserMultiFormatReader();
-    var pending  = false;
-    scanZxing    = { reset: function() { try { reader.reset(); } catch(e) {} } };
+    var canvas  = document.createElement('canvas');
+    var ctx     = canvas.getContext('2d');
+    var reader  = new ZXing.BrowserMultiFormatReader();
+    var pending = false;
+    scanZxing   = { reset: function() { try { reader.reset(); } catch(e) {} } };
 
     function tick() {
       if (!_scanActive) return;
@@ -961,12 +969,11 @@ function startDecode(vid) {
       canvas.height = vid.videoHeight;
       ctx.drawImage(vid, 0, 0);
 
-      var img   = new Image();
-      var url   = canvas.toDataURL('image/jpeg', 0.85);
+      var img = new Image();
+      var url = canvas.toDataURL('image/jpeg', 0.85);
       img.onload = function() {
         reader.decodeFromImageElement(img)
           .then(function(result) {
-            URL.revokeObjectURL && URL.revokeObjectURL(url);
             if (!_scanActive) return;
             _scanActive = false;
             closeScanner();
@@ -980,7 +987,6 @@ function startDecode(vid) {
       img.onerror = function() { pending = false; if (_scanActive) setTimeout(tick, 300); };
       img.src = url;
     }
-
     setTimeout(tick, 800);
     return;
   }
@@ -1004,7 +1010,6 @@ function startDecode(vid) {
   }
 
   document.getElementById('scanHint').textContent = 'Otomatik okuma desteklenmiyor. Manuel girin.';
-  document.getElementById('manualInput').focus();
 }
 
 function startDetection() {}
@@ -1299,8 +1304,10 @@ renderHome();
 
 
 
+
 </script>
 <script>
+
 
 
 
@@ -1311,6 +1318,7 @@ renderHome();
   var l=document.createElement('link');l.rel='manifest';l.href=URL.createObjectURL(b);document.head.appendChild(l);
   var ai=document.createElement('link');ai.rel='apple-touch-icon';ai.href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAFJElEQVR4nO3bu45cRRSFYSfE3M2dGHEx5jWQeCdyHs850rzB5ASNBtTSGMbTfbrqnFVV+9vSn46nu9aHJQQvXjjnnHPOOeecc84555xzzm289z/7/qQ6/frn7xdr/TPSm7546UfQMV0z9mu79XdIb/2tSz+I9q/n6HtiMHzt1hGjnxZC+nG0b6nxt0AwfjWXHn0rBOPXMsMfDkH6kVRz/LdAAEDLjX8LAuPXkuOPIUg/lox/KwLj17LjPxRB+sFk/LciAEBLj/8SAuPX8uPf9W+B9MMJgOjfAh98/sNJc5ce5pE99fkBKFx6kAAIgDACAIqWHiIAmhrAe69exsfcAwEABesxogcA59KDBkBRADMjAKBgewCYDQEARes1oKcAzIQAgKLtDWAmCAAU7CgAMyAAoFg9x3MNgNERAFCsBICREQBQrN4D2oJgRAgAFGuPEc2OAICFu7u7e6u9RnQkgN6IAFi4owBsQdDj5wOg4QBcC6HHzwRAwwK4hKDHzwJAQwN4DsHRPwOAwiUBtPzT+8h/kwTAwqUBPDXo1vEDoOkAPB526/gB0JQAzgNvHX9PAA/fUROAD7/48aRxGw1A6/B7A3j4jgAYuIdbGUBq+ABM0OPrBWAkBOnxAzBwT91KAEYYPwCD9tytAGCk8QMwWNdcFQB7/x4ADNaWawGQRjDC+AEYrFtuVQBHjh+AAWq5WwGM8p9FJMYPwED1uBUAHP07ADBISQApBCONH4DJx38JwegA0uMHYIHxP4fgEoDk/yOQwAfAAO15MwBI9a73AGCR8b8LwTWlxwlAgY48CK4bPwALjv9WBOmRJsYPwKLjh+C68QOw8PjPVxXBtZ8XgIXHf75qCLZ8VgAAWArB1s8JwOLjP18FBLd8RgAKjP98t36m9LD3Gj8AhcZ/vtUQtL5ZE4CPvvzppH+b6Vo+Z3rwj+vxbgAUG//5Wj/z7MMHoPD4z9fj8886fACKj/98vb6LmUYPgPG/dXt8PyOPHgDj/9+lv9NUAADwz6W/UwAmaeVLf7cADF6FS3/HAAxapUt/1wAMVsVLf+cADFLlS3/3ABh//NJvAIDxxy/9FgAYf/zSbwIAANFLvwkAxh+/9NsAYPzxS78RAMYfv/RbAWD88Uu/GQDGH7/02wFg/PFLvyEAxh+/9FsCYPzxS79pBMDHX706zZbb79Jve0sAuG6XflsAjD9+6TcGwPjjl35rAIw/fuk3B8D445d++/IAXP7SGygLwI1z6S2UBLCl+/t7bSz9ZgAcDOCvN390Lz1iAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA9JsBAAAAAAAAQBDAJ1//fFqhPQF89/q3WHsCSL9ZrwAAAAAAAAAAAAAAAAAAAAAAAAAA+gTA2AEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+XcDAAAAAAAAAAAAAAAAAAAAQNpQE4BPv3l9kmYOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJWuCcDLb385STMHgEoHgErXBAACzVzz+AHQzAGg0nUBAIFmrNv4AdCMdQUAgWaq+/gB0EztAgACzdBu44dAo7f7+CHQqB02fgg0WoePHwSNUHT4/730l6E6pbd+8dJfkNYrvWnnnHPOOeecc84555yb8P4GrEksNBUnF30AAAAASUVORK5CYII=';document.head.appendChild(ai);
 })();
+
 
 
 
