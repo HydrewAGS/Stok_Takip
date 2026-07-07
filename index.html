@@ -296,6 +296,7 @@
 
 
 
+
 <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js"></script>
 </head>
 <body>
@@ -522,7 +523,10 @@
 
 
 
+
+
 <script>
+
 
 
 
@@ -852,24 +856,75 @@ function cancelForm() { editId=null; showView(items.length?'list':'home'); }
 
 // ══ SCANNER ════════════════════════════════════════════════════════
 function openScanner() {
-  document.getElementById('scannerOverlay').classList.add('open');
+  var overlay = document.getElementById('scannerOverlay');
+  var hint    = document.getElementById('scanHint');
+  var vid     = document.getElementById('scanVideo');
+
+  _scanActive = false;
+  stopCamera();
+
+  overlay.classList.add('open');
+  hint.textContent = 'Kamera aciliyor...';
   document.getElementById('manualInput').value = '';
-  document.getElementById('scanHint').textContent = 'Kamera aciliyor...';
-  setTimeout(startCamera, 150);
-}
 
-function closeScanner() {
-  stopCamera();
-  document.getElementById('scannerOverlay').classList.remove('open');
-}
+  // getUserMedia
+  var tries = [
+    {video:{facingMode:{exact:'environment'},width:{ideal:1280},height:{ideal:720}}},
+    {video:{facingMode:{ideal:'environment'}}},
+    {video:{facingMode:'environment'}},
+    {video:true}
+  ];
 
-var _scanActive = false;
+  function attempt(i) {
+    if (i >= tries.length) {
+      hint.textContent = 'Kamera acilamadi. Lutfen manuel girin.';
+      document.getElementById('manualInput').focus();
+      return;
+    }
+    navigator.mediaDevices.getUserMedia(tries[i])
+      .then(function(stream) {
+        scanStream = stream;
+        _scanActive = true;
 
-function startCamera() {
-  var hint = document.getElementById('scanHint');
-  var vid  = document.getElementById('scanVideo');
-  _scanActive = true;
-  stopCamera();
+        // srcObject ata
+        vid.srcObject = stream;
+
+        // iOS Safari icin: oncanplay'de play() cagir
+        vid.oncanplay = function() {
+          vid.oncanplay = null;
+          vid.play()
+            .then(function() {
+              hint.textContent = 'Barkodu cerceve icine getirin';
+              startDecode(vid);
+            })
+            .catch(function(e) {
+              // play() basarisiz - yine de decode dene
+              hint.textContent = 'Barkodu cerceve icine getirin';
+              startDecode(vid);
+            });
+        };
+
+        // oncanplay gelmezse 1 saniye sonra zorla baslat
+        setTimeout(function() {
+          if (!vid.paused) return;
+          vid.play().catch(function(){});
+          hint.textContent = 'Barkodu cerceve icine getirin';
+          startDecode(vid);
+        }, 1000);
+
+      })
+      .catch(function(err) {
+        if (err.name === 'NotAllowedError') {
+          hint.textContent = 'Kamera izni verilmedi. Ayarlar > Safari > Kamera iznini acin.';
+          document.getElementById('manualInput').focus();
+        } else if (err.name === 'NotFoundError') {
+          hint.textContent = 'Kamera bulunamadi.';
+          document.getElementById('manualInput').focus();
+        } else {
+          attempt(i + 1);
+        }
+      });
+  }
 
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
     hint.textContent = 'Tarayiciniz kamerayi desteklemiyor. Manuel girin.';
@@ -877,91 +932,65 @@ function startCamera() {
     return;
   }
 
-  // 1. Kamerayı biz açıyoruz (video elementi zaten DOM'da ve görünür)
-  var constraints = [
-    {video:{facingMode:{exact:'environment'},width:{ideal:1280},height:{ideal:720}}},
-    {video:{facingMode:{ideal:'environment'}}},
-    {video:{facingMode:'environment'}},
-    {video:true}
-  ];
-
-  function tryNext(i) {
-    if (i >= constraints.length) {
-      hint.textContent = 'Kamera acilamadi. Manuel girin.';
-      document.getElementById('manualInput').focus();
-      return;
-    }
-    navigator.mediaDevices.getUserMedia(constraints[i])
-      .then(function(stream) {
-        if (!_scanActive) { stream.getTracks().forEach(function(t){t.stop();}); return; }
-        scanStream = stream;
-        vid.srcObject = stream;
-        vid.play().catch(function(){});
-        hint.textContent = 'Barkodu cerceve icine getirin';
-        startDecode(vid);
-      })
-      .catch(function(err) {
-        if (err.name === 'NotAllowedError') {
-          hint.textContent = 'Kamera izni verilmedi. Ayarlar > Safari > Kamera iznini acin.';
-          document.getElementById('manualInput').focus();
-        } else if (err.name === 'NotFoundError') {
-          hint.textContent = 'Kamera bulunamadi. Manuel girin.';
-          document.getElementById('manualInput').focus();
-        } else {
-          tryNext(i + 1);
-        }
-      });
-  }
-  tryNext(0);
+  attempt(0);
 }
 
+function closeScanner() {
+  _scanActive = false;
+  stopCamera();
+  document.getElementById('scannerOverlay').classList.remove('open');
+}
+
+var _scanActive = false;
+
 function startDecode(vid) {
-  // ZXing: canvas -> dataURL -> Image -> decodeFromImageElement
   if (typeof ZXing !== 'undefined') {
-    var canvas  = document.createElement('canvas');
-    var ctx     = canvas.getContext('2d');
-    var reader  = new ZXing.BrowserMultiFormatReader();
-    var decoding = false;
-    scanZxing = { reset: function() { reader.reset(); } };
+    var canvas   = document.createElement('canvas');
+    var ctx      = canvas.getContext('2d');
+    var reader   = new ZXing.BrowserMultiFormatReader();
+    var pending  = false;
+    scanZxing    = { reset: function() { try { reader.reset(); } catch(e) {} } };
 
     function tick() {
       if (!_scanActive) return;
+      if (pending) { setTimeout(tick, 100); return; }
       if (!vid.videoWidth || vid.readyState < 2) { setTimeout(tick, 300); return; }
-      if (decoding) { setTimeout(tick, 200); return; }
 
-      decoding = true;
+      pending = true;
       canvas.width  = vid.videoWidth;
       canvas.height = vid.videoHeight;
       ctx.drawImage(vid, 0, 0);
 
-      var img  = new Image();
+      var img   = new Image();
+      var url   = canvas.toDataURL('image/jpeg', 0.85);
       img.onload = function() {
         reader.decodeFromImageElement(img)
           .then(function(result) {
+            URL.revokeObjectURL && URL.revokeObjectURL(url);
             if (!_scanActive) return;
             _scanActive = false;
             closeScanner();
             onBarcodeFound(result.getText());
           })
           .catch(function() {
-            decoding = false;
+            pending = false;
             if (_scanActive) setTimeout(tick, 200);
           });
       };
-      img.onerror = function() { decoding = false; if (_scanActive) setTimeout(tick, 200); };
-      img.src = canvas.toDataURL('image/jpeg', 0.8);
+      img.onerror = function() { pending = false; if (_scanActive) setTimeout(tick, 300); };
+      img.src = url;
     }
 
-    setTimeout(tick, 700);
+    setTimeout(tick, 800);
     return;
   }
 
   if ('BarcodeDetector' in window) {
     var det = new window.BarcodeDetector({
-      formats:['ean_13','ean_8','qr_code','code_128','upc_a','upc_e','code_39','itf','data_matrix']
+      formats:['ean_13','ean_8','qr_code','code_128','upc_a','upc_e','code_39','data_matrix']
     });
     scanInterval = setInterval(function() {
-      if (!_scanActive || !vid || vid.readyState < 2) return;
+      if (!_scanActive || vid.readyState < 2) return;
       det.detect(vid).then(function(codes) {
         if (codes.length > 0 && _scanActive) {
           _scanActive = false;
@@ -981,14 +1010,12 @@ function startDecode(vid) {
 function startDetection() {}
 
 function stopCamera() {
-  _scanActive = false;
-  if (scanZxing)   { try { scanZxing.reset(); } catch(e){} scanZxing = null; }
-  if (scanInterval){ clearInterval(scanInterval); scanInterval = null; }
-  if (scanStream)  { scanStream.getTracks().forEach(function(t){t.stop();}); scanStream = null; }
+  if (scanZxing)    { try { scanZxing.reset(); } catch(e) {} scanZxing = null; }
+  if (scanInterval) { clearInterval(scanInterval); scanInterval = null; }
+  if (scanStream)   { scanStream.getTracks().forEach(function(t) { t.stop(); }); scanStream = null; }
   var v = document.getElementById('scanVideo');
-  if (v) { v.pause(); v.srcObject = null; }
+  if (v) { try { v.pause(); } catch(e){} v.srcObject = null; }
 }
-
 
 function manualGo() {
   const code = document.getElementById('manualInput').value.trim();
@@ -1271,8 +1298,10 @@ renderHome();
 
 
 
+
 </script>
 <script>
+
 
 
 
@@ -1282,6 +1311,7 @@ renderHome();
   var l=document.createElement('link');l.rel='manifest';l.href=URL.createObjectURL(b);document.head.appendChild(l);
   var ai=document.createElement('link');ai.rel='apple-touch-icon';ai.href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAFJElEQVR4nO3bu45cRRSFYSfE3M2dGHEx5jWQeCdyHs850rzB5ASNBtTSGMbTfbrqnFVV+9vSn46nu9aHJQQvXjjnnHPOOeecc84555xzzm289z/7/qQ6/frn7xdr/TPSm7546UfQMV0z9mu79XdIb/2tSz+I9q/n6HtiMHzt1hGjnxZC+nG0b6nxt0AwfjWXHn0rBOPXMsMfDkH6kVRz/LdAAEDLjX8LAuPXkuOPIUg/lox/KwLj17LjPxRB+sFk/LciAEBLj/8SAuPX8uPf9W+B9MMJgOjfAh98/sNJc5ce5pE99fkBKFx6kAAIgDACAIqWHiIAmhrAe69exsfcAwEABesxogcA59KDBkBRADMjAKBgewCYDQEARes1oKcAzIQAgKLtDWAmCAAU7CgAMyAAoFg9x3MNgNERAFCsBICREQBQrN4D2oJgRAgAFGuPEc2OAICFu7u7e6u9RnQkgN6IAFi4owBsQdDj5wOg4QBcC6HHzwRAwwK4hKDHzwJAQwN4DsHRPwOAwiUBtPzT+8h/kwTAwqUBPDXo1vEDoOkAPB526/gB0JQAzgNvHX9PAA/fUROAD7/48aRxGw1A6/B7A3j4jgAYuIdbGUBq+ABM0OPrBWAkBOnxAzBwT91KAEYYPwCD9tytAGCk8QMwWNdcFQB7/x4ADNaWawGQRjDC+AEYrFtuVQBHjh+AAWq5WwGM8p9FJMYPwED1uBUAHP07ADBISQApBCONH4DJx38JwegA0uMHYIHxP4fgEoDk/yOQwAfAAO15MwBI9a73AGCR8b8LwTWlxwlAgY48CK4bPwALjv9WBOmRJsYPwKLjh+C68QOw8PjPVxXBtZ8XgIXHf75qCLZ8VgAAWArB1s8JwOLjP18FBLd8RgAKjP98t36m9LD3Gj8AhcZ/vtUQtL5ZE4CPvvzppH+b6Vo+Z3rwj+vxbgAUG//5Wj/z7MMHoPD4z9fj8886fACKj/98vb6LmUYPgPG/dXt8PyOPHgDj/9+lv9NUAADwz6W/UwAmaeVLf7cADF6FS3/HAAxapUt/1wAMVsVLf+cADFLlS3/3ABh//NJvAIDxxy/9FgAYf/zSbwIAANFLvwkAxh+/9NsAYPzxS78RAMYfv/RbAWD88Uu/GQDGH7/02wFg/PFLvyEAxh+/9FsCYPzxS79pBMDHX706zZbb79Jve0sAuG6XflsAjD9+6TcGwPjjl35rAIw/fuk3B8D445d++/IAXP7SGygLwI1z6S2UBLCl+/t7bSz9ZgAcDOCvN390Lz1iAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA9JsBAAAAAAAAQBDAJ1//fFqhPQF89/q3WHsCSL9ZrwAAAAAAAAAAAAAAAAAAAAAAAAAA+gTA2AEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+XcDAAAAAAAAAAAAAAAAAAAAQNpQE4BPv3l9kmYOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJWuCcDLb385STMHgEoHgErXBAACzVzz+AHQzAGg0nUBAIFmrNv4AdCMdQUAgWaq+/gB0EztAgACzdBu44dAo7f7+CHQqB02fgg0WoePHwSNUHT4/730l6E6pbd+8dJfkNYrvWnnnHPOOeecc84555yb8P4GrEksNBUnF30AAAAASUVORK5CYII=';document.head.appendChild(ai);
 })();
+
 
 
 
