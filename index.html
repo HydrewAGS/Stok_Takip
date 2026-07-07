@@ -9,32 +9,44 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0F172A">
+<meta name="theme-color" content="#0A0E17">
 <meta name="apple-mobile-web-app-title" content="Ev Stogum">
 <title>Ev Stok Takip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#0F172A">
+<meta name="theme-color" content="#0A0E17">
 <meta name="apple-mobile-web-app-title" content="Ev Stoğum">
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
 
 <style>
   :root {
-    --bg:       #0F172A;
-    --surface:  #1E293B;
-    --surface2: #273549;
-    --border:   rgba(255,255,255,.08);
-    --text:     #F1F5F9;
-    --muted:    #94A3B8;
-    --dim:      #475569;
-    --accent:   #4ADE80;
-    --accent-bg:#052e16;
-    --danger:   #ef4444;
-    --warn:     #f59e0b;
-    --info:     #38bdf8;
+    --bg:       #0A0E17;
+    --bg-warm:  #12100D;
+    --surface:  #151B2C;
+    --surface2: #1C2338;
+    --paper:    rgba(245,241,234,.02);
+    --border:   rgba(255,255,255,.07);
+    --border-warm: rgba(255,138,76,.18);
+    --text:     #F5F1EA;
+    --muted:    #8B93A8;
+    --dim:      #4A5268;
+    --accent:   #FF8A4C;
+    --accent2:  #FFB380;
+    --accent-bg:#2B1608;
+    --sage:     #8FBC8F;
+    --sage-bg:  #0F1F16;
+    --danger:   #F0605A;
+    --danger-bg:#2B1210;
+    --warn:     #F0B849;
+    --warn-bg:  #2B2008;
+    --info:     #5FA8D3;
+    --info-bg:  #0D1F2B;
     --safe-b:   env(safe-area-inset-bottom, 0px);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, 'Inter', sans-serif; overscroll-behavior: none; }
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif; overscroll-behavior: none; }
   input, select, textarea, button { font-family: inherit; }
   button { cursor: pointer; }
 
@@ -47,7 +59,7 @@
   #bottomNav {
     position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
     width: 100%; max-width: 500px;
-    background: rgba(15,23,42,.96); backdrop-filter: blur(20px);
+    background: rgba(10,14,23,.92); backdrop-filter: blur(24px);
     border-top: 1px solid var(--border);
     display: grid; grid-template-columns: 1fr 1fr 72px 1fr;
     padding: 8px 4px calc(8px + var(--safe-b));
@@ -57,35 +69,41 @@
   .nav-btn svg { width: 22px; height: 22px; }
   .nav-btn span { font-size: 10px; font-weight: 600; }
   #scanNavBtn { display: flex; flex-direction: column; align-items: center; gap: 3px; background: none; border: none; padding: 0 8px; color: var(--accent); }
-  .scan-orb { width: 52px; height: 52px; border-radius: 999px; background: var(--accent); display: flex; align-items: center; justify-content: center; margin-top: -22px; box-shadow: 0 0 0 4px var(--accent-bg), 0 0 24px rgba(74,222,128,.45); }
-  .scan-orb svg { width: 24px; height: 24px; stroke: #052e16; }
+  .scan-orb { width: 52px; height: 52px; border-radius: 999px; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; margin-top: -22px; box-shadow: 0 0 0 4px var(--bg), 0 4px 20px rgba(255,138,76,.5); }
+  .scan-orb svg { width: 24px; height: 24px; stroke: #2B1608; }
   #scanNavBtn span { font-size: 10px; font-weight: 700; margin-top: 2px; }
 
   /* ── Cards ── */
-  .card { background: var(--surface); border-radius: 16px; padding: 16px; border: 1px solid var(--border); }
+  .card { background: var(--surface); border-radius: 14px; padding: 16px; border: 1px solid var(--border); box-shadow: 0 1px 0 rgba(255,255,255,.02) inset; }
   .item-card { transition: border-color .2s; }
   .item-card.expired  { border-color: #7f1d1d; }
   .item-card.expiring { border-color: #78350f; }
 
   /* ── Stat grid ── */
   .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 20px 24px; }
-  .stat-card { background: var(--surface); border-radius: 16px; padding: 18px 16px; border: 1px solid var(--border); }
-  .stat-val  { font-size: 28px; font-weight: 800; }
+  .stat-card {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    border-radius: 14px; padding: 18px 16px 18px 20px;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    position: relative;
+  }
+  .stat-val  { font-family:'Space Grotesk',sans-serif; font-size: 30px; font-weight: 700; letter-spacing:-.01em; }
   .stat-lbl  { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
   /* ── Category grid ── */
   .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 20px 24px; }
-  .cat-card { border-radius: 16px; padding: 18px 16px; text-align: left; border: 1px solid transparent; cursor: pointer; transition: transform .15s; }
+  .cat-card { border-radius: 14px; padding: 18px 16px; text-align: left; border: 1px solid transparent; cursor: pointer; transition: transform .15s, border-color .15s; position: relative; overflow: hidden; }
   .cat-card:active { transform: scale(.97); }
   .cat-emoji { font-size: 28px; margin-bottom: 8px; }
-  .cat-name  { font-weight: 700; font-size: 15px; }
+  .cat-name  { font-family:'Space Grotesk',sans-serif; font-weight: 600; font-size: 15px; letter-spacing:-.005em; }
   .cat-count { font-size: 12px; color: rgba(255,255,255,.4); margin-top: 2px; }
 
   /* ── Category tabs ── */
   .cat-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 0 20px 16px; scrollbar-width: none; }
   .cat-tabs::-webkit-scrollbar { display: none; }
   .tab-pill { padding: 8px 14px; border-radius: 99px; border: none; white-space: nowrap; background: rgba(255,255,255,.07); color: var(--muted); font-size: 13px; font-weight: 500; transition: all .15s; }
-  .tab-pill.active { background: var(--accent); color: #052e16; font-weight: 700; }
+  .tab-pill.active { background: var(--accent); color: #2B1608; font-weight: 700; }
 
   /* ── Item card inner ── */
   .ic-header { display: flex; align-items: flex-start; gap: 12px; }
@@ -105,6 +123,24 @@
   .icon-btn  { width: 32px; height: 32px; border: none; background: rgba(255,255,255,.06); border-radius: 99px; display: flex; align-items: center; justify-content: center; }
   .icon-btn svg { width: 15px; height: 15px; }
 
+  /* ── Shopping List ── */
+  .shop-action-btn { flex:1; padding:10px; border-radius:12px; border:none; background:rgba(255,255,255,.07); color:var(--muted); font-size:13px; font-weight:600; cursor:pointer; }
+  .shop-action-btn:active { background:rgba(255,255,255,.12); }
+  .shop-row { display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:12px 14px; margin-bottom:10px; transition:opacity .2s; }
+  .shop-row.checked { opacity:.5; }
+  .shop-row.checked .shop-row-name { text-decoration: line-through; }
+  .shop-check { width:26px; height:26px; border-radius:8px; border:2px solid var(--dim); background:transparent; flex-shrink:0; display:flex; align-items:center; justify-content:center; color:transparent; cursor:pointer; transition:all .15s; padding:0; }
+  .shop-row.checked .shop-check { background:var(--accent); border-color:var(--accent); color:#2B1608; }
+  .shop-row-body { flex:1; min-width:0; }
+  .shop-row-name { color:var(--text); font-weight:600; font-size:14px; }
+  .shop-row-meta { color:var(--muted); font-size:12px; margin-top:2px; }
+  .whatsapp-btn { flex:1; padding:15px; border-radius:14px; border:none; background:#25D366; color:#08341c; font-weight:700; font-size:15px; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; }
+  .copy-btn { padding:15px 18px; border-radius:14px; border:1px solid rgba(255,255,255,.15); background:transparent; color:var(--muted); cursor:pointer; }
+
+  /* ── Product Library ── */
+  .lib-card { margin-bottom:10px; }
+  .lib-add-btn { flex:1; padding:10px; border-radius:10px; border:none; background:var(--accent-bg); color:var(--accent); font-weight:700; font-size:13px; cursor:pointer; }
+
   /* ── Form ── */
   .form-view { min-height: 100vh; background: var(--bg); padding-bottom: calc(110px + var(--safe-b)); }
   .form-header { padding: 52px 20px 20px; display: flex; align-items: center; gap: 12px; }
@@ -122,7 +158,7 @@
   .qty-field { display: flex; align-items: center; background: rgba(255,255,255,.06); border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,.1); }
   .qty-field button { padding: 13px 16px; border: none; background: transparent; font-size: 22px; }
   .qty-field .qty-display { flex: 1; text-align: center; color: #fff; font-weight: 700; font-size: 18px; }
-  .save-btn { padding: 16px; border-radius: 14px; border: none; background: var(--accent); color: #052e16; font-weight: 700; font-size: 16px; width: 100%; transition: all .2s; margin-top: 8px; margin-bottom: 24px; }
+  .save-btn { padding: 16px; border-radius: 14px; border: none; background: var(--accent); color: #2B1608; font-weight: 700; font-size: 16px; width: 100%; transition: all .2s; margin-top: 8px; margin-bottom: 24px; }
   .save-btn:disabled { background: rgba(255,255,255,.08); color: var(--dim); cursor: not-allowed; }
 
   /* ── Scanner ── */
@@ -196,7 +232,7 @@
   .pf-barcode-num { color: var(--dim); font-size: 12px; font-family: monospace; letter-spacing: .06em; }
 
   .pf-actions { padding: 0 24px; display: flex; gap: 10px; }
-  .pf-btn-add  { flex: 1; padding: 16px; border-radius: 14px; border: none; background: var(--accent); color: #052e16; font-weight: 700; font-size: 16px; }
+  .pf-btn-add  { flex: 1; padding: 16px; border-radius: 14px; border: none; background: var(--accent); color: #2B1608; font-weight: 700; font-size: 16px; }
   .pf-btn-edit { padding: 16px 20px; border-radius: 14px; border: 1px solid rgba(255,255,255,.15); background: transparent; color: var(--muted); font-size: 14px; font-weight: 600; }
 
   /* Not found state */
@@ -205,7 +241,7 @@
   .nf-title { color: var(--text); font-size: 17px; font-weight: 700; margin-bottom: 6px; }
   .nf-sub   { color: var(--muted); font-size: 14px; margin-bottom: 8px; }
   .nf-code  { color: var(--dim); font-size: 12px; font-family: monospace; margin-bottom: 24px; background: rgba(255,255,255,.05); padding: 6px 12px; border-radius: 8px; display: inline-block; }
-  .nf-btn   { width: 100%; padding: 15px; border-radius: 14px; border: none; background: var(--accent); color: #052e16; font-weight: 700; font-size: 15px; margin-bottom: 10px; }
+  .nf-btn   { width: 100%; padding: 15px; border-radius: 14px; border: none; background: var(--accent); color: #2B1608; font-weight: 700; font-size: 15px; margin-bottom: 10px; }
   .nf-cancel { background: none; border: none; color: var(--muted); font-size: 14px; padding: 8px; }
 
   /* ── Search ── */
@@ -230,43 +266,43 @@
 
   /* ── Misc ── */
   .page-head { padding: 52px 20px 24px; }
-  .page-head .eyebrow { color: var(--accent); font-size: 13px; font-weight: 600; letter-spacing: .1em; margin-bottom: 4px; }
-  .page-head h1 { color: var(--text); font-size: 28px; font-weight: 800; margin-bottom: 4px; }
+  .page-head .eyebrow { color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: .14em; margin-bottom: 6px; text-transform: uppercase; }
+  .page-head h1 { font-family:'Space Grotesk',sans-serif; color: var(--text); font-size: 30px; font-weight: 700; letter-spacing:-.02em; margin-bottom: 4px; }
   .page-head p  { color: var(--dim); font-size: 14px; }
   .list-head { padding: 52px 20px 0; margin-bottom: 16px; }
-  .list-head h2 { color: var(--text); font-size: 22px; font-weight: 800; margin-bottom: 16px; }
+  .list-head h2 { font-family:'Space Grotesk',sans-serif; color: var(--text); font-size: 24px; font-weight: 700; letter-spacing:-.01em; margin-bottom: 16px; }
   .items-wrap { padding: 0 20px; display: flex; flex-direction: column; gap: 10px; }
   .recent-wrap { padding: 0 20px; }
   svg { stroke-linecap: round; stroke-linejoin: round; }
 
   /* ── Location badges ── */
-  .loc-badge { display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:rgba(56,189,248,.12);color:#38bdf8; }
+  .loc-badge { display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:rgba(56,189,248,.12);color:#5FA8D3; }
   .loc-badge svg { width:11px;height:11px;flex-shrink:0; }
   /* ── Location picker (form) ── */
   .loc-picker { display:grid;grid-template-columns:1fr 1fr;gap:8px; }
   .loc-opt { padding:10px 8px;border-radius:12px;border:2px solid transparent;background:rgba(255,255,255,.05);color:var(--dim);font-size:13px;font-weight:500;display:flex;align-items:center;gap:7px;cursor:pointer;transition:all .15s; }
-  .loc-opt.active { border-color:#38bdf8;background:#082f49;color:#38bdf8; }
+  .loc-opt.active { border-color:#5FA8D3;background:#0D1F2B;color:#5FA8D3; }
   /* ── Notification permission banner ── */
-  #notifBar { display:none;background:#082f49;border-bottom:1px solid rgba(56,189,248,.25);padding:12px 16px;align-items:center;gap:12px; }
+  #notifBar { display:none;background:#0D1F2B;border-bottom:1px solid rgba(56,189,248,.25);padding:12px 16px;align-items:center;gap:12px; }
   #notifBar.show { display:flex; }
   #notifBarText { flex:1;color:#e0f2fe;font-size:13px;line-height:1.4; }
-  #notifAllow { padding:8px 16px;border-radius:10px;border:none;background:#38bdf8;color:#082f49;font-weight:700;font-size:13px;flex-shrink:0; }
-  #notifClose { background:none;border:none;color:#475569;font-size:20px;padding:4px;flex-shrink:0; }
+  #notifAllow { padding:8px 16px;border-radius:10px;border:none;background:#5FA8D3;color:#0D1F2B;font-weight:700;font-size:13px;flex-shrink:0; }
+  #notifClose { background:none;border:none;color:#4A5268;font-size:20px;padding:4px;flex-shrink:0; }
   /* ── Location filter bar (list view) ── */
   .loc-tabs { display:flex;gap:8px;overflow-x:auto;padding:0 20px 12px;scrollbar-width:none; }
   .loc-tabs::-webkit-scrollbar { display:none; }
   .loc-pill { padding:6px 12px;border-radius:99px;border:1px solid transparent;white-space:nowrap;background:rgba(255,255,255,.06);color:var(--dim);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px; }
-  .loc-pill.active { background:rgba(56,189,248,.15);color:#38bdf8;border-color:rgba(56,189,248,.3); }
+  .loc-pill.active { background:rgba(56,189,248,.15);color:#5FA8D3;border-color:rgba(56,189,248,.3); }
   /* ── PWA Install Banner ── */
-  #pwaBar { display:none;position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:500px;z-index:9999;background:linear-gradient(135deg,#1E293B 0%,#0F172A 100%);border-bottom:1px solid rgba(74,222,128,.3);padding:12px 16px;align-items:center;gap:12px;box-shadow:0 4px 24px rgba(0,0,0,.5);animation:slideDown .35s cubic-bezier(.22,1,.36,1); }
+  #pwaBar { display:none;position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:500px;z-index:9999;background:linear-gradient(135deg,#1C2338 0%,#0A0E17 100%);border-bottom:1px solid rgba(74,222,128,.3);padding:12px 16px;align-items:center;gap:12px;box-shadow:0 4px 24px rgba(0,0,0,.5);animation:slideDown .35s cubic-bezier(.22,1,.36,1); }
   #pwaBar.show { display:flex; }
   @keyframes slideDown { from{transform:translateX(-50%) translateY(-100%)} to{transform:translateX(-50%) translateY(0)} }
   #pwaIcon { width:44px;height:44px;border-radius:10px;flex-shrink:0; }
   #pwaText { flex:1;min-width:0; }
-  #pwaText strong { display:block;color:#F1F5F9;font-size:14px;font-weight:700; }
+  #pwaText strong { display:block;color:#F5F1EA;font-size:14px;font-weight:700; }
   #pwaText span { color:#64748B;font-size:12px; }
-  #pwaInstall { padding:9px 16px;border-radius:10px;border:none;background:#4ADE80;color:#052e16;font-weight:700;font-size:13px;white-space:nowrap;flex-shrink:0; }
-  #pwaClose { background:none;border:none;color:#475569;font-size:20px;padding:4px;flex-shrink:0;line-height:1; }
+  #pwaInstall { padding:9px 16px;border-radius:10px;border:none;background:#FF8A4C;color:#2B1608;font-weight:700;font-size:13px;white-space:nowrap;flex-shrink:0; }
+  #pwaClose { background:none;border:none;color:#4A5268;font-size:20px;padding:4px;flex-shrink:0;line-height:1; }
   body.pwa-bar-open .view { padding-top:72px; }
 
 
@@ -300,7 +336,38 @@
   body { touch-action: pan-y; overscroll-behavior: none; }
   * { touch-action: manipulation; }
 
+
+  /* ── Settings rows ── */
+  .settings-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 8px; background: none; border: none;
+    width: 100%; text-align: left; cursor: pointer;
+    border-radius: 10px; transition: background .15s;
+  }
+  .settings-row:active { background: rgba(255,255,255,.04); }
+  .settings-row-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; flex-shrink: 0;
+  }
+  .settings-row-title { color: var(--text); font-weight: 600; font-size: 14px; }
+  .settings-row-sub { color: var(--muted); font-size: 12px; margin-top: 1px; }
+
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -317,14 +384,14 @@
 
   <!-- PWA Banner -->
   <div id="pwaBar">
-    <img id="pwaIcon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAFJElEQVR4nO3bu45cRRSFYSfE3M2dGHEx5jWQeCdyHs850rzB5ASNBtTSGMbTfbrqnFVV+9vSn46nu9aHJQQvXjjnnHPOOeecc84555xzzm289z/7/qQ6/frn7xdr/TPSm7546UfQMV0z9mu79XdIb/2tSz+I9q/n6HtiMHzt1hGjnxZC+nG0b6nxt0AwfjWXHn0rBOPXMsMfDkH6kVRz/LdAAEDLjX8LAuPXkuOPIUg/lox/KwLj17LjPxRB+sFk/LciAEBLj/8SAuPX8uPf9W+B9MMJgOjfAh98/sNJc5ce5pE99fkBKFx6kAAIgDACAIqWHiIAmhrAe69exsfcAwEABesxogcA59KDBkBRADMjAKBgewCYDQEARes1oKcAzIQAgKLtDWAmCAAU7CgAMyAAoFg9x3MNgNERAFCsBICREQBQrN4D2oJgRAgAFGuPEc2OAICFu7u7e6u9RnQkgN6IAFi4owBsQdDj5wOg4QBcC6HHzwRAwwK4hKDHzwJAQwN4DsHRPwOAwiUBtPzT+8h/kwTAwqUBPDXo1vEDoOkAPB526/gB0JQAzgNvHX9PAA/fUROAD7/48aRxGw1A6/B7A3j4jgAYuIdbGUBq+ABM0OPrBWAkBOnxAzBwT91KAEYYPwCD9tytAGCk8QMwWNdcFQB7/x4ADNaWawGQRjDC+AEYrFtuVQBHjh+AAWq5WwGM8p9FJMYPwED1uBUAHP07ADBISQApBCONH4DJx38JwegA0uMHYIHxP4fgEoDk/yOQwAfAAO15MwBI9a73AGCR8b8LwTWlxwlAgY48CK4bPwALjv9WBOmRJsYPwKLjh+C68QOw8PjPVxXBtZ8XgIXHf75qCLZ8VgAAWArB1s8JwOLjP18FBLd8RgAKjP98t36m9LD3Gj8AhcZ/vtUQtL5ZE4CPvvzppH+b6Vo+Z3rwj+vxbgAUG//5Wj/z7MMHoPD4z9fj8886fACKj/98vb6LmUYPgPG/dXt8PyOPHgDj/9+lv9NUAADwz6W/UwAmaeVLf7cADF6FS3/HAAxapUt/1wAMVsVLf+cADFLlS3/3ABh//NJvAIDxxy/9FgAYf/zSbwIAANFLvwkAxh+/9NsAYPzxS78RAMYfv/RbAWD88Uu/GQDGH7/02wFg/PFLvyEAxh+/9FsCYPzxS79pBMDHX706zZbb79Jve0sAuG6XflsAjD9+6TcGwPjjl35rAIw/fuk3B8D445d++/IAXP7SGygLwI1z6S2UBLCl+/t7bSz9ZgAcDOCvN390Lz1iAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA9JsBAAAAAAAAQBDAJ1//fFqhPQF89/q3WHsCSL9ZrwAAAAAAAAAAAAAAAAAAAAAAAAAA+gTA2AEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+XcDAAAAAAAAAAAAAAAAAAAAQNpQE4BPv3l9kmYOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJWuCcDLb385STMHgEoHgErXBAACzVzz+AHQzAGg0nUBAIFmrNv4AdCMdQUAgWaq+/gB0EztAgACzdBu44dAo7f7+CHQqB02fgg0WoePHwSNUHT4/730l6E6pbd+8dJfkNYrvWnnnHPOOeecc84555yb8P4GrEksNBUnF30AAAAASUVORK5CYII=" alt="icon">
+    <img id="pwaIcon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAHMUlEQVR4nO3dwW5URxSEYZYoAQxESgKvwKvkyfKo2WWRNRFRRkIjm7n3dp9TVd1/SWdpzOL7xXh8jV+9YowxxhhjjDHGGGOMMcYYu7if3v32deR+Hr0n7b15+l1778furcGpDZ/aKHjwgz8yiJnwwQ/+qBDAD/4tI5gNH/xZ+L/++cfhWy4E8O+H/wx4RRDgB/90/DPRV8bw7sOn/w784J+CvwP+rBBu+FsiAP/a+BXwR0K4x18aAPjXxa9GfyWC5/CXRQB+8DuF8CP8JRGAH/wuERzBPzUA8K+HX436agRH8U+NAPzgd7iz+K0CAD/4FRFYBAB+8KsiAD/4lwugNQLwg9/1rAMAP/i3DQD8PvhXDuBoBK0BgB/8bhG0BQB+8G8bAPi98O8UwKMIygMA/5r4v/z6Wg7bPgDw++GfGcAKEZQFAH5P/LMDSImgNQDwr43/PoCEENoCAL8v/uoAEiOYGgD4vfF3BOAcQWkA4N8H/6MAXEMoCwD8/vgVAbhFUBIA+DPwqwJwj2AoAPDn4K/47u+ZCFxC8AkA/K34Kx9/qAxgdjgeAYC/HX/18z+zA6j6l0MfAPgl+DsegJsVQOVLJ20A4Jfh7wjgUQhXP3aNAMAvxd8ZwBXIXV88awIAvxx/dwDPob6CPz8A8FvgVwRwD/wK/uwAwG+DXxnADfpZ+NkBgN8KvzoAB/x9AYDfDr9LAE74awIAvyV+hwDUj03UBwB+W/wOEajg9wQAfnv87gFUf/66AMAfgd85AAX+OQGAPwa/OgIF/NoAwB+H3ymAzs/9HP6n5ADAnx2AA/7YAMCfGUE3/JcCeEoOAPy5AbjhjwsA/EQwEsA9/qgAwE8As/HHBAB+IhgJ4CX8EQGAnwiq8NsHAH4CqMRvHQD4iaAav20A4CeCkQCO4rcMAPxE0IXfLgDwa+/28kENuQu/VQAO+P/5+y/u/1OD7sBvE4ADfgLIi+DsF7yWAbjgJ4CsEGbglwfghJ8AMiI48njD4fsoDMANPwH4hzAbvywAR/wEcOwU7xQ9eqT5Kn5JAK74CeBcAN9fB/oK/O0BOOMngOsBzIrh0Z89G39rAO74CWBOAFVXgb8tgAT8BOAbQBX+lgBS8BOAZwCV+MsDSMJPAH4BVOMvDSANPwF4BdCBvyyARPzf7sx/373rrYS/JIBU/ATgEUAn/ukBJOMnAH0A3finBpCO/y0BSANQ4J8WwAr4CUAXgAr/lABWwU8AmgCU+IcDWAk/AfQHoMafHcBk/N9O/R777Z6Dp/47zf4+gAP+3AAK8BNAXwAu+DMDKMJPAD0BOOHPC6AQPwHUB+CGPyuAYvwEUBuAI/6cABrwE0BdAK74MwJowk8ANQE44/cPoBE/AcwPwB2/dwDN+AlgbgAJ+H0DEOAngHkBpOD3DECEnwDmBJCE3y8AIX4CGA8gDb9XAGL8BDAWQCJ+nwAM8BPA9QBS8XsEYIKfAK4FkIxfH4ARfgI4H0A6/vcfPwsDMMNPAOcCWAG/LgBD/ARwPIBV8GsCMMVPAMduJfz9ARjjJ4CGAMzw9wZgjp8AigMwxN8XQAB+AigMwBR/TwAh+AmgKABj/PUBBOEngIIAzPHXBhCGnwAmBxCAvy6AQPwEMDGAEPw1AYTiJ4BJAQThnx9AMH4CmBBAGP65AYTjJ4DBAALxzwtgAfwEMBBAKP45ASyCnwAuBhCMfzyAhfATwIUAwvFLA1BjJ4DBABbALwtADZ0ABgNYBL8kADVyAhgMYCH87QGogRNAdgCz8bcGoMZNANkBVOBvC0ANmwCyA6jC3xKAGjUBZAdQib88ADVoAsgOoBp/aQBqzKM38svgHG7oh9cXe6uzPQA1XvCDXxaAGi/4wS8LQI0X/OCXBaDGC37wywJQ4wU/+GUBqPGCH/yyANR4wQ/+oftl4wDUeMGvx79tAGq84PfAv2UAarzg98G/XQBqvOD3wr9VAGq84PfDv00Aarzg98S/RQBqvOD3xb98AGq84PfGv3QAarzg98e/bABqvODPwL9kAGq84M/Bv1wAarzgz8K/VABqvODPw79MAGq84M/Ev0QAarzgz8UfH4AaL/iz8X9IDkCNF/z5+GMDUOMF/xr4IwNQ4wX/OvjjAlDjBf9a+KMCUOMF/3r4YwJQ4wX/mvgjAlDjBf+6+O0DUOMF/9r4rQNQ4wX/+vhtA1DjBf8e+C0DUOMF/z747QJQ4wX/XvitAlDjBf9++G0CUOMF/574LQJQ4wX/vvjlAajxgn9v/MMBjESgxgt+8A/jvxqAGi/4wS8LQI0X/OCXBaDGC37wTw/gaARqvOAHfwn+IwGo8YIf/KUB/CgCNV7wg78c/0sRqPGCH/xt+O8DUOMFP/jbA7hFoMYLfvBL8N+mBgx+8MvwJ0cAfvBvGwL418Mvhf/91LjBD36LqaGDf338auOnBn7wbwWeMcYYY4wxxhhjjDHGvPYvR2yAcXnampoAAAAASUVORK5CYII=" alt="icon">
     <div id="pwaText"><strong>Ev Stok Takip</strong><span>Ana ekrana uygulama olarak ekle</span></div>
     <button id="pwaInstall" onclick="pwaTriggerInstall()">⬇ Yükle</button>
     <button id="pwaClose" onclick="pwaDismiss()">×</button>
   </div>
   <!-- Notification Banner -->
   <div id="notifBar">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5FA8D3" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
     <div id="notifBarText"><strong>SKT Hatırlatıcısı</strong><br>Son kullanma tarihi yaklaşan ürünler için bildirim alın</div>
     <button id="notifAllow" onclick="requestNotifPermission()">İzin Ver</button>
     <button id="notifClose" onclick="dismissNotifBar()">×</button>
@@ -339,17 +406,35 @@
           <h1>Merhaba! 👋</h1>
           <p>Stoğunuzu buradan yönetin</p>
         </div>
-        <button onclick="showNotifSetup()" style="background:rgba(255,255,255,.07);border:none;border-radius:12px;padding:10px;color:var(--muted);margin-top:8px;cursor:pointer;position:relative" id="notifBell">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-          <span id="notifDot" style="display:none;position:absolute;top:8px;right:8px;width:8px;height:8px;background:#ef4444;border-radius:999px"></span>
-        </button>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button onclick="showNotifSetup()" style="background:rgba(255,255,255,.07);border:none;border-radius:12px;padding:10px;color:var(--muted);cursor:pointer;position:relative" id="notifBell">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span id="notifDot" style="display:none;position:absolute;top:8px;right:8px;width:8px;height:8px;background:#F0605A;border-radius:999px"></span>
+          </button>
+          <button onclick="showView('settings')" style="background:rgba(255,255,255,.07);border:none;border-radius:12px;padding:10px;color:var(--muted);cursor:pointer">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </button>
+        </div>
       </div>
     </div>
     <div class="stat-grid">
-      <div class="stat-card"><div class="stat-val" id="st-total" style="color:var(--accent)">0</div><div class="stat-lbl">Toplam Ürün</div></div>
-      <div class="stat-card"><div class="stat-val" id="st-low" style="color:var(--warn)">0</div><div class="stat-lbl">Az Stok</div></div>
-      <div class="stat-card"><div class="stat-val" id="st-exp" style="color:#fb923c">0</div><div class="stat-lbl">SKT Uyarısı</div></div>
-      <div class="stat-card"><div class="stat-val" id="st-out" style="color:var(--danger)">0</div><div class="stat-lbl">SKT Geçmiş</div></div>
+      <div class="stat-card" style="cursor:pointer;border-left-color:var(--accent)" onclick="setListTab('all')"><div class="stat-val" id="st-total" style="color:var(--accent)">0</div><div class="stat-lbl">Toplam Ürün</div></div>
+      <div class="stat-card" style="cursor:pointer;border-left-color:var(--warn)" onclick="setStatusFilter('low')"><div class="stat-val" id="st-low" style="color:var(--warn)">0</div><div class="stat-lbl">Az Stok</div></div>
+      <div class="stat-card" style="cursor:pointer;border-left-color:var(--accent2)" onclick="setStatusFilter('expiring')"><div class="stat-val" id="st-exp" style="color:var(--accent2)">0</div><div class="stat-lbl">SKT Uyarısı</div></div>
+      <div class="stat-card" style="cursor:pointer;border-left-color:var(--danger)" onclick="setStatusFilter('expired')"><div class="stat-val" id="st-out" style="color:var(--danger)">0</div><div class="stat-lbl">SKT Geçmiş</div></div>
+    </div>
+    <div style="padding:0 20px;margin-bottom:6px"><span class="sec-label">HIZLI ERİŞİM</span></div>
+    <div class="cat-grid" style="margin-bottom:8px">
+      <button class="cat-card" style="background:#132018;border-color:rgba(143,188,143,.15)" onclick="showView('shoplist')">
+        <div class="cat-emoji">🛒</div>
+        <div class="cat-name" style="color:#8FBC8F">Alışveriş Listesi</div>
+        <div class="cat-count" id="homeShopCount">0 bekleyen</div>
+      </button>
+      <button class="cat-card" style="background:#1A1830;border-color:rgba(179,157,219,.15)" onclick="showView('library')">
+        <div class="cat-emoji">📚</div>
+        <div class="cat-name" style="color:#B39DDB">Ürün Kütüphanesi</div>
+        <div class="cat-count" id="homeLibCount">0 kayıt</div>
+      </button>
     </div>
     <div style="padding:0 20px;margin-bottom:6px"><span class="sec-label">KATEGORİLER</span></div>
     <div class="cat-grid" id="homeCatGrid"></div>
@@ -371,6 +456,7 @@
   <div id="view-list" class="view">
     <div class="list-head">
       <h2>Ürün Listesi</h2>
+      <div id="statusFilterLabel" style="display:none;color:var(--accent2);font-size:12px;font-weight:600;margin:-8px 0 12px;cursor:pointer" onclick="clearStatusFilter()"></div>
       <div class="search-wrap" style="margin-bottom:16px">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="6"/><path d="M21 21l-4.35-4.35"/></svg>
         <input id="searchInput" placeholder="Ürün, marka veya barkod ara..." oninput="renderList()" style="width:100%;padding:13px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:#fff;font-size:14px;outline:none">
@@ -417,9 +503,143 @@
         <div class="field"><label>Son Kullanma Tarihi</label><input id="f-expiry" type="date"></div>
         <div class="field"><label>Min. Stok Uyarısı</label><input id="f-minstock" type="number" min="0" value="1"></div>
       </div>
+      <div class="field"><label>Birim Fiyat (₺)</label><input id="f-price" type="number" min="0" step="0.01" placeholder="ör. 24.90"></div>
       <div class="field"><label>Depolama Yeri</label><div class="loc-picker" id="locPicker"></div></div>
       <div class="field"><label>Notlar</label><textarea id="f-notes" rows="3" placeholder="İsteğe bağlı not..."></textarea></div>
-      <button class="save-btn" id="saveBtn" disabled onclick="saveItem()">Ürünü Ekle</button>
+    <button class="save-btn" id="saveBtn" disabled onclick="saveItem()">Ürünü Ekle</button>
+    </div>
+  </div>
+
+  <!-- ══ SETTINGS ══ -->
+  <div id="view-settings" class="view">
+    <div class="page-head">
+      <div class="eyebrow">AYARLAR</div>
+      <h1 style="font-size:26px">Uygulama Ayarları</h1>
+      <p>Görünüm, veri ve uygulama tercihlerin</p>
+    </div>
+
+    <div style="padding:0 20px 24px">
+
+      <!-- GÖRÜNÜM -->
+      <div class="sec-label" style="margin-bottom:10px">GÖRÜNÜM</div>
+      <div class="card" style="margin-bottom:22px">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--accent-bg),rgba(255,138,76,.15));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🎨</div>
+          <div style="flex:1;min-width:0">
+            <div style="color:var(--text);font-weight:600;font-size:14px">Tema</div>
+            <div style="color:var(--muted);font-size:12px;margin-top:2px">Koyu veya açık görünüm seç</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button id="themeDarkBtn" onclick="setTheme('dark')" style="flex:1;padding:12px;border-radius:12px;border:2px solid transparent;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s">🌙 Koyu</button>
+          <button id="themeLightBtn" onclick="setTheme('light')" style="flex:1;padding:12px;border-radius:12px;border:2px solid transparent;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s">☀️ Açık</button>
+        </div>
+      </div>
+
+      <!-- VERİ YÖNETİMİ -->
+      <div class="sec-label" style="margin-bottom:10px">VERİ YÖNETİMİ</div>
+      <div class="card" style="margin-bottom:10px;padding:6px">
+        <button onclick="exportBackup()" class="settings-row">
+          <div class="settings-row-icon" style="background:var(--sage-bg);color:var(--sage)">📤</div>
+          <div style="flex:1;min-width:0">
+            <div class="settings-row-title">Yedek Al</div>
+            <div class="settings-row-sub">Tüm verileri JSON dosyası olarak indir</div>
+          </div>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--dim);flex-shrink:0"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+        <div style="height:1px;background:var(--border);margin:2px 12px"></div>
+        <button onclick="document.getElementById('restoreFileInput').click()" class="settings-row">
+          <div class="settings-row-icon" style="background:var(--info-bg);color:var(--info)">📥</div>
+          <div style="flex:1;min-width:0">
+            <div class="settings-row-title">Yedekten Geri Yükle</div>
+            <div class="settings-row-sub">Daha önce indirdiğin JSON dosyasını yükle</div>
+          </div>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--dim);flex-shrink:0"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+        <input type="file" id="restoreFileInput" accept=".json" style="display:none" onchange="importBackup(event)">
+      </div>
+
+      <div class="card" style="margin-bottom:22px;padding:6px;border-color:rgba(240,96,90,.25)">
+        <button onclick="confirmResetAll()" class="settings-row">
+          <div class="settings-row-icon" style="background:var(--danger-bg);color:var(--danger)">🗑️</div>
+          <div style="flex:1;min-width:0">
+            <div class="settings-row-title" style="color:var(--danger)">Tüm Verileri Sıfırla</div>
+            <div class="settings-row-sub">Tüm ürünler ve ayarlar kalıcı olarak silinir</div>
+          </div>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--danger);flex-shrink:0;opacity:.5"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+
+      <!-- HAKKINDA -->
+      <div class="sec-label" style="margin-bottom:10px">HAKKINDA</div>
+      <div class="card" style="text-align:center;padding:28px 20px;background:linear-gradient(160deg,var(--surface) 0%,var(--surface2) 100%)">
+        <div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 12px;box-shadow:0 4px 16px rgba(255,138,76,.3)">📦</div>
+        <div style="color:var(--text);font-weight:700;font-size:16px;font-family:'Space Grotesk',sans-serif">Ev Stok Takip</div>
+        <div style="color:var(--muted);font-size:12px;margin-top:4px" id="settingsVersion"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SHOPPING LIST ══ -->
+  <div id="view-shoplist" class="view">
+    <div class="form-header">
+      <button class="back-btn" onclick="showView('home')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <span class="form-title">🛒 Alışveriş Listesi</span>
+    </div>
+
+    <div style="padding:0 20px 16px;display:flex;gap:8px">
+      <input id="shopNewInput" placeholder="Ürün adı ekle (ör. Ekmek)" onkeydown="if(event.key==='Enter'){addShopItemManual();}" style="flex:1;padding:13px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:#fff;font-size:14px;outline:none">
+      <button onclick="addShopItemManual()" style="width:48px;background:var(--accent);color:#2B1608;border:none;border-radius:12px;font-weight:700;font-size:22px;flex-shrink:0;cursor:pointer">+</button>
+    </div>
+
+    <div style="padding:0 20px 16px;display:flex;gap:8px">
+      <button class="shop-action-btn" onclick="addLowStockToShopList()">📥 Az Stoktakileri Ekle</button>
+      <button class="shop-action-btn" onclick="clearCheckedShopItems()">🧹 Alınanları Temizle</button>
+    </div>
+
+    <div style="padding:0 20px" id="shopList"></div>
+    <div id="shopEmpty" class="empty" style="display:none">
+      <div class="emoji">🛒</div>
+      <p>Alışveriş listen boş</p>
+      <small>Ürün ekle veya az stoktaki ürünleri otomatik ekle</small>
+    </div>
+
+    <div style="padding:20px 20px 24px;display:flex;gap:10px">
+      <button onclick="shareShopListWhatsApp()" class="whatsapp-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        WhatsApp'ta Paylaş
+      </button>
+      <button onclick="copyShopListText()" class="copy-btn" title="Metni kopyala">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ PRODUCT LIBRARY ══ -->
+  <div id="view-library" class="view">
+    <div class="form-header">
+      <button class="back-btn" onclick="showView('home')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <span class="form-title">📚 Ürün Kütüphanesi</span>
+    </div>
+
+    <div style="padding:0 20px 10px">
+      <span class="sec-label" id="libCount">0 ürün kayıtlı</span>
+    </div>
+
+    <div class="search-wrap" style="margin:0 20px 16px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="6"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input id="libSearchInput" placeholder="Ürün, marka veya barkod ara..." oninput="renderLibrary()" style="width:100%;padding:13px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:#fff;font-size:14px;outline:none">
+    </div>
+
+    <div style="padding:0 20px;display:flex;flex-direction:column;gap:10px" id="libList"></div>
+    <div id="libEmpty" class="empty" style="display:none">
+      <div class="emoji">📚</div>
+      <p>Kütüphane henüz boş</p>
+      <small>Ürün ekledikçe geçmiş kayıtları burada birikir</small>
     </div>
   </div>
 
@@ -548,10 +768,186 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script>
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ══ AYARLAR: TEMA ═══════════════════════════════════════════════
+function applyTheme(theme) {
+  var root = document.documentElement;
+  if (theme === 'light') {
+    root.style.setProperty('--bg', '#8A867E');
+    root.style.setProperty('--bg2', '#7D7A72');
+    root.style.setProperty('--surface', '#9B968D');
+    root.style.setProperty('--surface2', '#8D8880');
+    root.style.setProperty('--border', 'rgba(0,0,0,.15)');
+    root.style.setProperty('--border2', 'rgba(255,138,76,.4)');
+    root.style.setProperty('--text', '#1C1A17');
+    root.style.setProperty('--text2', '#332F2A');
+    root.style.setProperty('--muted', '#4A453F');
+    root.style.setProperty('--dim', '#605B54');
+  } else {
+    root.style.setProperty('--bg', '#0D0F1A');
+    root.style.setProperty('--bg2', '#12152B');
+    root.style.setProperty('--surface', '#181B2E');
+    root.style.setProperty('--surface2', '#1F2340');
+    root.style.setProperty('--border', 'rgba(255,255,255,.07)');
+    root.style.setProperty('--border2', 'rgba(99,102,241,.25)');
+    root.style.setProperty('--text', '#F0F1FF');
+    root.style.setProperty('--text2', '#A8AACC');
+    root.style.setProperty('--muted', '#6B6E96');
+    root.style.setProperty('--dim', '#3D4068');
+  }
+  updateThemeButtons(theme);
+}
+
+function setTheme(theme) {
+  localStorage.setItem('app_theme', theme);
+  applyTheme(theme);
+  toast(theme === 'light' ? 'Açık tema aktif' : 'Koyu tema aktif');
+}
+
+function updateThemeButtons(theme) {
+  var darkBtn  = document.getElementById('themeDarkBtn');
+  var lightBtn = document.getElementById('themeLightBtn');
+  if (!darkBtn || !lightBtn) return;
+  var activeStyle   = 'background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent;box-shadow:0 2px 10px rgba(255,138,76,.35)';
+  var inactiveStyle = 'background:rgba(255,255,255,.04);color:var(--muted);border-color:var(--border)';
+  if (theme === 'light') {
+    lightBtn.style.cssText += ';' + activeStyle;
+    darkBtn.style.cssText  += ';' + inactiveStyle;
+  } else {
+    darkBtn.style.cssText  += ';' + activeStyle;
+    lightBtn.style.cssText += ';' + inactiveStyle;
+  }
+}
+
+function loadTheme() {
+  var saved = localStorage.getItem('app_theme') || 'dark';
+  applyTheme(saved);
+}
+
+// ══ AYARLAR: YEDEKLEME / GERİ YÜKLEME ══════════════════════════════
+function exportBackup() {
+  var backup = {
+    version: typeof APP_VERSION !== 'undefined' ? APP_VERSION : '1.0',
+    exportedAt: new Date().toISOString(),
+    items: items,
+    shopItems: (typeof shopItems !== 'undefined') ? shopItems : [],
+    library: (typeof library !== 'undefined') ? library : [],
+  };
+  var blob = new Blob([JSON.stringify(backup, null, 2)], {type:'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'ev-stok-yedek-' + today() + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+  toast('Yedek indirildi ✓');
+}
+
+function importBackup(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var data = JSON.parse(e.target.result);
+      if (!data.items || !Array.isArray(data.items)) {
+        toast('Geçersiz yedek dosyası', 'error');
+        return;
+      }
+      if (!confirm('Mevcut ' + items.length + ' ürün silinip yedekteki ' + data.items.length + ' ürün yüklenecek. Devam edilsin mi?')) {
+        return;
+      }
+      items = data.items;
+      save();
+      if (data.shopItems && typeof shopItems !== 'undefined') {
+        shopItems = data.shopItems;
+        if (typeof saveShop === 'function') saveShop();
+      }
+      if (data.library && typeof library !== 'undefined') {
+        library = data.library;
+        if (typeof saveLibrary === 'function') saveLibrary();
+      }
+      renderHome();
+      toast('Yedek geri yüklendi ✓ (' + items.length + ' ürün)');
+      showView('home');
+    } catch(err) {
+      toast('Yedek dosyası okunamadı', 'error');
+      console.error('Import error:', err);
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
+function confirmResetAll() {
+  if (!confirm('TÜM ürünler, alışveriş listesi ve ayarlar kalıcı olarak silinecek. Bu işlem geri alınamaz. Emin misiniz?')) return;
+  if (!confirm('Son onay: Gerçekten tüm verileri silmek istiyor musunuz?')) return;
+
+  localStorage.removeItem('homestock_v2');
+  localStorage.removeItem('homestock_v3');
+  localStorage.removeItem('shoplist_v1');
+  localStorage.removeItem('library_v1');
+  localStorage.removeItem('app_theme');
+  localStorage.removeItem('notifEnabled');
+  localStorage.removeItem('lastNotifCheck');
+
+  items = [];
+  if (typeof shopItems !== 'undefined') shopItems = [];
+  if (typeof library   !== 'undefined') library   = [];
+
+  toast('Tüm veriler silindi', 'info');
+  setTimeout(function() {
+    showView('home');
+    renderHome();
+  }, 300);
+}
 
 // ══ VERSIYON KONTROLU ═══════════════════════════════════════════
 var APP_VERSION = "2025.01.15.1";
@@ -623,10 +1019,10 @@ document.addEventListener('visibilitychange', function() {
 
 // ══ DATA ═══════════════════════════════════════════════════════════
 const CATS = [
-  { id:'food',        label:'Yiyecek',       emoji:'🥦', color:'#22c55e', bg:'#052e16' },
-  { id:'cleaning',    label:'Ev Bakım',      emoji:'🧹', color:'#38bdf8', bg:'#082f49' },
-  { id:'personal',    label:'Kişisel Bakım', emoji:'🧴', color:'#f472b6', bg:'#4a044e' },
-  { id:'electronics', label:'Elektronik',    emoji:'🔌', color:'#a78bfa', bg:'#2e1065' },
+  { id:'food',        label:'Yiyecek',       emoji:'🥦', color:'#8FBC8F', bg:'#0F1F16' },
+  { id:'cleaning',    label:'Ev Bakım',      emoji:'🧹', color:'#5FA8D3', bg:'#0D1F2B' },
+  { id:'personal',    label:'Kişisel Bakım', emoji:'🧴', color:'#E8869F', bg:'#2B1420' },
+  { id:'electronics', label:'Elektronik',    emoji:'🔌', color:'#B39DDB', bg:'#1F1A2E' },
 ];
 
 // Local fallback DB
@@ -658,18 +1054,53 @@ function guessCategory(name, cats) {
 }
 
 let items     = JSON.parse(localStorage.getItem('homestock_v2') || '[]');
+let shopItems = JSON.parse(localStorage.getItem('shoplist_v1')  || '[]');
+let library   = JSON.parse(localStorage.getItem('library_v1')   || '[]');
 let editId    = null;
 let formQty   = 1;
 let formCat   = 'food';
 let formLoc   = '';
 let activeLoc = 'all';
 let activeTab = 'all';
+let activeStatus = 'all';
 let scanStream= null;
 let scanInterval = null;
 let previewData  = null;
 let scanZxing = null; // holds the found product data
 
 function save() { localStorage.setItem('homestock_v2', JSON.stringify(items)); }
+function saveShop()    { localStorage.setItem('shoplist_v1', JSON.stringify(shopItems)); }
+function saveLibrary() { localStorage.setItem('library_v1', JSON.stringify(library)); }
+
+// A product's "identity" for library matching: barcode if present, otherwise name+brand
+function libKey(o) {
+  if (o.barcode && String(o.barcode).trim()) return 'b:' + String(o.barcode).trim();
+  return 'n:' + String(o.name||'').trim().toLowerCase() + '|' + String(o.brand||'').trim().toLowerCase();
+}
+
+// Add or refresh a product's entry in the permanent library (called whenever a NEW item is added to stock)
+function upsertLibrary(data) {
+  const key = libKey(data);
+  let entry = library.find(e => libKey(e) === key);
+  const now = today();
+  if (entry) {
+    entry.name     = data.name     || entry.name;
+    entry.brand    = data.brand    || entry.brand;
+    entry.category = data.category || entry.category;
+    entry.unit     = data.unit     || entry.unit;
+    entry.barcode  = data.barcode  || entry.barcode;
+    if (data.price) entry.lastPrice = data.price;
+    entry.lastAdded  = now;
+    entry.timesAdded = (entry.timesAdded||1) + 1;
+  } else {
+    library.unshift({
+      id: uid(), name: data.name, brand: data.brand||'', category: data.category||'food',
+      unit: data.unit||'adet', barcode: data.barcode||'', lastPrice: data.price||0,
+      firstAdded: now, lastAdded: now, timesAdded: 1
+    });
+  }
+  saveLibrary();
+}
 function uid()  { return Math.random().toString(36).slice(2,9); }
 function today(){ return new Date().toISOString().split('T')[0]; }
 function isExpired(d)  { return d && new Date(d) < new Date(); }
@@ -684,11 +1115,9 @@ function showView(name) {
   const nb = document.getElementById('nav-'+name);
   if (nb) nb.classList.add('active');
   if (name==='home') renderHome();
-maybeAutoNotify();
-var existingBanner = document.getElementById('updateBanner');
-if (existingBanner) existingBanner.remove();
-checkForUpdate();
-  if (name==='list') renderList();
+  if (name==='list') { renderList(); updateStatusFilterLabel(); }
+  if (name==='shoplist') renderShopList();
+  if (name==='library') renderLibrary();
   window.scrollTo(0,0);
 }
 
@@ -701,6 +1130,10 @@ function renderHome() {
   document.getElementById('st-low').textContent   = low;
   document.getElementById('st-exp').textContent   = exp;
   document.getElementById('st-out').textContent   = out;
+
+  const shopPending = shopItems.filter(s=>!s.checked).length;
+  document.getElementById('homeShopCount').textContent = shopPending ? (shopPending + ' bekleyen') : 'Liste boş';
+  document.getElementById('homeLibCount').textContent   = library.length ? (library.length + ' kayıt') : 'Henüz kayıt yok';
 
   document.getElementById('homeCatGrid').innerHTML = CATS.map(c=>{
     const cnt = items.filter(i=>i.category===c.id).length;
@@ -719,7 +1152,35 @@ function renderHome() {
   if (typeof updateNotifBell === 'function') updateNotifBell();
 }
 
-function setListTab(catId) { activeTab=catId; showView('list'); }
+function setListTab(catId) { activeTab=catId; activeStatus='all'; showView('list'); }
+
+function setStatusFilter(status) {
+  activeTab='all'; activeLoc='all'; activeStatus=status;
+  showView('list');
+}
+
+function clearStatusFilter() {
+  activeStatus='all';
+  renderList();
+  updateStatusFilterLabel();
+}
+
+function updateStatusFilterLabel() {
+  var el = document.getElementById('statusFilterLabel');
+  if (!el) return;
+  var labels = {
+    low:      '⚠️ Az Stok filtresi aktif · Kaldır',
+    expiring: '⏰ SKT Uyarısı filtresi aktif · Kaldır',
+    expired:  '🚨 SKT Geçmiş filtresi aktif · Kaldır',
+    out:      '❌ Tükenenler filtresi aktif · Kaldır',
+  };
+  if (activeStatus !== 'all' && labels[activeStatus]) {
+    el.textContent = labels[activeStatus];
+    el.style.display = 'block';
+  } else {
+    el.style.display = 'none';
+  }
+}
 
 // ══ LIST ═══════════════════════════════════════════════════════════
 function renderList() {
@@ -738,8 +1199,13 @@ function renderList() {
   const filtered = items.filter(i=>{
     const catOk = activeTab==='all' || i.category===activeTab;
     const locOk = activeLoc==='all' || (i.location||'')=== activeLoc;
+    let statusOk = true;
+    if (activeStatus === 'low')      statusOk = i.quantity > 0 && i.quantity <= i.minStock;
+    else if (activeStatus === 'expiring') statusOk = isExpiring(i.expiry) && !isExpired(i.expiry);
+    else if (activeStatus === 'expired')  statusOk = isExpired(i.expiry);
+    else if (activeStatus === 'out')      statusOk = i.quantity === 0;
     const ok = !q || i.name.toLowerCase().includes(q) || (i.brand||'').toLowerCase().includes(q) || (i.barcode||'').includes(q);
-    return catOk && locOk && ok;
+    return catOk && locOk && statusOk && ok;
   });
 
   const wrap  = document.getElementById('itemsList');
@@ -764,10 +1230,10 @@ function itemCard(item) {
   if (expired) cls+=' expired'; else if (expiring) cls+=' expiring';
 
   const badges = [
-    outStock ? `<span class="badge" style="color:var(--danger);background:#450a0a">Tükendi</span>` : '',
-    !outStock&&lowStock ? `<span class="badge" style="color:var(--warn);background:#451a03">Az Kaldı</span>` : '',
-    expired  ? `<span class="badge" style="color:var(--danger);background:#450a0a">SKT Geçti</span>` : '',
-    !expired&&expiring ? `<span class="badge" style="color:var(--warn);background:#451a03">Son 7 Gün</span>` : '',
+    outStock ? `<span class="badge" style="color:var(--danger);background:#2B1210">Tükendi</span>` : '',
+    !outStock&&lowStock ? `<span class="badge" style="color:var(--warn);background:#2B2008">Az Kaldı</span>` : '',
+    expired  ? `<span class="badge" style="color:var(--danger);background:#2B1210">SKT Geçti</span>` : '',
+    !expired&&expiring ? `<span class="badge" style="color:var(--warn);background:#2B2008">Son 7 Gün</span>` : '',
   ].join('');
 
   const ec = expired?'var(--danger)':expiring?'var(--warn)':'var(--dim)';
@@ -784,6 +1250,7 @@ function itemCard(item) {
           ${item.barcode ? `<span style="color:var(--dim);font-size:11px">#${esc(item.barcode)}</span>` : ''}
           ${item.expiry  ? `<span style="color:${ec};font-size:12px">SKT: ${item.expiry}</span>` : ''}
           ${item.location ? (()=>{ const lo=LOCATIONS.find(x=>x.id===item.location); return lo?`<span class="loc-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${lo.emoji} ${lo.label}</span>`:''; })() : ''}
+          ${item.price ? `<span style="color:var(--accent);font-size:12px;font-weight:600">₺${item.price.toFixed(2)}</span>` : ''}
         </div>
         <div class="ic-footer">
           <div class="qty-ctrl">
@@ -806,6 +1273,156 @@ function itemCard(item) {
 }
 
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ══ SHOPPING LIST ═════════════════════════════════════════════════
+function renderShopList() {
+  const wrap  = document.getElementById('shopList');
+  const empty = document.getElementById('shopEmpty');
+  if (!shopItems.length) { wrap.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  const sorted = [...shopItems].sort((a,b)=> (a.checked===b.checked) ? 0 : (a.checked ? 1 : -1));
+  wrap.innerHTML = sorted.map(shopRow).join('');
+}
+
+function shopRow(item) {
+  return `<div class="shop-row ${item.checked?'checked':''}" id="sh-${item.id}">
+    <button class="shop-check" onclick="toggleShopItem('${item.id}')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+    </button>
+    <div class="shop-row-body">
+      <div class="shop-row-name">${esc(item.name)}</div>
+      <div class="shop-row-meta">${item.qty} ${esc(item.unit||'adet')}${item.source==='auto' ? ' · Stoktan eklendi' : ''}</div>
+    </div>
+    <button class="icon-btn" style="color:var(--danger)" onclick="deleteShopItem('${item.id}')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+    </button>
+  </div>`;
+}
+
+function addShopItemManual() {
+  const inp = document.getElementById('shopNewInput');
+  const name = inp.value.trim();
+  if (!name) return;
+  shopItems.push({id:uid(), name, qty:1, unit:'adet', checked:false, source:'manual'});
+  inp.value = '';
+  saveShop(); renderShopList(); renderHome();
+}
+
+function addLowStockToShopList() {
+  const candidates = items.filter(i => i.quantity===0 || i.quantity<=i.minStock);
+  if (!candidates.length) { toast('Az stokta ürün yok','info'); return; }
+  let added = 0;
+  candidates.forEach(i=>{
+    const already = shopItems.some(s => !s.checked && (s.linkedItemId===i.id || s.name.toLowerCase()===i.name.toLowerCase()));
+    if (!already) {
+      shopItems.push({id:uid(), name:i.name, qty:Math.max(i.minStock,1), unit:i.unit||'adet', checked:false, source:'auto', linkedItemId:i.id});
+      added++;
+    }
+  });
+  if (!added) { toast('Az stoktaki ürünler zaten listede','info'); return; }
+  saveShop(); renderShopList(); renderHome();
+  toast(added + ' ürün listeye eklendi ✓');
+}
+
+function toggleShopItem(id) {
+  const it = shopItems.find(s=>s.id===id);
+  if (!it) return;
+  it.checked = !it.checked;
+  saveShop(); renderShopList(); renderHome();
+}
+
+function deleteShopItem(id) {
+  shopItems = shopItems.filter(s=>s.id!==id);
+  saveShop(); renderShopList(); renderHome();
+}
+
+function clearCheckedShopItems() {
+  const before = shopItems.length;
+  shopItems = shopItems.filter(s=>!s.checked);
+  if (shopItems.length===before) { toast('Temizlenecek ürün yok','info'); return; }
+  saveShop(); renderShopList(); renderHome();
+  toast('Alınan ürünler temizlendi ✓');
+}
+
+function buildShopShareText() {
+  const pending = shopItems.filter(s=>!s.checked);
+  if (!pending.length) return null;
+  const lines = pending.map(s => `• ${s.name}${s.qty>1 ? ` (${s.qty} ${s.unit||'adet'})` : ''}`);
+  return `🛒 Alışveriş Listesi\n\n${lines.join('\n')}\n\n— Ev Stok Takip`;
+}
+
+function shareShopListWhatsApp() {
+  const text = buildShopShareText();
+  if (!text) { toast('Paylaşılacak ürün yok','error'); return; }
+  window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+}
+
+function copyShopListText() {
+  const text = buildShopShareText();
+  if (!text) { toast('Kopyalanacak ürün yok','error'); return; }
+  navigator.clipboard.writeText(text)
+    .then(()=>toast('Panoya kopyalandı ✓'))
+    .catch(()=>toast('Kopyalanamadı','error'));
+}
+
+// ══ PRODUCT LIBRARY ═══════════════════════════════════════════════
+function renderLibrary() {
+  const q = (document.getElementById('libSearchInput').value||'').toLowerCase();
+  const filtered = library.filter(e=>{
+    if (!q) return true;
+    return e.name.toLowerCase().includes(q) || (e.brand||'').toLowerCase().includes(q) || (e.barcode||'').includes(q);
+  }).sort((a,b)=> new Date(b.lastAdded) - new Date(a.lastAdded));
+
+  document.getElementById('libCount').textContent = library.length + ' ürün kayıtlı';
+
+  const wrap  = document.getElementById('libList');
+  const empty = document.getElementById('libEmpty');
+  if (!filtered.length) { wrap.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  wrap.innerHTML = filtered.map(libCard).join('');
+}
+
+function libCard(entry) {
+  const c = catInfo(entry.category);
+  const inStock = items.some(it => libKey(it) === libKey(entry));
+  return `<div class="card lib-card">
+    <div style="display:flex;gap:12px;align-items:flex-start">
+      <div class="ic-icon" style="background:${c.bg}">${c.emoji}</div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          <span class="ic-title">${esc(entry.name)}</span>
+          <span class="badge" style="color:${inStock?'var(--sage)':'var(--dim)'};background:${inStock?'var(--sage-bg)':'rgba(255,255,255,.06)'}">${inStock?'Stokta':'Stokta Değil'}</span>
+        </div>
+        <div class="ic-meta">
+          ${entry.brand   ? `<span style="color:var(--dim);font-size:12px">${esc(entry.brand)}</span>` : ''}
+          ${entry.barcode ? `<span style="color:var(--dim);font-size:11px">#${esc(entry.barcode)}</span>` : ''}
+          <span style="color:var(--muted);font-size:12px">${entry.timesAdded||1} kez eklendi</span>
+        </div>
+        <div style="color:var(--dim);font-size:11px;margin-top:4px">İlk: ${entry.firstAdded} · Son: ${entry.lastAdded}${entry.lastPrice ? ` · Son fiyat ₺${Number(entry.lastPrice).toFixed(2)}` : ''}</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="lib-add-btn" onclick="reAddFromLibrary('${entry.id}')">+ Stoğa Ekle</button>
+      <button class="icon-btn" style="color:var(--danger)" onclick="deleteLibraryEntry('${entry.id}')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>
+      </button>
+    </div>
+  </div>`;
+}
+
+function reAddFromLibrary(id) {
+  const entry = library.find(e=>e.id===id);
+  if (!entry) return;
+  openManualAdd({ name:entry.name, brand:entry.brand, category:entry.category, unit:entry.unit, barcode:entry.barcode, price:entry.lastPrice });
+}
+
+function deleteLibraryEntry(id) {
+  if (!confirm('Bu ürünü kütüphaneden kaldırmak istediğinize emin misiniz? Mevcut stoğunuz etkilenmez.')) return;
+  library = library.filter(e=>e.id!==id);
+  saveLibrary();
+  renderLibrary();
+  toast('Kütüphaneden kaldırıldı','info');
+}
 
 // ══ CRUD ═══════════════════════════════════════════════════════════
 function changeQty(id, delta) {
@@ -888,6 +1505,7 @@ function openManualAdd(prefill) {
   document.getElementById('f-brand').value   = prefill?.brand   || '';
   document.getElementById('f-barcode').value = prefill?.barcode || '';
   document.getElementById('f-expiry').value  = '';
+  document.getElementById('f-price').value   = prefill?.price || '';
   document.getElementById('f-minstock').value= 1;
   document.getElementById('f-notes').value   = '';
   document.getElementById('f-unit').value    = prefill?.unit || 'adet';
@@ -907,6 +1525,7 @@ function openForm(item) {
   document.getElementById('f-brand').value   = item.brand   || '';
   document.getElementById('f-barcode').value = item.barcode || '';
   document.getElementById('f-expiry').value  = item.expiry  || '';
+  document.getElementById('f-price').value   = item.price   || '';
   document.getElementById('f-minstock').value= item.minStock|| 1;
   document.getElementById('f-notes').value   = item.notes   || '';
   document.getElementById('f-unit').value    = item.unit    || 'adet';
@@ -932,6 +1551,7 @@ function saveItem() {
     minStock: Number(document.getElementById('f-minstock').value)||1,
     notes:    document.getElementById('f-notes').value.trim(),
     location: formLoc,
+    price:    Number(document.getElementById('f-price').value) || 0,
   };
   if (editId) {
     const idx = items.findIndex(i=>i.id===editId);
@@ -940,6 +1560,7 @@ function saveItem() {
     editId = null;
   } else {
     items.unshift({id:uid(), addedDate:today(), ...data});
+    upsertLibrary(data);
     toast('Ürün eklendi ✓');
   }
   save(); showView('list'); renderHome();
@@ -1336,6 +1957,7 @@ function addFromPreview() {
       minStock: 1,
       notes:    '',
     });
+    upsertLibrary(previewData);
     toast(`${previewData.name} stoğa eklendi ✓`);
   }
   save();
@@ -1360,7 +1982,7 @@ function editFromPreview() {
 let toastTimer;
 function toast(msg, type='success') {
   const el = document.getElementById('toast');
-  const colors = { success:['#052e16','#4ADE80'], info:['#082f49','#38bdf8'], error:['#450a0a','#ef4444'] };
+  const colors = { success:['#2B1608','#FF8A4C'], info:['#0D1F2B','#5FA8D3'], error:['#2B1210','#F0605A'] };
   const [bg,color] = colors[type]||colors.success;
   el.style.background=bg; el.style.color=color; el.style.border=`1px solid ${color}44`;
   el.textContent=msg; el.classList.add('show');
@@ -1458,9 +2080,9 @@ function showIosGuide() {
   var div = document.createElement('div');
   div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)';
   var msg = (isIos && isSafari)
-    ? '<p style="font-size:15px;color:#F1F5F9;font-weight:700;margin-bottom:10px">Ana Ekrana Ekle</p><p style="font-size:13px;color:#94A3B8;line-height:1.7">1. Alttaki <strong style="color:#4ADE80">Paylaş &#x2B06;</strong> butonuna dokunun<br>2. <strong style="color:#4ADE80">Ana Ekrana Ekle</strong> secenegini secin<br>3. <strong style="color:#4ADE80">Ekle</strong> butonuna dokunun</p>'
-    : '<p style="font-size:15px;color:#F1F5F9;font-weight:700;margin-bottom:10px">Ana Ekrana Ekle</p><p style="font-size:13px;color:#94A3B8;line-height:1.7">Tarayici menusu (&#8942;) <br><strong style="color:#4ADE80">Ana ekrana ekle</strong> secenegini secin.</p>';
-  div.innerHTML = '<div style="background:#1E293B;border-radius:24px 24px 0 0;padding:24px 24px 40px;width:100%;max-width:500px;text-align:center">'+msg+'<br><button onclick="this.parentNode.parentNode.remove()" style="margin-top:18px;padding:13px 32px;border-radius:12px;border:none;background:#4ADE80;color:#052e16;font-weight:700;font-size:15px">Anladim</button></div>';
+    ? '<p style="font-size:15px;color:#F5F1EA;font-weight:700;margin-bottom:10px">Ana Ekrana Ekle</p><p style="font-size:13px;color:#8B93A8;line-height:1.7">1. Alttaki <strong style="color:#FF8A4C">Paylaş &#x2B06;</strong> butonuna dokunun<br>2. <strong style="color:#FF8A4C">Ana Ekrana Ekle</strong> secenegini secin<br>3. <strong style="color:#FF8A4C">Ekle</strong> butonuna dokunun</p>'
+    : '<p style="font-size:15px;color:#F5F1EA;font-weight:700;margin-bottom:10px">Ana Ekrana Ekle</p><p style="font-size:13px;color:#8B93A8;line-height:1.7">Tarayici menusu (&#8942;) <br><strong style="color:#FF8A4C">Ana ekrana ekle</strong> secenegini secin.</p>';
+  div.innerHTML = '<div style="background:#151B2C;border-radius:24px 24px 0 0;padding:24px 24px 40px;width:100%;max-width:500px;text-align:center">'+msg+'<br><button onclick="this.parentNode.parentNode.remove()" style="margin-top:18px;padding:13px 32px;border-radius:12px;border:none;background:#FF8A4C;color:#2B1608;font-weight:700;font-size:15px">Anladim</button></div>';
   document.body.appendChild(div);
 }
 (function(){
@@ -1474,11 +2096,13 @@ function showIosGuide() {
 
 // ══ INIT ═══════════════════════════════════════════════════════════
 renderHome();
-
-
-
-
-
+maybeAutoNotify();
+loadTheme();
+var svEl = document.getElementById('settingsVersion');
+if (svEl && typeof APP_VERSION !== 'undefined') svEl.textContent = 'Sürüm ' + APP_VERSION;
+var existingBanner = document.getElementById('updateBanner');
+if (existingBanner) existingBanner.remove();
+checkForUpdate();
 
 
 
@@ -1495,12 +2119,40 @@ renderHome();
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 (function(){
-  var m={"name":"Ev Stok Takip","short_name":"Ev Stogum","description":"Evdeki urunlerinizi barkod okuyarak takip edin","start_url":".?pwa=1","display":"standalone","background_color":"#0F172A","theme_color":"#0F172A","orientation":"portrait","lang":"tr","icons":[{"src":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAFJElEQVR4nO3bu45cRRSFYSfE3M2dGHEx5jWQeCdyHs850rzB5ASNBtTSGMbTfbrqnFVV+9vSn46nu9aHJQQvXjjnnHPOOeecc84555xzzm289z/7/qQ6/frn7xdr/TPSm7546UfQMV0z9mu79XdIb/2tSz+I9q/n6HtiMHzt1hGjnxZC+nG0b6nxt0AwfjWXHn0rBOPXMsMfDkH6kVRz/LdAAEDLjX8LAuPXkuOPIUg/lox/KwLj17LjPxRB+sFk/LciAEBLj/8SAuPX8uPf9W+B9MMJgOjfAh98/sNJc5ce5pE99fkBKFx6kAAIgDACAIqWHiIAmhrAe69exsfcAwEABesxogcA59KDBkBRADMjAKBgewCYDQEARes1oKcAzIQAgKLtDWAmCAAU7CgAMyAAoFg9x3MNgNERAFCsBICREQBQrN4D2oJgRAgAFGuPEc2OAICFu7u7e6u9RnQkgN6IAFi4owBsQdDj5wOg4QBcC6HHzwRAwwK4hKDHzwJAQwN4DsHRPwOAwiUBtPzT+8h/kwTAwqUBPDXo1vEDoOkAPB526/gB0JQAzgNvHX9PAA/fUROAD7/48aRxGw1A6/B7A3j4jgAYuIdbGUBq+ABM0OPrBWAkBOnxAzBwT91KAEYYPwCD9tytAGCk8QMwWNdcFQB7/x4ADNaWawGQRjDC+AEYrFtuVQBHjh+AAWq5WwGM8p9FJMYPwED1uBUAHP07ADBISQApBCONH4DJx38JwegA0uMHYIHxP4fgEoDk/yOQwAfAAO15MwBI9a73AGCR8b8LwTWlxwlAgY48CK4bPwALjv9WBOmRJsYPwKLjh+C68QOw8PjPVxXBtZ8XgIXHf75qCLZ8VgAAWArB1s8JwOLjP18FBLd8RgAKjP98t36m9LD3Gj8AhcZ/vtUQtL5ZE4CPvvzppH+b6Vo+Z3rwj+vxbgAUG//5Wj/z7MMHoPD4z9fj8886fACKj/98vb6LmUYPgPG/dXt8PyOPHgDj/9+lv9NUAADwz6W/UwAmaeVLf7cADF6FS3/HAAxapUt/1wAMVsVLf+cADFLlS3/3ABh//NJvAIDxxy/9FgAYf/zSbwIAANFLvwkAxh+/9NsAYPzxS78RAMYfv/RbAWD88Uu/GQDGH7/02wFg/PFLvyEAxh+/9FsCYPzxS79pBMDHX706zZbb79Jve0sAuG6XflsAjD9+6TcGwPjjl35rAIw/fuk3B8D445d++/IAXP7SGygLwI1z6S2UBLCl+/t7bSz9ZgAcDOCvN390Lz1iAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA9JsBAAAAAAAAQBDAJ1//fFqhPQF89/q3WHsCSL9ZrwAAAAAAAAAAAAAAAAAAAAAAAAAA+gTA2AEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+XcDAAAAAAAAAAAAAAAAAAAAQNpQE4BPv3l9kmYOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJWuCcDLb385STMHgEoHgErXBAACzVzz+AHQzAGg0nUBAIFmrNv4AdCMdQUAgWaq+/gB0EztAgACzdBu44dAo7f7+CHQqB02fgg0WoePHwSNUHT4/730l6E6pbd+8dJfkNYrvWnnnHPOOeecc84555yb8P4GrEksNBUnF30AAAAASUVORK5CYII=","sizes":"192x192","type":"image/png","purpose":"any maskable"},{"src":"data:image/png;base64,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","sizes":"512x512","type":"image/png","purpose":"any maskable"}]};
+  var m={"name":"Ev Stok Takip","short_name":"Ev Stogum","description":"Evdeki urunlerinizi barkod okuyarak takip edin","start_url":".?pwa=1","display":"standalone","background_color":"#0A0E17","theme_color":"#0A0E17","orientation":"portrait","lang":"tr","icons":[{"src":"data:image/png;base64,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","sizes":"192x192","type":"image/png","purpose":"any maskable"},{"src":"data:image/png;base64,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","sizes":"512x512","type":"image/png","purpose":"any maskable"}]};
   var b=new Blob([JSON.stringify(m)],{type:'application/manifest+json'});
   var l=document.createElement('link');l.rel='manifest';l.href=URL.createObjectURL(b);document.head.appendChild(l);
-  var ai=document.createElement('link');ai.rel='apple-touch-icon';ai.href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAFJElEQVR4nO3bu45cRRSFYSfE3M2dGHEx5jWQeCdyHs850rzB5ASNBtTSGMbTfbrqnFVV+9vSn46nu9aHJQQvXjjnnHPOOeecc84555xzzm289z/7/qQ6/frn7xdr/TPSm7546UfQMV0z9mu79XdIb/2tSz+I9q/n6HtiMHzt1hGjnxZC+nG0b6nxt0AwfjWXHn0rBOPXMsMfDkH6kVRz/LdAAEDLjX8LAuPXkuOPIUg/lox/KwLj17LjPxRB+sFk/LciAEBLj/8SAuPX8uPf9W+B9MMJgOjfAh98/sNJc5ce5pE99fkBKFx6kAAIgDACAIqWHiIAmhrAe69exsfcAwEABesxogcA59KDBkBRADMjAKBgewCYDQEARes1oKcAzIQAgKLtDWAmCAAU7CgAMyAAoFg9x3MNgNERAFCsBICREQBQrN4D2oJgRAgAFGuPEc2OAICFu7u7e6u9RnQkgN6IAFi4owBsQdDj5wOg4QBcC6HHzwRAwwK4hKDHzwJAQwN4DsHRPwOAwiUBtPzT+8h/kwTAwqUBPDXo1vEDoOkAPB526/gB0JQAzgNvHX9PAA/fUROAD7/48aRxGw1A6/B7A3j4jgAYuIdbGUBq+ABM0OPrBWAkBOnxAzBwT91KAEYYPwCD9tytAGCk8QMwWNdcFQB7/x4ADNaWawGQRjDC+AEYrFtuVQBHjh+AAWq5WwGM8p9FJMYPwED1uBUAHP07ADBISQApBCONH4DJx38JwegA0uMHYIHxP4fgEoDk/yOQwAfAAO15MwBI9a73AGCR8b8LwTWlxwlAgY48CK4bPwALjv9WBOmRJsYPwKLjh+C68QOw8PjPVxXBtZ8XgIXHf75qCLZ8VgAAWArB1s8JwOLjP18FBLd8RgAKjP98t36m9LD3Gj8AhcZ/vtUQtL5ZE4CPvvzppH+b6Vo+Z3rwj+vxbgAUG//5Wj/z7MMHoPD4z9fj8886fACKj/98vb6LmUYPgPG/dXt8PyOPHgDj/9+lv9NUAADwz6W/UwAmaeVLf7cADF6FS3/HAAxapUt/1wAMVsVLf+cADFLlS3/3ABh//NJvAIDxxy/9FgAYf/zSbwIAANFLvwkAxh+/9NsAYPzxS78RAMYfv/RbAWD88Uu/GQDGH7/02wFg/PFLvyEAxh+/9FsCYPzxS79pBMDHX706zZbb79Jve0sAuG6XflsAjD9+6TcGwPjjl35rAIw/fuk3B8D445d++/IAXP7SGygLwI1z6S2UBLCl+/t7bSz9ZgAcDOCvN390Lz1iAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA9JsBAAAAAAAAQBDAJ1//fFqhPQF89/q3WHsCSL9ZrwAAAAAAAAAAAAAAAAAAAAAAAAAA+gTA2AEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+XcDAAAAAAAAAAAAAAAAAAAAQNpQE4BPv3l9kmYOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJUOAJWuCcDLb385STMHgEoHgErXBAACzVzz+AHQzAGg0nUBAIFmrNv4AdCMdQUAgWaq+/gB0EztAgACzdBu44dAo7f7+CHQqB02fgg0WoePHwSNUHT4/730l6E6pbd+8dJfkNYrvWnnnHPOOeecc84555yb8P4GrEksNBUnF30AAAAASUVORK5CYII=';document.head.appendChild(ai);
+  var ai=document.createElement('link');ai.rel='apple-touch-icon';ai.href='data:image/png;base64,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';document.head.appendChild(ai);
 })();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
