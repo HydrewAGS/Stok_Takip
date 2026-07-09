@@ -61,7 +61,7 @@
     width: 100%; max-width: 500px;
     background: rgba(10,14,23,.92); backdrop-filter: blur(24px);
     border-top: 1px solid var(--border);
-    display: grid; grid-template-columns: 1fr 1fr 72px 1fr;
+    display: grid; grid-template-columns: 1fr 1fr 72px 1fr 1fr;
     padding: 8px 4px calc(8px + var(--safe-b));
     z-index: 200; pointer-events: auto; }
   .nav-btn { display: flex; flex-direction: column; align-items: center; gap: 3px; background: none; border: none; color: var(--dim); padding: 4px 8px; transition: color .15s; }
@@ -99,11 +99,29 @@
   .cat-name  { font-family:'Space Grotesk',sans-serif; font-weight: 600; font-size: 15px; letter-spacing:-.005em; }
   .cat-count { font-size: 12px; color: rgba(255,255,255,.4); margin-top: 2px; }
 
-  /* ── Category tabs ── */
+  /* ── Category tabs (legacy, kept for potential reuse) ── */
   .cat-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 0 20px 16px; scrollbar-width: none; }
   .cat-tabs::-webkit-scrollbar { display: none; }
   .tab-pill { padding: 8px 14px; border-radius: 99px; border: none; white-space: nowrap; background: rgba(255,255,255,.07); color: var(--muted); font-size: 13px; font-weight: 500; transition: all .15s; }
   .tab-pill.active { background: var(--accent); color: #2B1608; font-weight: 700; }
+
+  /* ── Filter trigger + modal ── */
+  .filter-trigger { display:flex; align-items:center; gap:8px; width:100%; padding:9px 13px; border-radius:11px; border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.05); color:var(--text); font-size:13px; font-weight:600; margin-bottom:14px; cursor:pointer; }
+  .filter-trigger svg { flex-shrink:0; width:15px; height:15px; color:var(--muted); }
+  .filter-badge { background:var(--accent); color:#2B1608; font-size:10px; font-weight:800; border-radius:999px; min-width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; padding:0 5px; }
+  #filterOverlay { display:none; position:fixed; inset:0; z-index:1100; background:rgba(0,0,0,.7); backdrop-filter:blur(6px); align-items:flex-end; justify-content:center; }
+  #filterOverlay.open { display:flex; }
+  #filterSheet { background:#151B2C; border-radius:24px 24px 0 0; width:100%; max-width:500px; padding:0 0 calc(20px + var(--safe-b)); max-height:85vh; overflow-y:auto; animation: slideUp .28s cubic-bezier(.22,1,.36,1); }
+  .loc-picker-wrap { display:flex; flex-wrap:wrap; gap:8px; padding:0 20px 20px; }
+  #libEditOverlay { display:none; position:fixed; inset:0; z-index:1100; background:rgba(0,0,0,.7); backdrop-filter:blur(6px); align-items:flex-end; justify-content:center; }
+  #libEditOverlay.open { display:flex; }
+  #libEditSheet { background:#151B2C; border-radius:24px 24px 0 0; width:100%; max-width:500px; padding:0 0 calc(20px + var(--safe-b)); max-height:90vh; overflow-y:auto; animation: slideUp .28s cubic-bezier(.22,1,.36,1); }
+  #confirmOverlay { display:none; position:fixed; inset:0; z-index:1300; background:rgba(0,0,0,.75); backdrop-filter:blur(6px); align-items:center; justify-content:center; padding:24px; }
+  #confirmOverlay.open { display:flex; }
+  #confirmBox { background:#151B2C; border-radius:20px; padding:24px; width:100%; max-width:340px; border:1px solid rgba(255,255,255,.08); animation: fadeIn .18s ease; }
+  #batchAddOverlay { display:none; position:fixed; inset:0; z-index:1300; background:rgba(0,0,0,.75); backdrop-filter:blur(6px); align-items:center; justify-content:center; padding:24px; }
+  #batchAddOverlay.open { display:flex; }
+  #batchAddBox { background:#151B2C; border-radius:20px; padding:24px; width:100%; max-width:360px; border:1px solid rgba(255,255,255,.08); animation: fadeIn .18s ease; }
 
   /* ── Item card inner ── */
   .ic-header { display: flex; align-items: flex-start; gap: 12px; }
@@ -113,6 +131,8 @@
   .ic-meta   { display: flex; gap: 8px; flex-wrap: wrap; margin: 3px 0 8px; }
   .badge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 999px; letter-spacing: .04em; }
   .ic-footer { display: flex; align-items: center; justify-content: space-between; }
+  .batch-list { margin: 6px 0 10px; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,.1); display: flex; flex-direction: column; gap: 4px; }
+  .batch-row { display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--muted); }
   .qty-ctrl  { display: flex; align-items: center; gap: 4px; background: rgba(0,0,0,.3); border-radius: 99px; padding: 2px 4px; }
   .qty-btn   { width: 30px; height: 30px; border: none; border-radius: 999px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
   .qty-minus { background: rgba(255,255,255,.08); color: var(--muted); }
@@ -139,7 +159,8 @@
 
   /* ── Product Library ── */
   .lib-card { margin-bottom:10px; }
-  .lib-add-btn { flex:1; padding:10px; border-radius:10px; border:none; background:var(--accent-bg); color:var(--accent); font-weight:700; font-size:13px; cursor:pointer; }
+  .lib-add-btn { flex:1; padding:10px 6px; border-radius:10px; border:none; background:var(--accent-bg); color:var(--accent); font-weight:700; font-size:12.5px; cursor:pointer; }
+  .lib-shop-btn { background:var(--sage-bg); color:var(--sage); }
 
   /* ── Form ── */
   .form-view { min-height: 100vh; background: var(--bg); padding-bottom: calc(110px + var(--safe-b)); }
@@ -457,17 +478,43 @@
     <div class="list-head">
       <h2>Ürün Listesi</h2>
       <div id="statusFilterLabel" style="display:none;color:var(--accent2);font-size:12px;font-weight:600;margin:-8px 0 12px;cursor:pointer" onclick="clearStatusFilter()"></div>
-      <div class="search-wrap" style="margin-bottom:16px">
+      <div class="search-wrap" style="margin-bottom:12px">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="6"/><path d="M21 21l-4.35-4.35"/></svg>
         <input id="searchInput" placeholder="Ürün, marka veya barkod ara..." oninput="renderList()" style="width:100%;padding:13px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:#fff;font-size:14px;outline:none">
       </div>
-      <div class="cat-tabs" id="catTabs"></div>
-      <div class="loc-tabs" id="locTabs"></div>
+      <button id="filterBtn" class="filter-trigger" onclick="openFilterModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        <span id="filterBtnLabel" style="flex:1;text-align:left">Tüm Ürünler</span>
+        <span id="filterBadge" class="filter-badge" style="display:none"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
     </div>
     <div class="items-wrap" id="itemsList"></div>
     <div id="listEmpty" class="empty" style="display:none">
       <div class="emoji">🔍</div><p>Ürün bulunamadı</p>
       <small>Arama kriterini değiştirin veya yeni ürün ekleyin</small>
+    </div>
+  </div>
+
+  <!-- ══ FILTER MODAL ══ -->
+  <div id="filterOverlay" onclick="handleFilterOverlayClick(event)">
+    <div id="filterSheet">
+      <div class="preview-drag"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0 20px 18px">
+        <span style="color:var(--text);font-weight:700;font-size:17px">Filtrele</span>
+        <button onclick="closeFilterModal()" style="width:32px;height:32px;border-radius:999px;background:rgba(255,255,255,.08);border:none;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div style="padding:0 20px 8px"><span class="sec-label">KATEGORİ</span></div>
+      <div class="cat-picker" id="filterCatPicker" style="padding:0 20px 20px"></div>
+      <div id="filterLocSection">
+        <div style="padding:0 20px 8px"><span class="sec-label">KONUM</span></div>
+        <div class="loc-picker-wrap" id="filterLocPicker"></div>
+      </div>
+      <div style="padding:4px 20px 24px">
+        <button onclick="resetFilters()" style="width:100%;padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--muted);font-weight:600;font-size:14px;cursor:pointer">Filtreleri Temizle</button>
+      </div>
     </div>
   </div>
 
@@ -503,6 +550,10 @@
         <div class="field"><label>Son Kullanma Tarihi</label><input id="f-expiry" type="date"></div>
         <div class="field"><label>Min. Stok Uyarısı</label><input id="f-minstock" type="number" min="0" value="1"></div>
       </div>
+      <label class="field" style="flex-direction:row;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);cursor:pointer">
+        <span style="color:var(--muted);font-size:13px;font-weight:500">Bu ürün için minimum stok uyarısı istemiyorum</span>
+        <input type="checkbox" id="f-nowarn" onchange="toggleMinStockField()" style="width:20px;height:20px;accent-color:var(--accent);flex-shrink:0;cursor:pointer">
+      </label>
       <div class="field"><label>Birim Fiyat (₺)</label><input id="f-price" type="number" min="0" step="0.01" placeholder="ör. 24.90"></div>
       <div class="field"><label>Depolama Yeri</label><div class="loc-picker" id="locPicker"></div></div>
       <div class="field"><label>Notlar</label><textarea id="f-notes" rows="3" placeholder="İsteğe bağlı not..."></textarea></div>
@@ -513,9 +564,16 @@
   <!-- ══ SETTINGS ══ -->
   <div id="view-settings" class="view">
     <div class="page-head">
-      <div class="eyebrow">AYARLAR</div>
-      <h1 style="font-size:26px">Uygulama Ayarları</h1>
-      <p>Görünüm, veri ve uygulama tercihlerin</p>
+      <div style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div>
+          <div class="eyebrow">AYARLAR</div>
+          <h1 style="font-size:26px">Uygulama Ayarları</h1>
+          <p>Görünüm, veri ve uygulama tercihlerin</p>
+        </div>
+        <button onclick="showView('home')" style="background:rgba(255,255,255,.07);border:none;border-radius:12px;padding:10px;color:var(--muted);cursor:pointer;margin-top:8px;flex-shrink:0">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
     </div>
 
     <div style="padding:0 20px 24px">
@@ -643,6 +701,74 @@
     </div>
   </div>
 
+  <!-- ══ LIBRARY EDIT MODAL ══ -->
+  <div id="libEditOverlay" onclick="handleLibEditOverlayClick(event)">
+    <div id="libEditSheet">
+      <div class="preview-drag"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0 20px 18px">
+        <span style="color:var(--text);font-weight:700;font-size:17px">Ürünü Düzenle</span>
+        <button onclick="closeLibEditModal()" style="width:32px;height:32px;border-radius:999px;background:rgba(255,255,255,.08);border:none;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="form-body" style="padding:0 20px 4px">
+        <div class="field"><label>Ürün Adı *</label><input id="le-name" type="text" placeholder="ör. Zeytinyağı" oninput="checkLibEditValid()"></div>
+        <div class="field"><label>Kategori</label><div class="cat-picker" id="leCatPicker"></div></div>
+        <div class="two-col">
+          <div class="field"><label>Marka</label><input id="le-brand" type="text" placeholder="ör. Komili"></div>
+          <div class="field"><label>Birim</label>
+            <select id="le-unit"><option>adet</option><option>kg</option><option>g</option><option>lt</option><option>ml</option><option>paket</option><option>kutu</option><option>şişe</option><option>tüp</option><option>çift</option></select>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="field"><label>Barkod</label><input id="le-barcode" type="text" placeholder="ör. 8690..."></div>
+          <div class="field"><label>Son Fiyat (₺)</label><input id="le-price" type="number" min="0" step="0.01" placeholder="ör. 24.90"></div>
+        </div>
+        <div id="lePriceHistorySection" style="display:none">
+          <div style="padding:4px 0 8px"><span class="sec-label">FİYAT GEÇMİŞİ</span></div>
+          <div id="lePriceHistoryList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:6px"></div>
+        </div>
+        <button class="save-btn" id="leSaveBtn" disabled onclick="saveLibEdit()">Kaydet</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CONFIRM MODAL ══ -->
+  <div id="confirmOverlay" onclick="handleConfirmOverlayClick(event)">
+    <div id="confirmBox">
+      <div id="confirmTitle" style="color:var(--text);font-weight:700;font-size:16px;margin-bottom:8px"></div>
+      <div id="confirmMsg" style="color:var(--muted);font-size:13px;line-height:1.5;margin-bottom:22px"></div>
+      <div style="display:flex;gap:10px">
+        <button onclick="closeConfirmModal(false)" style="flex:1;padding:13px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--muted);font-weight:600;font-size:14px;cursor:pointer">Vazgeç</button>
+        <button id="confirmOkBtn" onclick="closeConfirmModal(true)" style="flex:1;padding:13px;border-radius:12px;border:none;background:var(--danger);color:#fff;font-weight:700;font-size:14px;cursor:pointer">Sil</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ YENİ PARTİ EKLE MODAL ══ -->
+  <div id="batchAddOverlay" onclick="handleBatchAddOverlayClick(event)">
+    <div id="batchAddBox">
+      <div style="color:var(--text);font-weight:700;font-size:16px;margin-bottom:4px">Yeni Parti Ekle</div>
+      <div id="batchAddSub" style="color:var(--muted);font-size:12px;line-height:1.5;margin-bottom:18px"></div>
+      <div class="field" style="margin-bottom:14px">
+        <label>Miktar</label>
+        <div class="qty-field">
+          <button type="button" style="color:var(--muted)" onclick="adjBatchQty(-1)">−</button>
+          <div class="qty-display" id="batchQtyDisplay">1</div>
+          <button type="button" style="color:var(--accent)" onclick="adjBatchQty(1)">+</button>
+        </div>
+      </div>
+      <div class="field" style="margin-bottom:20px">
+        <label>Son Kullanma Tarihi (bu parti için)</label>
+        <input id="batchExpiryInput" type="date">
+      </div>
+      <div style="display:flex;gap:10px">
+        <button onclick="closeBatchAddModal()" style="flex:1;padding:13px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--muted);font-weight:600;font-size:14px;cursor:pointer">Vazgeç</button>
+        <button onclick="confirmBatchAdd()" style="flex:1;padding:13px;border-radius:12px;border:none;background:var(--accent);color:#2B1608;font-weight:700;font-size:14px;cursor:pointer">Ekle</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ══ BOTTOM NAV ══ -->
   <nav id="bottomNav">
     <button class="nav-btn active" id="nav-home" onclick="showView('home')">
@@ -658,6 +784,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" y1="12" x2="17" y2="12"/></svg>
       </div>
       <span>TARA</span>
+    </button>
+    <button class="nav-btn" id="nav-library" onclick="showView('library')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span>Kütüphane</span>
     </button>
     <button class="nav-btn" onclick="openManualAdd()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -895,15 +1025,21 @@ function importBackup(event) {
   if (!file) return;
   var reader = new FileReader();
   reader.onload = function(e) {
+    var data;
     try {
-      var data = JSON.parse(e.target.result);
-      if (!data.items || !Array.isArray(data.items)) {
-        toast('Geçersiz yedek dosyası', 'error');
-        return;
-      }
-      if (!confirm('Mevcut ' + items.length + ' ürün silinip yedekteki ' + data.items.length + ' ürün yüklenecek. Devam edilsin mi?')) {
-        return;
-      }
+      data = JSON.parse(e.target.result);
+    } catch(err) {
+      toast('Yedek dosyası okunamadı', 'error');
+      console.error('Import error:', err);
+      event.target.value = '';
+      return;
+    }
+    if (!data.items || !Array.isArray(data.items)) {
+      toast('Geçersiz yedek dosyası', 'error');
+      event.target.value = '';
+      return;
+    }
+    showConfirm('Yedeği Geri Yükle', 'Mevcut ' + items.length + ' ürün silinip yedekteki ' + data.items.length + ' ürün yüklenecek.', () => {
       items = data.items;
       save();
       if (data.shopItems && typeof shopItems !== 'undefined') {
@@ -917,36 +1053,34 @@ function importBackup(event) {
       renderHome();
       toast('Yedek geri yüklendi ✓ (' + items.length + ' ürün)');
       showView('home');
-    } catch(err) {
-      toast('Yedek dosyası okunamadı', 'error');
-      console.error('Import error:', err);
-    }
+    }, 'Geri Yükle');
     event.target.value = '';
   };
   reader.readAsText(file);
 }
 
 function confirmResetAll() {
-  if (!confirm('TÜM ürünler, alışveriş listesi ve ayarlar kalıcı olarak silinecek. Bu işlem geri alınamaz. Emin misiniz?')) return;
-  if (!confirm('Son onay: Gerçekten tüm verileri silmek istiyor musunuz?')) return;
+  showConfirm('Tüm Verileri Sıfırla', 'TÜM ürünler, alışveriş listesi ve ayarlar kalıcı olarak silinecek. Bu işlem geri alınamaz.', () => {
+    showConfirm('Son Onay', 'Gerçekten tüm verileri silmek istiyor musunuz?', () => {
+      localStorage.removeItem('homestock_v2');
+      localStorage.removeItem('homestock_v3');
+      localStorage.removeItem('shoplist_v1');
+      localStorage.removeItem('library_v1');
+      localStorage.removeItem('app_theme');
+      localStorage.removeItem('notifEnabled');
+      localStorage.removeItem('lastNotifCheck');
 
-  localStorage.removeItem('homestock_v2');
-  localStorage.removeItem('homestock_v3');
-  localStorage.removeItem('shoplist_v1');
-  localStorage.removeItem('library_v1');
-  localStorage.removeItem('app_theme');
-  localStorage.removeItem('notifEnabled');
-  localStorage.removeItem('lastNotifCheck');
+      items = [];
+      if (typeof shopItems !== 'undefined') shopItems = [];
+      if (typeof library   !== 'undefined') library   = [];
 
-  items = [];
-  if (typeof shopItems !== 'undefined') shopItems = [];
-  if (typeof library   !== 'undefined') library   = [];
-
-  toast('Tüm veriler silindi', 'info');
-  setTimeout(function() {
-    showView('home');
-    renderHome();
-  }, 300);
+      toast('Tüm veriler silindi', 'info');
+      setTimeout(function() {
+        showView('home');
+        renderHome();
+      }, 300);
+    }, 'Sıfırla');
+  }, 'Devam Et');
 }
 
 // ══ VERSIYON KONTROLU ═══════════════════════════════════════════
@@ -1089,13 +1223,20 @@ function upsertLibrary(data) {
     entry.category = data.category || entry.category;
     entry.unit     = data.unit     || entry.unit;
     entry.barcode  = data.barcode  || entry.barcode;
-    if (data.price) entry.lastPrice = data.price;
+    if (data.price) {
+      if (data.price !== entry.lastPrice) {
+        if (!entry.priceHistory) entry.priceHistory = [];
+        entry.priceHistory.push({ date: now, price: data.price });
+      }
+      entry.lastPrice = data.price;
+    }
     entry.lastAdded  = now;
     entry.timesAdded = (entry.timesAdded||1) + 1;
   } else {
     library.unshift({
       id: uid(), name: data.name, brand: data.brand||'', category: data.category||'food',
       unit: data.unit||'adet', barcode: data.barcode||'', lastPrice: data.price||0,
+      priceHistory: data.price ? [{ date: now, price: data.price }] : [],
       firstAdded: now, lastAdded: now, timesAdded: 1
     });
   }
@@ -1109,6 +1250,14 @@ function catInfo(id)   { return CATS.find(c=>c.id===id)||CATS[0]; }
 
 // ══ VIEWS ══════════════════════════════════════════════════════════
 function showView(name) {
+  const fo = document.getElementById('filterOverlay');
+  if (fo) fo.classList.remove('open');
+  const leo = document.getElementById('libEditOverlay');
+  if (leo) leo.classList.remove('open');
+  const co = document.getElementById('confirmOverlay');
+  if (co) co.classList.remove('open');
+  const bao = document.getElementById('batchAddOverlay');
+  if (bao) bao.classList.remove('open');
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('view-'+name).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
@@ -1123,7 +1272,7 @@ function showView(name) {
 
 // ══ HOME ═══════════════════════════════════════════════════════════
 function renderHome() {
-  const low = items.filter(i=>i.quantity<=i.minStock&&i.quantity>0).length;
+  const low = items.filter(i=>!i.noMinStockWarning && i.quantity<=i.minStock&&i.quantity>0).length;
   const exp = items.filter(i=>isExpiring(i.expiry)&&!isExpired(i.expiry)).length;
   const out = items.filter(i=>isExpired(i.expiry)).length;
   document.getElementById('st-total').textContent = items.length;
@@ -1184,23 +1333,14 @@ function updateStatusFilterLabel() {
 
 // ══ LIST ═══════════════════════════════════════════════════════════
 function renderList() {
-  const allTabs = [{id:'all',label:'Tümü',emoji:'🗂️'},...CATS];
-  document.getElementById('catTabs').innerHTML = allTabs.map(c=>
-    `<button class="tab-pill ${activeTab===c.id?'active':''}" onclick="setTab('${c.id}')">${c.emoji} ${c.label}</button>`
-  ).join('');
-
-  const allLocs = [{id:'all',label:'Tümü',emoji:'🗺️'}, ...LOCATIONS.filter(l=>items.some(i=>i.location===l.id))];
-  const lt = document.getElementById('locTabs');
-  if (lt) lt.innerHTML = allLocs.map(l=>
-    `<button class="loc-pill ${activeLoc===l.id?'active':''}" onclick="setLoc('${l.id}')">${l.emoji} ${l.label}</button>`
-  ).join('');
+  updateFilterBtnLabel();
 
   const q = (document.getElementById('searchInput').value||'').toLowerCase();
   const filtered = items.filter(i=>{
     const catOk = activeTab==='all' || i.category===activeTab;
     const locOk = activeLoc==='all' || (i.location||'')=== activeLoc;
     let statusOk = true;
-    if (activeStatus === 'low')      statusOk = i.quantity > 0 && i.quantity <= i.minStock;
+    if (activeStatus === 'low')      statusOk = !i.noMinStockWarning && i.quantity > 0 && i.quantity <= i.minStock;
     else if (activeStatus === 'expiring') statusOk = isExpiring(i.expiry) && !isExpired(i.expiry);
     else if (activeStatus === 'expired')  statusOk = isExpired(i.expiry);
     else if (activeStatus === 'out')      statusOk = i.quantity === 0;
@@ -1215,26 +1355,156 @@ function renderList() {
   wrap.innerHTML = filtered.map(itemCard).join('');
 }
 
-function setTab(id) { activeTab=id; renderList(); }
-function setLoc(id) { activeLoc=id; renderList(); }
+// ══ FILTER MODAL ═══════════════════════════════════════════════════
+function openFilterModal() {
+  buildFilterCatPicker();
+  buildFilterLocPicker();
+  document.getElementById('filterOverlay').classList.add('open');
+}
+
+function closeFilterModal() {
+  document.getElementById('filterOverlay').classList.remove('open');
+}
+
+function handleFilterOverlayClick(e) {
+  if (e.target === document.getElementById('filterOverlay')) closeFilterModal();
+}
+
+function buildFilterCatPicker() {
+  const allTabs = [{id:'all', label:'Tümü', emoji:'🗂️', color:'var(--accent)', bg:'var(--accent-bg)'}, ...CATS];
+  document.getElementById('filterCatPicker').innerHTML = allTabs.map(c=>{
+    const active = activeTab === c.id;
+    const style  = active
+      ? `border-color:${c.color};background:${c.bg};color:${c.color}`
+      : `border-color:transparent;background:rgba(255,255,255,.05);color:var(--dim)`;
+    return `<button type="button" class="cat-opt" style="${style}" onclick="selectFilterCat('${c.id}')">${c.emoji} ${c.label}</button>`;
+  }).join('');
+}
+
+function selectFilterCat(id) {
+  activeTab = id;
+  renderList();
+  buildFilterCatPicker();
+}
+
+function buildFilterLocPicker() {
+  const allLocs = [{id:'all', label:'Tümü', emoji:'🗺️'}, ...LOCATIONS.filter(l=>items.some(i=>i.location===l.id))];
+  const section = document.getElementById('filterLocSection');
+  if (allLocs.length <= 1) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+  document.getElementById('filterLocPicker').innerHTML = allLocs.map(l=>
+    `<button type="button" class="loc-pill ${activeLoc===l.id?'active':''}" onclick="selectFilterLoc('${l.id}')">${l.emoji} ${l.label}</button>`
+  ).join('');
+}
+
+function selectFilterLoc(id) {
+  activeLoc = id;
+  renderList();
+  buildFilterLocPicker();
+}
+
+function resetFilters() {
+  activeTab = 'all'; activeLoc = 'all';
+  renderList();
+  buildFilterCatPicker();
+  buildFilterLocPicker();
+}
+
+function updateFilterBtnLabel() {
+  const parts = [];
+  if (activeTab !== 'all') { const c = catInfo(activeTab); parts.push(c.emoji + ' ' + c.label); }
+  if (activeLoc !== 'all') { const l = LOCATIONS.find(x=>x.id===activeLoc); if (l) parts.push(l.emoji + ' ' + l.label); }
+  const labelEl = document.getElementById('filterBtnLabel');
+  if (labelEl) labelEl.textContent = parts.length ? parts.join(' · ') : 'Tüm Ürünler';
+  const badge = document.getElementById('filterBadge');
+  if (badge) {
+    const count = (activeTab!=='all'?1:0) + (activeLoc!=='all'?1:0);
+    if (count) { badge.style.display='inline-flex'; badge.textContent = count; }
+    else { badge.style.display='none'; }
+  }
+}
+
+// ══ BATCH (PARTİ) TAKİBİ ═════════════════════════════════════════════
+// Her stok kaydı artık birden fazla "parti" (farklı tarihte alınmış, farklı SKT'li) içerebilir.
+// item.quantity ve item.expiry, mevcut tüm ekranlarla (rozetler, az-stok, bildirimler) uyumlu
+// kalması için her zaman partilerin toplamı / en yakın SKT'si olacak şekilde senkron tutulur.
+function ensureBatches(item) {
+  if (!item.batches || !Array.isArray(item.batches) || !item.batches.length) {
+    item.batches = [{ id: uid(), qty: item.quantity||0, expiry: item.expiry||'', addedDate: item.addedDate||today() }];
+  }
+  return item.batches;
+}
+
+function syncItemFromBatches(item) {
+  const batches = item.batches || [];
+  item.quantity = batches.reduce((s,b)=>s+b.qty, 0);
+  const withExpiry = batches.filter(b=>b.qty>0 && b.expiry).sort((a,b)=> new Date(a.expiry) - new Date(b.expiry));
+  item.expiry = withExpiry.length ? withExpiry[0].expiry : '';
+}
+
+// Ürün zaten stoktayken yeni bir alım (farklı SKT olabilir) parti olarak eklenir
+function addBatchToItem(item, qty, expiry) {
+  ensureBatches(item);
+  item.batches.push({ id: uid(), qty: qty, expiry: expiry||'', addedDate: today() });
+  syncItemFromBatches(item);
+}
+
+// Bir işlemi geri almak için en SON eklenen parti(ler)den düşer (LIFO)
+function removeBatchQty(item, qty) {
+  ensureBatches(item);
+  let remaining = qty;
+  for (let i=item.batches.length-1; i>=0 && remaining>0; i--) {
+    const b = item.batches[i];
+    const take = Math.min(b.qty, remaining);
+    b.qty -= take;
+    remaining -= take;
+  }
+  item.batches = item.batches.filter(b=>b.qty>0);
+  if (!item.batches.length) item.batches.push({id:uid(), qty:0, expiry:'', addedDate:today()});
+  syncItemFromBatches(item);
+}
+
+// Kart üzerinde, birden fazla parti varsa her birinin miktar ve SKT'sini alt alta listeler
+function buildBatchBreakdown(item) {
+  const batches = (item.batches||[]).filter(b=>b.qty>0);
+  if (batches.length <= 1) return '';
+  const sorted = [...batches].sort((a,b)=>{
+    if (!a.expiry && !b.expiry) return 0;
+    if (!a.expiry) return 1;
+    if (!b.expiry) return -1;
+    return new Date(a.expiry) - new Date(b.expiry);
+  });
+  const rows = sorted.map(b=>{
+    const label = b.expiry ? `SKT: ${b.expiry}` : 'SKT girilmedi';
+    const color = b.expiry && isExpired(b.expiry) ? 'var(--danger)' : (b.expiry && isExpiring(b.expiry) ? 'var(--warn)' : 'var(--dim)');
+    return `<div class="batch-row"><span>${b.qty} ${esc(item.unit||'adet')}</span><span style="color:${color}">${label}</span></div>`;
+  }).join('');
+  return `<div class="batch-list">${rows}</div>`;
+}
 
 // ══ ITEM CARD ══════════════════════════════════════════════════════
-function itemCard(item) {
-  const c        = catInfo(item.category);
+function buildItemBadges(item) {
   const expired  = isExpired(item.expiry);
   const expiring = isExpiring(item.expiry);
-  const lowStock = item.quantity <= item.minStock && item.quantity > 0;
+  const lowStock = !item.noMinStockWarning && item.quantity <= item.minStock && item.quantity > 0;
   const outStock = item.quantity === 0;
-
-  let cls = 'item-card card';
-  if (expired) cls+=' expired'; else if (expiring) cls+=' expiring';
-
-  const badges = [
+  return [
     outStock ? `<span class="badge" style="color:var(--danger);background:#2B1210">Tükendi</span>` : '',
     !outStock&&lowStock ? `<span class="badge" style="color:var(--warn);background:#2B2008">Az Kaldı</span>` : '',
     expired  ? `<span class="badge" style="color:var(--danger);background:#2B1210">SKT Geçti</span>` : '',
     !expired&&expiring ? `<span class="badge" style="color:var(--warn);background:#2B2008">Son 7 Gün</span>` : '',
   ].join('');
+}
+
+function itemCard(item) {
+  const c        = catInfo(item.category);
+  const expired  = isExpired(item.expiry);
+  const expiring = isExpiring(item.expiry);
+
+  let cls = 'item-card card';
+  if (expired) cls+=' expired'; else if (expiring) cls+=' expiring';
+
+  const badges = buildItemBadges(item);
 
   const ec = expired?'var(--danger)':expiring?'var(--warn)':'var(--dim)';
 
@@ -1252,6 +1522,7 @@ function itemCard(item) {
           ${item.location ? (()=>{ const lo=LOCATIONS.find(x=>x.id===item.location); return lo?`<span class="loc-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${lo.emoji} ${lo.label}</span>`:''; })() : ''}
           ${item.price ? `<span style="color:var(--accent);font-size:12px;font-weight:600">₺${item.price.toFixed(2)}</span>` : ''}
         </div>
+        ${buildBatchBreakdown(item)}
         <div class="ic-footer">
           <div class="qty-ctrl">
             <button class="qty-btn qty-minus" onclick="changeQty('${item.id}',-1)">−</button>
@@ -1259,9 +1530,6 @@ function itemCard(item) {
             <button class="qty-btn qty-plus"  onclick="changeQty('${item.id}',1)">+</button>
           </div>
           <div class="ic-actions">
-            <button class="icon-btn" style="color:var(--muted)" onclick="editItem('${item.id}')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>
-            </button>
             <button class="icon-btn" style="color:var(--danger)" onclick="deleteItem('${item.id}')">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
             </button>
@@ -1285,13 +1553,14 @@ function renderShopList() {
 }
 
 function shopRow(item) {
+  const addedNote = (item.checked && item.stockAction) ? ' · Stoğa eklendi ✓' : '';
   return `<div class="shop-row ${item.checked?'checked':''}" id="sh-${item.id}">
     <button class="shop-check" onclick="toggleShopItem('${item.id}')">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
     </button>
     <div class="shop-row-body">
       <div class="shop-row-name">${esc(item.name)}</div>
-      <div class="shop-row-meta">${item.qty} ${esc(item.unit||'adet')}${item.source==='auto' ? ' · Stoktan eklendi' : ''}</div>
+      <div class="shop-row-meta">${item.qty} ${esc(item.unit||'adet')}${item.source==='auto' ? ' · Stoktan eklendi' : ''}${item.source==='library' ? ' · Kütüphaneden' : ''}${addedNote}</div>
     </div>
     <button class="icon-btn" style="color:var(--danger)" onclick="deleteShopItem('${item.id}')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
@@ -1309,7 +1578,7 @@ function addShopItemManual() {
 }
 
 function addLowStockToShopList() {
-  const candidates = items.filter(i => i.quantity===0 || i.quantity<=i.minStock);
+  const candidates = items.filter(i => i.quantity===0 || (!i.noMinStockWarning && i.quantity<=i.minStock));
   if (!candidates.length) { toast('Az stokta ürün yok','info'); return; }
   let added = 0;
   candidates.forEach(i=>{
@@ -1328,7 +1597,52 @@ function toggleShopItem(id) {
   const it = shopItems.find(s=>s.id===id);
   if (!it) return;
   it.checked = !it.checked;
-  saveShop(); renderShopList(); renderHome();
+
+  if (it.checked) addShopItemToStock(it);
+  else            undoShopItemStock(it);
+
+  save(); saveShop(); renderShopList(); renderList(); renderHome();
+  if (typeof updateNotifBell === 'function') updateNotifBell();
+}
+
+// Bir alışveriş listesi ürünü işaretlendiğinde stoğa ekler (varsa mevcut ürüne, yoksa yeni ürün olarak)
+function addShopItemToStock(shopItem) {
+  const qty = shopItem.qty || 1;
+  let target = null;
+  if (shopItem.linkedItemId) target = items.find(i=>i.id===shopItem.linkedItemId);
+  if (!target) target = items.find(i=>i.name.toLowerCase()===shopItem.name.toLowerCase());
+
+  if (target) {
+    addBatchToItem(target, qty, '');
+    shopItem.stockAction = { itemId: target.id, qty, wasNewItem:false };
+    toast(`${target.name} stoğa eklendi ✓ (+${qty} ${target.unit||'adet'})`);
+  } else {
+    const newItem = {
+      id: uid(), addedDate: today(),
+      name: shopItem.name, brand: shopItem.brand||'', category: shopItem.category || guessCategory(shopItem.name), quantity: qty,
+      unit: shopItem.unit||'adet', barcode: shopItem.barcode||'', expiry:'', minStock:1, notes:'', location:'', price: shopItem.price||0
+    };
+    ensureBatches(newItem);
+    items.unshift(newItem);
+    upsertLibrary(newItem);
+    shopItem.stockAction = { itemId: newItem.id, qty, wasNewItem:true };
+    toast(`${shopItem.name} stoğa eklendi ✓`);
+  }
+}
+
+// İşaret geri alındığında stoğa yapılan eklemeyi (son eklenen partiyi) geri alır
+function undoShopItemStock(shopItem) {
+  const action = shopItem.stockAction;
+  if (!action) return;
+  const target = items.find(i=>i.id===action.itemId);
+  if (target) {
+    removeBatchQty(target, action.qty);
+    if (action.wasNewItem && target.quantity === 0) {
+      items = items.filter(i=>i.id!==action.itemId);
+    }
+  }
+  delete shopItem.stockAction;
+  toast('Geri alındı, stoktan çıkarıldı', 'info');
 }
 
 function deleteShopItem(id) {
@@ -1403,6 +1717,10 @@ function libCard(entry) {
     </div>
     <div style="display:flex;gap:8px;margin-top:12px">
       <button class="lib-add-btn" onclick="reAddFromLibrary('${entry.id}')">+ Stoğa Ekle</button>
+      <button class="lib-add-btn lib-shop-btn" onclick="addLibraryEntryToShopList('${entry.id}')">🛒 Listeye Ekle</button>
+      <button class="icon-btn" style="color:var(--muted)" onclick="openLibEditModal('${entry.id}')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>
+      </button>
       <button class="icon-btn" style="color:var(--danger)" onclick="deleteLibraryEntry('${entry.id}')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>
       </button>
@@ -1413,42 +1731,244 @@ function libCard(entry) {
 function reAddFromLibrary(id) {
   const entry = library.find(e=>e.id===id);
   if (!entry) return;
-  openManualAdd({ name:entry.name, brand:entry.brand, category:entry.category, unit:entry.unit, barcode:entry.barcode, price:entry.lastPrice });
+  const existing = items.find(i => libKey(i) === libKey(entry));
+  if (existing) {
+    // Ürün zaten stokta: bu yeni alımın kendi miktar ve SKT'sini soran hafif bir modal açıyoruz,
+    // böylece farklı tarihlerde alınan partiler birbirine karışmadan ayrı ayrı takip edilebiliyor.
+    openBatchAddModal(existing.id, entry.name);
+  } else {
+    openManualAdd({ name:entry.name, brand:entry.brand, category:entry.category, unit:entry.unit, barcode:entry.barcode, price:entry.lastPrice });
+  }
+}
+
+// ══ YENİ PARTİ EKLE MODAL ═══════════════════════════════════════════
+let batchAddQty = 1;
+let batchAddTargetItemId = null;
+
+function openBatchAddModal(itemId, productName) {
+  batchAddTargetItemId = itemId;
+  batchAddQty = 1;
+  document.getElementById('batchQtyDisplay').textContent = '1';
+  document.getElementById('batchExpiryInput').value = '';
+  document.getElementById('batchAddSub').textContent = `"${productName}" zaten stokta. Bu yeni alım için miktar ve varsa SKT'sini gir — mevcut partilerin üzerine yazılmaz, ayrı bir parti olarak eklenir.`;
+  document.getElementById('batchAddOverlay').classList.add('open');
+}
+
+function adjBatchQty(delta) {
+  batchAddQty = Math.max(1, batchAddQty + delta);
+  document.getElementById('batchQtyDisplay').textContent = batchAddQty;
+}
+
+function closeBatchAddModal() {
+  document.getElementById('batchAddOverlay').classList.remove('open');
+  batchAddTargetItemId = null;
+}
+
+function handleBatchAddOverlayClick(e) {
+  if (e.target === document.getElementById('batchAddOverlay')) closeBatchAddModal();
+}
+
+function confirmBatchAdd() {
+  const item = items.find(i=>i.id===batchAddTargetItemId);
+  if (!item) { closeBatchAddModal(); return; }
+  const expiry = document.getElementById('batchExpiryInput').value;
+  addBatchToItem(item, batchAddQty, expiry);
+  save();
+  toast(`${item.name} stoğa eklendi ✓ (+${batchAddQty} ${item.unit||'adet'})`);
+  closeBatchAddModal();
+  renderHome(); renderList();
+}
+
+// Kütüphanedeki bir ürünü doğrudan (formu açmadan) alışveriş listesine ekler
+function addLibraryEntryToShopList(id) {
+  const entry = library.find(e=>e.id===id);
+  if (!entry) return;
+  const already = shopItems.some(s => !s.checked && s.name.toLowerCase()===entry.name.toLowerCase());
+  if (already) { toast(entry.name + ' zaten listede', 'info'); return; }
+  const inStockItem = items.find(i => libKey(i) === libKey(entry));
+  shopItems.push({
+    id: uid(), name: entry.name, qty: 1, unit: entry.unit || 'adet', checked:false, source:'library',
+    linkedItemId: inStockItem ? inStockItem.id : undefined,
+    category: entry.category, brand: entry.brand, barcode: entry.barcode, price: entry.lastPrice
+  });
+  saveShop();
+  toast(entry.name + ' alışveriş listesine eklendi ✓');
 }
 
 function deleteLibraryEntry(id) {
-  if (!confirm('Bu ürünü kütüphaneden kaldırmak istediğinize emin misiniz? Mevcut stoğunuz etkilenmez.')) return;
-  library = library.filter(e=>e.id!==id);
+  const entry = library.find(e=>e.id===id);
+  if (!entry) return;
+  showConfirm('Kütüphaneden Kaldır', `"${entry.name}" ürününü kütüphaneden kaldırmak istediğinize emin misiniz? Mevcut stoğunuz etkilenmez.`, () => {
+    library = library.filter(e=>e.id!==id);
+    saveLibrary();
+    renderLibrary();
+    toast('Kütüphaneden kaldırıldı','info');
+  });
+}
+
+// ══ LIBRARY EDIT MODAL ═══════════════════════════════════════════
+let libEditId  = null;
+let libEditCat = 'food';
+
+function openLibEditModal(id) {
+  const entry = library.find(e=>e.id===id);
+  if (!entry) return;
+  libEditId = id;
+  document.getElementById('le-name').value    = entry.name    || '';
+  document.getElementById('le-brand').value   = entry.brand   || '';
+  document.getElementById('le-unit').value    = entry.unit    || 'adet';
+  document.getElementById('le-barcode').value = entry.barcode || '';
+  document.getElementById('le-price').value   = entry.lastPrice || '';
+  buildLibEditCatPicker(entry.category || 'food');
+  buildLibPriceHistory(entry);
+  checkLibEditValid();
+  document.getElementById('libEditOverlay').classList.add('open');
+}
+
+function closeLibEditModal() {
+  document.getElementById('libEditOverlay').classList.remove('open');
+  libEditId = null;
+}
+
+function handleLibEditOverlayClick(e) {
+  if (e.target === document.getElementById('libEditOverlay')) closeLibEditModal();
+}
+
+function buildLibEditCatPicker(activeId) {
+  libEditCat = activeId;
+  document.getElementById('leCatPicker').innerHTML = CATS.map(c=>{
+    const active = c.id === activeId;
+    const style  = active
+      ? `border-color:${c.color};background:${c.bg};color:${c.color}`
+      : `border-color:transparent;background:rgba(255,255,255,.05);color:var(--dim)`;
+    return `<button type="button" class="cat-opt" style="${style}" onclick="selectLibEditCat('${c.id}')">${c.emoji} ${c.label}</button>`;
+  }).join('');
+}
+
+function selectLibEditCat(id) {
+  buildLibEditCatPicker(id);
+}
+
+// Ürünün geçmiş fiyat değişikliklerini, en yeniden en eskiye doğru listeler
+function buildLibPriceHistory(entry) {
+  const section = document.getElementById('lePriceHistorySection');
+  const list = document.getElementById('lePriceHistoryList');
+  const history = (entry.priceHistory || []).slice().reverse();
+  if (!history.length) { section.style.display = 'none'; list.innerHTML = ''; return; }
+  section.style.display = 'block';
+  list.innerHTML = history.map((h, idx) => {
+    let diffHtml = '';
+    if (idx < history.length - 1) {
+      const diff = h.price - history[idx+1].price;
+      if (diff > 0)      diffHtml = `<span style="color:var(--danger);font-size:11px;font-weight:700">▲ +₺${diff.toFixed(2)}</span>`;
+      else if (diff < 0) diffHtml = `<span style="color:var(--sage);font-size:11px;font-weight:700">▼ ₺${Math.abs(diff).toFixed(2)}</span>`;
+      else               diffHtml = `<span style="color:var(--dim);font-size:11px">değişmedi</span>`;
+    }
+    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:rgba(255,255,255,.04);border-radius:10px">
+      <span style="color:var(--muted);font-size:12px">${h.date}</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="color:var(--text);font-weight:700;font-size:13px">₺${Number(h.price).toFixed(2)}</span>
+        ${diffHtml}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function checkLibEditValid() {
+  document.getElementById('leSaveBtn').disabled = !document.getElementById('le-name').value.trim();
+}
+
+function saveLibEdit() {
+  const entry = library.find(e=>e.id===libEditId);
+  if (!entry) return;
+  const name = document.getElementById('le-name').value.trim();
+  if (!name) return;
+  const newPrice = Number(document.getElementById('le-price').value) || 0;
+  if (newPrice && newPrice !== entry.lastPrice) {
+    if (!entry.priceHistory) entry.priceHistory = [];
+    entry.priceHistory.push({ date: today(), price: newPrice });
+  }
+  entry.name      = name;
+  entry.brand     = document.getElementById('le-brand').value.trim();
+  entry.unit      = document.getElementById('le-unit').value;
+  entry.barcode   = document.getElementById('le-barcode').value.trim();
+  entry.lastPrice = newPrice;
+  entry.category  = libEditCat;
   saveLibrary();
+  closeLibEditModal();
   renderLibrary();
-  toast('Kütüphaneden kaldırıldı','info');
+  toast('Ürün güncellendi ✓');
 }
 
 // ══ CRUD ═══════════════════════════════════════════════════════════
 function changeQty(id, delta) {
   const item = items.find(i=>i.id===id);
   if (!item) return;
-  item.quantity = Math.max(0, item.quantity+delta);
+  ensureBatches(item);
+  if (delta > 0) {
+    // Yeni birim(ler), en son eklenen partiye eklenir (kullanıcı genelde son aldığını kastediyordur)
+    item.batches[item.batches.length-1].qty += delta;
+  } else {
+    // Azaltma, SKT'si en yakın olan partiden başlar (FEFO - önce süresi dolacak olan tüketilir)
+    let remaining = -delta;
+    const sorted = [...item.batches].sort((a,b)=>{
+      if (!a.expiry && !b.expiry) return 0;
+      if (!a.expiry) return 1;
+      if (!b.expiry) return -1;
+      return new Date(a.expiry) - new Date(b.expiry);
+    });
+    for (const b of sorted) {
+      if (remaining<=0) break;
+      const take = Math.min(b.qty, remaining);
+      b.qty -= take;
+      remaining -= take;
+    }
+    item.batches = item.batches.filter(b=>b.qty>0);
+    if (!item.batches.length) item.batches.push({id:uid(), qty:0, expiry:'', addedDate:today()});
+  }
+  syncItemFromBatches(item);
   save();
-  const el = document.getElementById('ic-'+id);
-  if (el) el.outerHTML = itemCard(item);
+  updateItemCardInPlace(item);
   renderHome();
 }
 
-function editItem(id) {
-  const item = items.find(i=>i.id===id);
-  if (!item) return;
-  editId = id;
-  openForm(item);
+// Miktar değiştiğinde kartın DOM düğümlerini (özellikle +/- butonlarını) yok edip yeniden oluşturmadan
+// sadece miktar metnini, rozetleri ve parti dökümünü günceller. Böylece hızlı ardışık tıklamalarda buton
+// her seferinde yeniden yaratılmadığı için tıklamalar kaçırılmaz. Aynı ürün hem ana sayfadaki
+// "Son Eklenenler" listesinde hem de Stok listesinde aynı id ile göründüğünden, id'ye sahip TÜM
+// kopyaları güncelliyoruz (document.getElementById yalnızca ilkini bulup yanlış/görünmez olanı
+// güncelleyebiliyordu).
+function updateItemCardInPlace(item) {
+  const els = document.querySelectorAll(`[id="ic-${item.id}"]`);
+  els.forEach(el => {
+    const qtyVal = el.querySelector('.qty-val');
+    if (qtyVal) qtyVal.innerHTML = `${item.quantity} <span class="qty-unit">${esc(item.unit||'')}</span>`;
+    const titleRow = el.querySelector('.ic-title');
+    if (titleRow && titleRow.parentElement) {
+      titleRow.parentElement.innerHTML = `<span class="ic-title">${esc(item.name)}</span>${buildItemBadges(item)}`;
+    }
+    const oldBatchList = el.querySelector('.batch-list');
+    const newBatchHtml  = buildBatchBreakdown(item);
+    if (oldBatchList) {
+      if (newBatchHtml) oldBatchList.outerHTML = newBatchHtml;
+      else oldBatchList.remove();
+    } else if (newBatchHtml) {
+      const metaEl = el.querySelector('.ic-meta');
+      if (metaEl) metaEl.insertAdjacentHTML('afterend', newBatchHtml);
+    }
+  });
 }
 
 function deleteItem(id) {
-  if (!confirm('Bu ürünü silmek istediğinizden emin misiniz?')) return;
-  items = items.filter(i=>i.id!==id);
-  save();
-  toast('Ürün silindi','info');
-  renderHome(); renderList();
-  if (typeof updateNotifBell === 'function') updateNotifBell();
+  const item = items.find(i=>i.id===id);
+  if (!item) return;
+  showConfirm('Ürünü Sil', `"${item.name}" ürününü silmek istediğinizden emin misiniz?`, () => {
+    items = items.filter(i=>i.id!==id);
+    save();
+    toast('Ürün silindi','info');
+    renderHome(); renderList();
+    if (typeof updateNotifBell === 'function') updateNotifBell();
+  });
 }
 
 // ══ FORM ═══════════════════════════════════════════════════════════
@@ -1509,6 +2029,8 @@ function openManualAdd(prefill) {
   document.getElementById('f-minstock').value= 1;
   document.getElementById('f-notes').value   = '';
   document.getElementById('f-unit').value    = prefill?.unit || 'adet';
+  document.getElementById('f-nowarn').checked = false;
+  toggleMinStockField();
   selectCat(prefill?.category || 'food');
   selectLoc(prefill?.location || '');
   checkFormValid();
@@ -1529,10 +2051,19 @@ function openForm(item) {
   document.getElementById('f-minstock').value= item.minStock|| 1;
   document.getElementById('f-notes').value   = item.notes   || '';
   document.getElementById('f-unit').value    = item.unit    || 'adet';
+  document.getElementById('f-nowarn').checked = !!item.noMinStockWarning;
+  toggleMinStockField();
   selectCat(item.category || 'food');
   selectLoc(item.location || '');
   checkFormValid();
   showView('form');
+}
+
+function toggleMinStockField() {
+  const checked = document.getElementById('f-nowarn').checked;
+  const ms = document.getElementById('f-minstock');
+  ms.disabled = checked;
+  ms.style.opacity = checked ? '.4' : '1';
 }
 
 function checkFormValid() {
@@ -1549,17 +2080,26 @@ function saveItem() {
     barcode:  document.getElementById('f-barcode').value.trim(),
     expiry:   document.getElementById('f-expiry').value,
     minStock: Number(document.getElementById('f-minstock').value)||1,
+    noMinStockWarning: document.getElementById('f-nowarn').checked,
     notes:    document.getElementById('f-notes').value.trim(),
     location: formLoc,
     price:    Number(document.getElementById('f-price').value) || 0,
   };
   if (editId) {
     const idx = items.findIndex(i=>i.id===editId);
-    if (idx!==-1) items[idx] = {...items[idx],...data};
+    if (idx!==-1) {
+      items[idx] = {...items[idx],...data};
+      // Formdan tam düzenleme yapılırsa (bu yol şu an sadece güvenlik amaçlı korunuyor),
+      // partileri de yeni miktar/SKT ile tutarlı hale getiriyoruz.
+      items[idx].batches = [{ id: uid(), qty: data.quantity, expiry: data.expiry, addedDate: today() }];
+      syncItemFromBatches(items[idx]);
+    }
     toast('Ürün güncellendi ✓');
     editId = null;
   } else {
-    items.unshift({id:uid(), addedDate:today(), ...data});
+    const newItem = {id:uid(), addedDate:today(), ...data};
+    ensureBatches(newItem);
+    items.unshift(newItem);
     upsertLibrary(data);
     toast('Ürün eklendi ✓');
   }
@@ -1942,10 +2482,10 @@ function addFromPreview() {
   if (!previewData) return;
   const existing = items.findIndex(i=>i.barcode===previewData.barcode && previewData.barcode);
   if (existing !== -1) {
-    items[existing].quantity += 1;
+    addBatchToItem(items[existing], 1, '');
     toast(`${items[existing].name} miktarı artırıldı ✓`);
   } else {
-    items.unshift({
+    const newItem = {
       id: uid(), addedDate: today(),
       name:     previewData.name,
       brand:    previewData.brand    || '',
@@ -1956,7 +2496,9 @@ function addFromPreview() {
       expiry:   '',
       minStock: 1,
       notes:    '',
-    });
+    };
+    ensureBatches(newItem);
+    items.unshift(newItem);
     upsertLibrary(previewData);
     toast(`${previewData.name} stoğa eklendi ✓`);
   }
@@ -1976,6 +2518,30 @@ function editFromPreview() {
     barcode:  d.barcode  || '',
     location: d.location || '',
   });
+}
+
+// ══ CONFIRM MODAL ═════════════════════════════════════════════════
+// Tarayıcının yerel confirm() penceresi bazı mobil/PWA ortamlarında engellenebildiği için
+// uygulama içi, her yerde güvenilir çalışan bir onay penceresi kullanıyoruz.
+let __confirmCallback = null;
+
+function showConfirm(title, message, onConfirm, okLabel) {
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmMsg').textContent = message;
+  document.getElementById('confirmOkBtn').textContent = okLabel || 'Sil';
+  __confirmCallback = onConfirm;
+  document.getElementById('confirmOverlay').classList.add('open');
+}
+
+function closeConfirmModal(confirmed) {
+  document.getElementById('confirmOverlay').classList.remove('open');
+  const cb = __confirmCallback;
+  __confirmCallback = null;
+  if (confirmed && typeof cb === 'function') cb();
+}
+
+function handleConfirmOverlayClick(e) {
+  if (e.target === document.getElementById('confirmOverlay')) closeConfirmModal(false);
 }
 
 // ══ TOAST ══════════════════════════════════════════════════════════
